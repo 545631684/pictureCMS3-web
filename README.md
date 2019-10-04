@@ -1,6 +1,6 @@
 # picturecms
 
-> http://www.doudouvww.doudouv.com.com
+> http://www.doudouv.com
 
 ## Build Setup
 
