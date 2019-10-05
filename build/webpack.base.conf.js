@@ -8,15 +8,16 @@ function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
+// vue 中的代码规范检测（Eslint验证）
 const createLintingRule = () => ({
-  test: /\.(js|vue)$/,
-  loader: 'eslint-loader',
-  enforce: 'pre',
-  include: [resolve('src'), resolve('test')],
-  options: {
-    formatter: require('eslint-friendly-formatter'),
-    emitWarning: !config.dev.showEslintErrorsInOverlay
-  }
+  // test: /\.(js|vue)$/,
+  // loader: 'eslint-loader',
+  // enforce: 'pre',
+  // include: [resolve('src'), resolve('test')],
+  // options: {
+  //   formatter: require('eslint-friendly-formatter'),
+  //   emitWarning: !config.dev.showEslintErrorsInOverlay
+  // }
 })
 
 module.exports = {
@@ -35,7 +36,16 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
+      'SRC': resolve('src'),
+      'STATIC': resolve('static'),
+      'ASSETS': resolve('src/assets'),
+      'IMAGES': resolve('src/assets/images'),
+      'VIEWS': resolve('src/views'),
+      'LESS': resolve('src/less'),
+      'COMMON': resolve('src/common'),
+      'API': resolve('src/api'),
+      'UTIL': resolve('src/util'),
+      'STORE': resolve('src/store')
     }
   },
   module: {
@@ -74,6 +84,10 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /\.less$/,
+        loader: 'style-loader!css-loader!less-loader'
       }
     ]
   },
