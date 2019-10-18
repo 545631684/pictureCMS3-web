@@ -17,7 +17,7 @@ const routes = [
   ...web
 ]
 
-// 创建路由，并设置url为'history'模式需要后台支持（相关内容查看官网介绍），以及模仿浏览器跳转效果以及每次跳转页面后指定设置
+// 创建路由，并设置url为'history'模式需要后台支持（相关内容查看官网介绍），以及模仿浏览器跳转效果以及每次跳转页面后置顶设置
 const router = new VueRouter({
   mode: 'history',
   routes,
@@ -32,14 +32,14 @@ const router = new VueRouter({
 
 // 全局前置守卫
 router.beforeEach((to, from, next) => {
-  // 页面跳转置顶进度条完成
+  // 页面跳转置顶进度条开始
   NProgress.start()
   next() // 确保一定要调用 next()
 })
 
 // 全局后置钩子
 router.afterEach((to, from) => {
-  // 页面跳转置顶进度条完成
+  // 页面跳转置顶进度条结束
   NProgress.done()
 })
 export default router

@@ -3,7 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import Vuex from 'vuex'
+import store from './store/index'
+import { sync } from 'vuex-router-sync'
+
+// 引入element-ui组件
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 // 前台图片查看组件
 import Viewer from 'v-viewer'
@@ -13,11 +18,8 @@ import 'viewerjs/dist/viewer.css'
 import VideoPlayer from 'vue-video-player'
 
 Vue.config.productionTip = false
-
-Vue.use(Vuex)
-// css初始样式
-// require('normalize.css/normalize.css') 
-// require('flex.css') 
+Vue.use(ElementUI);
+sync(store, router)
 
 // 前台页面图片查看组件包括 import 'viewerjs/dist/viewer.css'
 Viewer.setDefaults({
@@ -34,6 +36,7 @@ Vue.use(VideoPlayer)
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
