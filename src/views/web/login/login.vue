@@ -31,6 +31,7 @@
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'
   export default {
+    inject: ['reload'],
     name: 'login',
     data() {
       return {
@@ -79,11 +80,11 @@
       ...mapActions([
         'webLogin'
       ]),
-      submitForm (formName) { // 登录提交
+      // 登录提交
+      submitForm (formName) { 
         let _this = this
       	if (this.ruleForm.email === 'admin' && this.ruleForm.pw.length !== 0) {
-      		// 登录方法
-        	this.webLogin({userName: this.ruleForm.email, password: this.ruleForm.pw})
+        	this.webLogin({userName: this.ruleForm.email, password: this.ruleForm.pw, 'setPasswordStyle': this.ruleForm.type })
             .then(function (response) {
               if (response.code === 200 && response.data.adminInfo.userName === _this.ruleForm.email) {
                 _this.$message({message: response.msg, type: 'success'})
@@ -96,8 +97,7 @@
       	} else {
       		this.$refs[formName].validate((valid) => {
       		  if (valid) {
-      		    // 登录方法
-      		    this.webLogin({userName: this.ruleForm.email, password: this.ruleForm.pw})
+      		    this.webLogin({userName: this.ruleForm.email, password: this.ruleForm.pw, 'setPasswordStyle': this.ruleForm.type })
       		      .then(function (response) {
       		        if (response.code === 200 && response.data.adminInfo.userName === _this.ruleForm.email) {
       		          _this.$message({message: response.msg, type: 'success'})
@@ -105,7 +105,7 @@
       		        }
       		      })
       		      .catch(function (error) {
-      		        _this.$alert(error.msg, {confirmButtonText: '确定'})
+      		        _this.$alert(error, {confirmButtonText: '确定'})
       		      })
       		  } else {
       		    this.$alert('请输入邮箱和密码', '警告', {confirmButtonText: '确定'})
@@ -116,19 +116,16 @@
       }
     },
     created () {
-      // 获取本地存储数据
-      // this.$store.dispatch('getLocalStorage')
       // 判断vuex中setPasswordStyle（记住密码）的值做页面显示
-      // if (this.$store.state.user.setPasswordStyle === 'true') {
-      //   this.ruleForm.email = this.$store.state.user.userName
-      //   this.ruleForm.pw = this.$store.state.user.Password
-      //   this.ruleForm.type = true
-      // } else {
-      // }
-        this.ruleForm.email = ''
-        this.ruleForm.pw = ''
-        this.ruleForm.type = false
-      
+      this.$store.state.admin.adminInfo.setPasswordStyle === 'true' ? this.ruleForm = {
+          email: this.$store.state.admin.adminInfo.userName,
+          pw: this.$store.state.admin.adminInfo.password,
+          type: true
+        } : this.ruleForm = {
+          email: '',
+          pw: '',
+          type: false
+        }
     }
   }
 </script>

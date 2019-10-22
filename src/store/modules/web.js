@@ -1,6 +1,11 @@
 import api from 'API/index'
 
-import { SET_WEB_INFO } from '../mutation-types'
+import { 
+  SET_WEB_INFO, 
+  SET_ADMIN_INFO, 
+  SET_TOKEN_INFO, 
+  SET_PUBLIC_INFO 
+} from '../mutation-types'
 
 import {
   saveAccessToken,
@@ -8,11 +13,12 @@ import {
   cachedAdminInfo,
   cachedWebInfo,
   cachedPublicInfo,
-  removeAccessToken
+  removeAccessToken,
+  cachedKeysData
 } from 'API/cacheService'
 
 const state = {
-  webInfo: cachedWebInfo.load() || {}
+  webInfo: cachedWebInfo.load() || cachedKeysData.webInfo
 }
 
 const getters = {
@@ -36,7 +42,12 @@ const actions = {
       .then((data) => {
         cachedAdminInfo.save(data.data.adminInfo)
         cachedPublicInfo.save(data.data.publicInfo)
+        cachedWebInfo.save(cachedKeysData.webInfo)
         saveAccessToken(data.data.token.access_token, parseInt(data.data.token.token_expires_in))
+        store.commit(SET_WEB_INFO, cachedKeysData.webInfo)
+        store.commit(SET_ADMIN_INFO, data.data.adminInfo)
+        store.commit(SET_PUBLIC_INFO, data.data.publicInfo)
+        store.commit(SET_TOKEN_INFO, data.data.token)
         return Promise.resolve(data)
       })
       .catch((error) => {
@@ -84,6 +95,18 @@ const actions = {
    */
   emailrepeat (store, params) {
     return api.emailrepeat(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 找回密码
+   */
+  retrievePassword (store, params) {
+    return api.retrievePassword(params)
       .then((data) => {
         return Promise.resolve(data)
       })

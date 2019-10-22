@@ -1,10 +1,12 @@
 /********************************* 正在使用的begin ***************************************/
-// 保存管理员信息
+// 保存用户信息
 export const SET_ADMIN_INFO = 'SET_ADMIN_INFO'
 // 保存前台信息
 export const SET_WEB_INFO = 'SET_WEB_INFO'
 // 保存前后台页面辅助参数信息
 export const SET_PUBLIC_INFO = 'SET_PUBLIC_INFO'
+// 保存token
+export const SET_TOKEN_INFO = 'SET_TOKEN_INFO'
 /********************************* 正在使用的end ***************************************/
 
 // 屏幕大小改变

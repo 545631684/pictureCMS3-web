@@ -91,6 +91,7 @@ class CommonStorage {
 // localStorage添加Token变量
 export function saveAccessToken (token, expiredIn) {
   lsCache.set(KEYS.token, token, { exp: expiredIn })
+  // lsCache.set(KEYS.token, token)
 }
 
 // localStorage获取Token变量
@@ -124,3 +125,5 @@ export const cachedAdminInfo = new CommonStorage(KEYS.adminInfo, 0)
 export const cachedWebInfo = new CommonStorage(KEYS.webInfo, 0)
 // 公共key
 export const cachedPublicInfo = new CommonStorage(KEYS.publicInfo, 0)
+// 初始化参数
+export const cachedKeysData = KEYS_DATA

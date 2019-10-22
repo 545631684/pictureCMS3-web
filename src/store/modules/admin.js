@@ -1,30 +1,26 @@
 import api from 'API/index'
 
 import {
-  IS_LOGIN,
   SET_ADMIN_INFO,
-  SHOW_TOKEN_ERROR
+  SET_TOKEN_INFO
 } from '../mutation-types'
 
 import {
   saveAccessToken,
   getAccessToken,
   cachedAdminInfo,
-  removeAccessToken
+  removeAccessToken,
+  cachedKeysData
 } from 'API/cacheService'
 
 const state = {
-  isLogin: getAccessToken() ? true : false, // eslint-disable-line
-  tokenError: false,
-  adminInfo: cachedAdminInfo.load() || {}
+  token: getAccessToken() || {},
+  adminInfo: cachedAdminInfo.load() || cachedKeysData.adminInfo
 }
 
 const getters = {
-  isLogin (state) {
-    return state.isLogin
-  },
-  tokenError (state) {
-    return state.tokenError
+  token (state) {
+    return state.token
   },
   adminInfo (state) {
     return state.adminInfo
@@ -32,11 +28,8 @@ const getters = {
 }
 
 const mutations = {
-  [IS_LOGIN] (state, data) {
-    state.isLogin = data
-  },
-  [SHOW_TOKEN_ERROR] (state, data) {
-    state.tokenError = data
+  [SET_TOKEN_INFO] (state, data) {
+    state.token = data
   },
   [SET_ADMIN_INFO] (state, data) {
     state.adminInfo = data
@@ -44,9 +37,18 @@ const mutations = {
 }
 
 const actions = {
-  setIsLogin (store, isLogin) {
-    store.state.isLogin = isLogin
-  }
+  /**
+   * 用户列表
+   */
+  adminUserList (params) {
+    return api.adminUserList(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
 }
 
 export default {

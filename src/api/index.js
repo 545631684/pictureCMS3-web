@@ -1,6 +1,8 @@
 import axios from 'axios'
 import Qs from 'qs'
 import store from 'STORE/index'
+import { pushLogins } from 'ROUTER/index'
+
 
 import {
   saveAccessToken,
@@ -31,7 +33,7 @@ axios.defaults.headers.Accept = 'application/json'
 axios.interceptors.request.use(function (config) {
   if (config.url.indexOf('a/') === 0 || config.url.indexOf('w/') === 0) {
     if (getAccessToken()) {
-      config.headers['accessToken'] = getAccessToken()
+      config.headers['accesstoken'] = getAccessToken()
     }
   }
   return config
@@ -46,6 +48,8 @@ axios.interceptors.response.use(function (response) {
       // 清空登录信息、token
       removeAdminInfo()
       removeAccessToken()
+      pushLogins()
+      // window.location.href = '192.168.1.130/login';
     }
     let error = {
       msg: response.data.msg
@@ -91,4 +95,17 @@ export default {
   emailrepeat (params) {
     return axios.post('u/emailrepeat', Qs.stringify(params))
   },
+  /**
+   * 找回密码
+   */
+  retrievePassword (params) {
+    return axios.post('u/retrievePassword', Qs.stringify(params))
+  },
+  /**
+   * 用户列表
+   */
+  adminUserList (params) {
+    return axios.get('a/user_list', Qs.stringify(params))
+  },
+  
 }

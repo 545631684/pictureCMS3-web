@@ -42,4 +42,13 @@ router.afterEach((to, from) => {
   // 页面跳转置顶进度条结束
   NProgress.done()
 })
+
+// 跳转登录页
+export function pushLogin () {
+  router.push('/login')
+}
+
 export default router
+
+// 跳转登录页
+export const pushLogins = pushLogin
