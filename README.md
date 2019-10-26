@@ -1,6 +1,6 @@
 # picturecms
 
-> http://www.doudouv.com
+> [https://www.zz64.cn/](https://www.zz64.cn/)
 
 ## Build Setup
 

@@ -9,8 +9,8 @@
           <!-- 左边导航 -->
           <myLeft></myLeft>
           <!-- 主内容区 -->
-          <el-main>
-              <router-view/>
+          <el-main >
+              <router-view class="article-table-wrap"></router-view>
           </el-main>
       </el-container>
   </el-container>
@@ -18,7 +18,6 @@
 
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'
-  import { cachedAdminInfo } from 'API/cacheService'
   import myHeader from 'VIEWS/admin/myHeader/myHeader'
   import myLeft from 'VIEWS/admin/myLeft/myLeft'
   export default {
@@ -54,4 +53,9 @@
 
 <style lang="less" scoped>
 @import '~LESS/color.less';
+.article-table-wrap{width: 100%; animation: show .8s;}
+@keyframes show {
+  from {margin-top: -10px;opacity: 0;}
+  to {margin-top: 0px;opacity: 1;}
+}
 </style>

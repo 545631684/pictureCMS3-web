@@ -181,6 +181,13 @@
       "unicode_decimal": 58880
     },
     {
+      "icon_id": "10406079",
+      "name": "首页",
+      "font_class": "shouye",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
       "icon_id": "10785902",
       "name": "icon_4.psd",
       "font_class": "web-psd",

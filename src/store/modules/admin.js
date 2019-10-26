@@ -40,8 +40,80 @@ const actions = {
   /**
    * 用户列表
    */
-  adminUserList (params) {
+  adminUserList (store, params) {
     return api.adminUserList(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 获取权限功页
+   */
+  authList (store, params) {
+    return api.authList(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 添加权限组
+   */
+  authGroupadd (store, params) {
+    return api.authGroupadd(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 获取权限组列表
+   */
+  authGrouplist (store, params) {
+    return api.authGrouplist(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 删除权限组
+   */
+  authGroupdel (store, params) {
+    return api.authGroupdel(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 获取单个权限组
+   */
+  authGroupone (store, params) {
+    return api.authGroupone(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 修改权限组
+   */
+  authGroupedit (store, params) {
+    return api.authGroupedit(params)
       .then((data) => {
         return Promise.resolve(data)
       })

@@ -39,7 +39,10 @@ const KEYS_DATA = {
     adminTime: 0,
     // 导航高亮显示位置
     adminNavigation: '1',
-    auth: {}
+    // 权限
+    auth: {},
+    // 后台导航缩进
+    isCollapse: false
   },
   webInfo: {
     // 注册/找回密码的获取验证码按钮成功后的读秒
@@ -91,7 +94,6 @@ class CommonStorage {
 // localStorage添加Token变量
 export function saveAccessToken (token, expiredIn) {
   lsCache.set(KEYS.token, token, { exp: expiredIn })
-  // lsCache.set(KEYS.token, token)
 }
 
 // localStorage获取Token变量

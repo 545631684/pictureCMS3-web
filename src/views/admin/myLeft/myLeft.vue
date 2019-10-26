@@ -36,12 +36,28 @@
 </template>
 
 <script>
+  import {
+    SET_WEB_INFO, 
+    SET_ADMIN_INFO, 
+    SET_TOKEN_INFO, 
+    SET_PUBLIC_INFO 
+  } from 'STORE/mutation-types'
+  
+  import {
+    saveAccessToken,
+    getAccessToken,
+    cachedAdminInfo,
+    cachedWebInfo,
+    cachedPublicInfo,
+    removeAccessToken,
+    cachedKeysData
+  } from 'API/cacheService'
 	export default {
 		inject: ['reload'],
 		name: 'myLeft',
 		data() {
 			return {
-				isCollapse: false,
+				isCollapse: this.$store.state.admin.adminInfo.isCollapse,
 				isdefaultActive: '',
 				userGroups: this.$store.state.admin.adminInfo.auth,
         toggleLineData: [],
@@ -128,7 +144,11 @@
 			// 通过给定关键字跳转相应页面， $event在点击事件里加入函数写event可以调用当前元素的所有值
 			urlpage(type, event) {
 				switch(type) {
-					case "img":
+					case "home":
+						this.$router.push("/backstage/home");
+						this.localStorageSet(event.index)
+						break;
+          case "img":
 						this.$router.push("/backstage/img");
 						this.localStorageSet(event.index)
 						break;
@@ -140,28 +160,12 @@
 						this.$router.push("/backstage/video");
 						this.localStorageSet(event.index)
 						break;
-					case "articlRecovery":
-						this.$router.push("/backstage/articleRecovery");
+					case "recoveryArticle":
+						this.$router.push("/backstage/recoveryArticle");
 						this.localStorageSet(event.index)
 						break;
 					case "statistics":
 						this.$router.push("/backstage/statistics");
-						this.localStorageSet(event.index)
-						break;
-					case "userInfo":
-						this.$router.push("/backstage/userInfo");
-						this.localStorageSet(event.index)
-						break;
-					case "userPw":
-						this.$router.push("/backstage/userUpdatePassword");
-						this.localStorageSet(event.index)
-						break;
-					case "userAuthorize":
-						this.$router.push("/backstage/authorizeList");
-						this.localStorageSet(event.index)
-						break;
-					case "userAdd":
-						this.$router.push("/backstage/userAdd");
 						this.localStorageSet(event.index)
 						break;
 					case "userList":
@@ -172,16 +176,8 @@
 						this.$router.push("/backstage/userRecovery");
 						this.localStorageSet(event.index)
 						break;
-					case "item":
-						this.$router.push("/backstage/itemList");
-						this.localStorageSet(event.index)
-						break;
-					case "type":
-						this.$router.push("/backstage/typeList");
-						this.localStorageSet(event.index)
-						break;
-					case "typeMin":
-						this.$router.push("/backstage/typeMinList");
+					case "category":
+						this.$router.push("/backstage/category");
 						this.localStorageSet(event.index)
 						break;
 					case "seeArticle":
@@ -207,6 +203,11 @@
       toggleCollapse () {
         this.isCollapse = !this.isCollapse
         this.toggleLineData = this.isCollapse ? this.lineStyle.arrowRightLineData : this.lineStyle.arrowLeftLineData
+        // 更新本地和vuex
+        let adminInfo = this.$store.state.admin.adminInfo
+        adminInfo.isCollapse = this.isCollapse
+        cachedAdminInfo.save(adminInfo)
+        this.$store.commit(SET_ADMIN_INFO, adminInfo)
       },
       // 导航缩放展开/缩进按钮的样式赋值
       setLineData (e) {
@@ -234,7 +235,8 @@
   .collapse-wrap{position:absolute; width: 24px; height: 24px; background-color: #262a30; right: 20px; bottom: 15px; padding: 5px; z-index: 1050; cursor: pointer; line-height: 0;}
   .collapse-wrap .collapse-line{position:relative; display: inline-block; vertical-align: top; width: 100%; height: 2px; margin-top: 4px; background-color: #fff; transition: all .3s;}
   .collapse-wrap .collapse-line a:first-child{margin-top:0;}   
-   .el-menu-item .el-submenu__title{font-size: 14px !important;}
-   .el-menu-item .el-submenu__title a.is-active{background-color: rgb(30, 34, 38) !important;}
-   .el-menu-item .el-submenu__title .iconfont{margin-right: 10px !important;font-size: 14px !important;}
+  .el-menu-item{cursor: pointer;}
+  .el-menu-item .el-submenu__title{font-size: 14px !important;}
+  .el-menu-item .el-submenu__title a.is-active{background-color: rgb(30, 34, 38) !important;}
+  .el-menu-item .el-submenu__title .iconfont{margin-right: 10px !important;font-size: 14px !important;}
 </style>

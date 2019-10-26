@@ -45,11 +45,10 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
   if (response.data.code < 0) {
     if (response.data.code === -4001) {
-      // 清空登录信息、token
+      // 清空登录信息、token、跳转登录页
       removeAdminInfo()
       removeAccessToken()
       pushLogins()
-      // window.location.href = '192.168.1.130/login';
     }
     let error = {
       msg: response.data.msg
@@ -106,6 +105,42 @@ export default {
    */
   adminUserList (params) {
     return axios.get('a/user_list', Qs.stringify(params))
+  },
+  /**
+   * 获取权限功能页参数
+   */
+  authList (params) {
+    return axios.get('a/auth_list', Qs.stringify(params))
+  },
+  /**
+   * 添加权限组
+   */
+  authGroupadd (params) {
+    return axios.post('a/auth_groupadd', Qs.stringify(params))
+  },
+  /**
+   * 修改权限组
+   */
+  authGroupedit (params) {
+    return axios.post('a/auth_groupedit', Qs.stringify(params))
+  },
+  /**
+   * 删除权限组
+   */
+  authGroupdel (params) {
+    return axios.post('a/auth_groupdel', Qs.stringify(params))
+  },
+  /**
+   * 获取权限组列表
+   */
+  authGrouplist (params) {
+    return axios.get('a/auth_grouplist', Qs.stringify(params))
+  },
+  /**
+   * 获取单个权限组
+   */
+  authGroupone (params) {
+    return axios.post('a/auth_groupone', Qs.stringify(params))
   },
   
 }
