@@ -52,13 +52,14 @@
     removeAccessToken,
     cachedKeysData
   } from 'API/cacheService'
+  import { mapActions, mapGetters, mapMutations } from 'vuex'
 	export default {
 		inject: ['reload'],
 		name: 'myLeft',
 		data() {
 			return {
 				isCollapse: this.$store.state.admin.adminInfo.isCollapse,
-				isdefaultActive: '',
+				isdefaultActive: this.$store.state.admin.adminInfo.adminNavigation,
 				userGroups: this.$store.state.admin.adminInfo.auth,
         toggleLineData: [],
         lineStyle: {
@@ -190,14 +191,21 @@
 						break;
 				}
 			},
+      ...mapMutations([
+        SET_ADMIN_INFO
+      ]),
 			// 把导航值赋值给isdefaultActive并本地储存
 			localStorageSet(index) {
-				this.isdefaultActive = index
-				localStorage.setItem("navigationIndex", index);
+				this.isdefaultActive = index.toString()
+        let adminInfo = cachedAdminInfo.load()
+        adminInfo.adminNavigation = index.toString()
+        cachedAdminInfo.save(adminInfo)
+        this.$store.commit(SET_ADMIN_INFO, adminInfo)
 			},
 			// 本地获取导航值，赋值给isdefaultActive
 			localStorageGet() {
-				this.isdefaultActive = localStorage.getItem("navigationIndex") || ''
+        let adminInfo = cachedAdminInfo.load()
+				this.isdefaultActive = adminInfo.adminNavigation.toString() || ''
 			},
       // 导航缩放展开/缩进按钮
       toggleCollapse () {

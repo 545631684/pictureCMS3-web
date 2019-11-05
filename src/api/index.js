@@ -142,5 +142,113 @@ export default {
   authGroupone (params) {
     return axios.post('a/auth_groupone', Qs.stringify(params))
   },
+  /**
+   * 添加项目
+   */
+  projectAdd (params) {
+    return axios.post('a/projectAdd', Qs.stringify(params))
+  },
+  /**
+   * 编辑项目
+   */
+  projectsave (params) {
+    return axios.post('a/projectsave', Qs.stringify(params))
+  },
+  /**
+   * 删除项目
+   */
+  projectdel (params) {
+    return axios.post('a/projectdel', Qs.stringify(params))
+  },
+  /**
+   * 获取辅助参数
+   */
+  getPublicInfo (params) {
+    return axios.get('a/getPublicInfo', Qs.stringify(params))
+  },
+  /**
+   * 添加类型
+   */
+  typeAdd (params) {
+    return axios.post('a/typeAdd', Qs.stringify(params))
+  },
+  /**
+   * 编辑类型
+   */
+  typesave (params) {
+    return axios.post('a/typesave', Qs.stringify(params))
+  },
+  /**
+   * 删除类型
+   */
+  typeDel (params) {
+    return axios.post('a/typeDel', Qs.stringify(params))
+  },
+  /**
+   * 添加分类
+   */
+  detailsAdd (params) {
+    return axios.post('a/detailsAdd', Qs.stringify(params))
+  },
+  /**
+   * 编辑分类
+   */
+  detailssave (params) {
+    return axios.post('a/detailssave', Qs.stringify(params))
+  },
+  /**
+   * 删除分类
+   */
+  detailsDel (params) {
+    return axios.post('a/detailsDel', Qs.stringify(params))
+  },
+  /**
+   * 添加标签组
+   */
+  labelsAdd (params) {
+    return axios.post('a/labelsAdd', Qs.stringify(params))
+  },
+  /**
+   * 编辑标签组
+   */ 
+  labelssave (params) {
+    return axios.post('a/labelssave', Qs.stringify(params))
+  },
+  /**
+   * 删除标签组
+   */
+  labelsDel (params) {
+    return axios.post('a/labelsDel', Qs.stringify(params))
+  },
+  /**
+   * 添加标签
+   */
+  labelAdd (params) {
+    return axios.post('a/labelAdd', Qs.stringify(params))
+  },
+  /**
+   * 编辑标签
+   */
+  labelsave (params) {
+    return axios.post('a/labelsave', Qs.stringify(params))
+  },
+  /**
+   * 删除标签
+   */
+  labelDel (params) {
+    return axios.post('a/labelDel', Qs.stringify(params))
+  },
+  /**
+   * 用户回收list
+   */
+  userRecovery (params) {
+    return axios.get('a/userRecovery', Qs.stringify(params))
+  },
+  /**
+   * 用户还原
+   */
+  reduction (params) {
+    return axios.post('a/reduction', Qs.stringify(params))
+  },
   
 }

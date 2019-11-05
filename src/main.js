@@ -10,6 +10,10 @@ import { sync } from 'vuex-router-sync'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
+// 阿里云字体图标
+import './assets/fonts/iconfont.css'
+import './assets/fonts/iconfont.js'
+
 // 前台图片查看组件
 import Viewer from 'v-viewer'
 import 'viewerjs/dist/viewer.css'

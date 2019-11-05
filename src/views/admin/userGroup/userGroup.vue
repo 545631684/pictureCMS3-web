@@ -12,7 +12,7 @@
   						<el-checkbox v-for="(city, index) in time.cityOptions" :label="city" :key="city" name="type">{{city}}</el-checkbox>
   					</el-checkbox-group>
   				</div>
-          <el-checkbox style="margin-top: 25px;" v-model="groupForbid">禁止删除/修改</el-checkbox>
+          <el-checkbox style="margin-top: 25px;" v-model="groupForbid">禁止删除/修改(选中后将不可修改/删除)</el-checkbox>
   				<span slot="footer" class="dialog-footer">
   				    <el-button @click="groupAdd = false">取 消</el-button>
   				    <el-button type="primary" @click="groupUserAdd">确 定</el-button>
@@ -48,7 +48,7 @@
   								<el-checkbox v-for="(city, index) in time.cityOptions" :label="city" :key="city" name="type">{{city}}</el-checkbox>
   							</el-checkbox-group>
   						</div>
-              <el-checkbox style="margin-top: 25px;" v-model="groupUpdateSingle[0].disabled">禁止删除/修改</el-checkbox>
+              <el-checkbox style="margin-top: 25px;" v-model="groupUpdateSingle[0].disabled">禁止删除/修改(选中后将不可修改/删除)</el-checkbox>
   						<span slot="footer" class="dialog-footer">
   						    <el-button @click="groupUpdate = false">取 消</el-button>
   						    <el-button type="primary" @click="updateGroups(slotProps.row.id)">确 定</el-button>

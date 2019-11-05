@@ -18,7 +18,7 @@ const KEYS = {
   token: 'token',
   adminInfo: 'adminInfo',
   webInfo: 'webInfo',
-  publicInfo: 'publicInfo'
+  publicInfo: 'publicInfo',
 }
 const KEYS_DATA = {
   token: '',
@@ -52,12 +52,16 @@ const KEYS_DATA = {
   },
   publicInfo: {
     // 类型数组
-    types: [],
+    types: {},
     // 项目数组
-    projects: [],
+    projects: {},
     // 分类数组
-    details: [],
-  }
+    details: {},
+    // 标签组
+    groupLabel: {},
+    // 标签
+    label: {}
+  },
 }
 
 // 这里改为自己的nameSpace，比如项目名称
@@ -78,6 +82,7 @@ class CommonStorage {
   }
 
   save (value) {
+    this.storage.deleteAllExpires()
     const options = this.exp ? { exp: this.exp } : null
     this.storage.set(this.key, value, options)
   }

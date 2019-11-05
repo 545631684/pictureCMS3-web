@@ -1,6 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+// 本地存储
+import {
+  getAccessToken
+} from 'API/cacheService'
+
 // 路由跳转页面顶部进度条
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -32,6 +37,14 @@ const router = new VueRouter({
 
 // 全局前置守卫
 router.beforeEach((to, from, next) => {
+  // 判断是否登录
+  if (to.path.indexOf('/backstage') === 0 || to.path.indexOf('/web') === 0) {
+    if (!getAccessToken()) {
+      // 页面跳转置顶进度条开始
+      NProgress.start()
+      next('/login') // 确保一定要调用 next()
+    }
+  }
   // 页面跳转置顶进度条开始
   NProgress.start()
   next() // 确保一定要调用 next()

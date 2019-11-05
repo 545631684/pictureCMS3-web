@@ -111,6 +111,13 @@
       "unicode_decimal": 58898
     },
     {
+      "icon_id": "3654003",
+      "name": "复原",
+      "font_class": "cityworksjichugongnengtubiao-",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
       "icon_id": "3913054",
       "name": "查看",
       "font_class": "chakanwenzhang",
@@ -179,6 +186,13 @@
       "font_class": "huishouzhan",
       "unicode": "e600",
       "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "8747098",
+      "name": "标签组",
+      "font_class": "biaoqianzu",
+      "unicode": "e7b7",
+      "unicode_decimal": 59319
     },
     {
       "icon_id": "10406079",
