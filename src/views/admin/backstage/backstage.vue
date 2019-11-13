@@ -31,22 +31,22 @@
       return {}
     },
     methods: {
-      ...mapActions([
-        'adminUserList'
-      ]),
-      getlist() {
-        let _this = this
-        this.adminUserList()
-          .then(function (response) {
-            // _this.$message({message: response.msg, type: 'success'})
-          })
-          .catch(function (error) {
-            _this.$message.error(error.msg);
-          })
-      }
+      // ...mapActions([
+      //   'adminUserList'
+      // ]),
+      // getlist() {
+      //   let _this = this
+      //   this.adminUserList()
+      //     .then(function (response) {
+      //       _this.$message({message: response.msg, type: 'success'})
+      //     })
+      //     .catch(function (error) {
+      //       _this.$message.error(error.msg);
+      //     })
+      // }
     },
     created() {
-      this.getlist()
+      // this.getlist()
     }
   }
 </script>

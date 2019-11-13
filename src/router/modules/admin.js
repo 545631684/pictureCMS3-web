@@ -13,6 +13,7 @@ const userList = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/
 const userRecovery = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/userRecovery/userRecovery.vue')
 const userGroup = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/userGroup/userGroup.vue')
 const category = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/category/category.vue')
+const userInfo = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/userInfo/userInfo.vue')
 
 export default [
   {
@@ -85,6 +86,12 @@ export default [
         path: 'userList',
         name: 'backstageUserList',
         component: userList
+      },
+      {
+        // 用户信息
+        path: 'userInfo',
+        name: 'backstageUserInfo',
+        component: userInfo
       },
       {
         // 用户回收站

@@ -20,9 +20,17 @@ const getters = {
   getUserTypesName: (state) => (id) => {
     return state.publicInfo.types.find(type => type.tid === id)
   },
-  // 遍历小分类数组，通过id获取name
+  // 遍历分类数组，通过id获取name
   getUserMinTypeName: (state, getters) => (id) => {
     return state.publicInfo.details.find(minType => {if (minType.id === id) {return minType.dname}})
+  },
+  // 遍历权限组数组，通过id获取name
+  getUserRecoveryName: (state, getters) => (id) => {
+    return state.publicInfo.userRecovery.find(o => {if (o.id === id) {return o.title}})
+  },
+  // 遍历权限组数组，通过id获取name
+  getUserRecoveryId: (state, getters) => (name) => {
+    return state.publicInfo.userRecovery.find(o => {if (o.title === name) {return o.id}})
   },
   // 遍历项目数组，通过name获取id
   getUserProjectsId: (state, getters) => (xname) => {
@@ -32,7 +40,7 @@ const getters = {
   getUserTypesId: (state) => (lname) => {
     return state.publicInfo.types.find(type => {if (type.lname === lname) {return type.tid}})
   },
-  // 遍历小分类数组，通过name获取id
+  // 遍历分类数组，通过name获取id
   getUserMinTypeId: (state, getters) => (dname) => {
     return state.publicInfo.details.find(minType => {if (minType.dname === dname) {return minType.did}})
   },
@@ -69,7 +77,9 @@ const actions = {
           types: data.data.types,
           details: data.data.details,
           groupLabel: data.data.groupLabel,
-          label: data.data.label
+          label: data.data.label,
+          userRecovery: store.state.publicInfo.userRecovery,
+          srcUrl: data.data.srcUrl
         }
         cachedPublicInfo.save(publicInfo)
         store.commit(SET_PUBLIC_INFO, publicInfo)

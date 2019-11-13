@@ -2,11 +2,11 @@
   <el-aside :style="{width: isCollapse ? '64px' : '210px'}">
 		<el-menu router :default-active="isdefaultActive" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" background-color="#252a2f" text-color="#fff" active-text-color="#ffd04b" style="height:100%; border:none;">
       <template v-for="(item, index) in userGroups.rules">
-        <el-menu-item :index="item.index" :key="index" @click="urlpage(item.urlKeyword,$event)" v-if="item.cityOptions === '[]' && item.checkAll === 'true'">
+        <el-menu-item :index="item.index" :key="index" @click="urlpage(item.urlKeyword,$event)" v-if="item.checkedCities === '[]' && item.checkAll === 'true'">
           <i :class="item.icon"></i>
           <span slot="title">{{item.name}}</span>
         </el-menu-item>
-        <el-submenu :index="item.index" :key="index" v-else-if="item.cityOptions.length >= 0 && item.cityOptions !== '[]'">
+        <el-submenu :index="item.index" :key="index" v-else-if="item.checkedCities.length >= 0 && item.checkedCities !== '[]'">
           <template slot="title">
             <i :class="item.icon"></i>
             <span slot="title">{{item.name}}</span>
@@ -171,6 +171,10 @@
 						break;
 					case "userList":
 						this.$router.push("/backstage/userList");
+						this.localStorageSet(event.index)
+						break;
+          case "userInfo":
+						this.$router.push("/backstage/userInfo");
 						this.localStorageSet(event.index)
 						break;
 					case "userRecovery":

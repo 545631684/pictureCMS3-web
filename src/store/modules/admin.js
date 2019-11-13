@@ -338,10 +338,112 @@ const actions = {
       })
   },
   /**
+   * 用户列表list
+   */
+  getUserList (store, params) {
+    return api.getUserList(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
    * 用户还原
    */
   reduction (store, params) {
     return api.reduction(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 超管编辑用户信息
+   */
+  guanliuserSave (store, params) {
+    return api.guanliuserSave(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 获取用户token
+   */
+  getUserToken (store, params) {
+    return api.getUserToken(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 修改用户信息
+   */
+  userSave (store, params) {
+    return api.userSave(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 获取用户信息
+   */
+  getUserInfo (store, params) {
+    return api.getUserInfo(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 删除文件
+   */
+  delfile (store, params) {
+    return api.delfile(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 更新辅助数据
+   */
+  setAdminInfo (store, params) {
+    return api.getUserInfo(params)
+      .then((data) => {
+        let adminInfo = store.state.adminInfo
+        adminInfo.headPortraitSrc = data.data.adminInfo.headPortraitSrc
+        adminInfo.nickname = data.data.adminInfo.nickname
+        adminInfo.sex = data.data.adminInfo.sex
+        cachedAdminInfo.save(adminInfo)
+        store.commit(SET_ADMIN_INFO, adminInfo)
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 获取统计页面数据
+   */
+  getAdminStatisticsData (store, params) {
+    return api.getAdminStatisticsData(params)
       .then((data) => {
         return Promise.resolve(data)
       })

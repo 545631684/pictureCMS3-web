@@ -42,7 +42,9 @@ const KEYS_DATA = {
     // 权限
     auth: {},
     // 后台导航缩进
-    isCollapse: false
+    isCollapse: false,
+    // 用户是否登录
+    judgeLogin: ''
   },
   webInfo: {
     // 注册/找回密码的获取验证码按钮成功后的读秒
@@ -60,7 +62,11 @@ const KEYS_DATA = {
     // 标签组
     groupLabel: {},
     // 标签
-    label: {}
+    label: {},
+    // 权限组
+    userRecovery: {},
+    // img访问域名
+    srcUrl: ''
   },
 }
 

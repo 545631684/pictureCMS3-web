@@ -245,10 +245,64 @@ export default {
     return axios.get('a/userRecovery', Qs.stringify(params))
   },
   /**
+   * 用户列表list
+   */
+  getUserList (params) {
+    return axios.get('a/user_list', Qs.stringify(params))
+  },
+  /**
    * 用户还原
    */
   reduction (params) {
     return axios.post('a/reduction', Qs.stringify(params))
+  },
+  /**
+   * 超管编辑用户信息
+   */
+  guanliuserSave (params) {
+    return axios.post('a/guanliuserSave', Qs.stringify(params))
+  },
+  /**
+   * 获取用户token
+   */
+  getUserToken (params) {
+    return axios.post('a/getUserToken', Qs.stringify(params))
+  },
+  /**
+   * 修改用户信息
+   */
+  userSave (params) {
+    return axios.post('a/userSave', Qs.stringify(params))
+  },
+  /**
+   * 获取用户信息
+   */
+  getUserInfo (params) {
+    return axios.post('a/getUserInfo', Qs.stringify(params))
+  },
+  /**
+   * 删除文件
+   */
+  delfile (params) {
+    return axios.post('a/delfile', Qs.stringify(params))
+  },
+  /**
+   * 获取统计页面数据
+   */
+  getAdminStatisticsData (params) {
+    return axios.post('a/getAdminStatisticsData', Qs.stringify(params))
+  },
+  /**
+   * 获取回收站文章数据
+   */
+  getRecoveryArticle (params) {
+    return axios.post('a/getRecoveryArticle', Qs.stringify(params))
+  },
+  /**
+   * 管理员添加用户
+   */
+  guanliUserAdd (params) {
+    return axios.post('a/user_add', Qs.stringify(params))
   },
   
 }

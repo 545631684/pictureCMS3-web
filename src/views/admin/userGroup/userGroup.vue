@@ -102,7 +102,10 @@
     	    if (this.groupUpdate === false) {
     	    	this.groupUpdateSingle = {}
     	    }
-    	}
+    	},
+      groups:function () {
+        console.log(this.groups)
+      }
     },
     methods: {
       ...mapActions([
@@ -330,6 +333,7 @@
          		typeof o.cityOptions === "string" ? o.cityOptions === "[]" ? o.cityOptions = [] : o.cityOptions = eval('(' + o.cityOptions + ')') : o.cityOptions
          	})
          })
+         
         }
       })
       .catch(function (error) {

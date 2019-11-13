@@ -21,6 +21,12 @@ import 'viewerjs/dist/viewer.css'
 // 视频播放组件
 import VideoPlayer from 'vue-video-player'
 
+// 统计图标
+import echarts from 'echarts'
+
+// echarts图表统计插件
+Vue.prototype.$echarts = echarts
+
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 sync(store, router)
