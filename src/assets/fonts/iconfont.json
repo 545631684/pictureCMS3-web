@@ -48,6 +48,13 @@
       "unicode_decimal": 58886
     },
     {
+      "icon_id": "1417491",
+      "name": "下载",
+      "font_class": "xiazaigray",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
       "icon_id": "1605769",
       "name": "图片",
       "font_class": "picture",
@@ -165,6 +172,13 @@
       "font_class": "dui",
       "unicode": "e720",
       "unicode_decimal": 59168
+    },
+    {
+      "icon_id": "6708701",
+      "name": "文章",
+      "font_class": "wenzhang",
+      "unicode": "e7c7",
+      "unicode_decimal": 59335
     },
     {
       "icon_id": "6751992",

@@ -999,13 +999,13 @@
       seeArticle(mid, typeFile) {
       	switch (typeFile) {
       		case 'img':
-      			 return {path:'/article/' + mid + '/backstage/0/0/'}
+      			 return {path:'/web/article/' + mid + '/backstage/0/0/'}
       		    break;
       		case 'psd':
-          		return {path:'/article/' + mid  + '/backstage/0/0/'}
+          		return {path:'/web/article/' + mid  + '/backstage/0/0/'}
       		    break;
       		case 'video':
-          		return {path:'/articleVideo/' + mid  + '/backstage/0/0/'}
+          		return {path:'/web/articleVideo/' + mid  + '/backstage/0/0/'}
       		    break;
       	}
       },
@@ -1395,7 +1395,7 @@
           			})
           		}
           	})
-          	console.log(1398)
+
           	// 当月在职用户每日发布情况  数据填充
           	response.data.m.find((r, index) => {_this.articleUserSubsectionData.xAxis.data.push(r.riqi)})
           	response.data.activeUserReleaseMonthAll.find((o, index) => {

@@ -114,6 +114,42 @@ const actions = {
         return Promise.reject(error)
       })
   },
+  /**
+   * 前台获取分页数据
+   */
+  getWebArticleAll (store, params) {
+    return api.getWebArticleAll(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 前台获取单篇文章数据
+   */
+  getWebArticle (store, params) {
+    return api.getWebArticle(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 前台获取所有用户数据
+   */
+  webUserList (store, params) {
+    return api.webUserList(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
 }
 
 export default {

@@ -1,5 +1,5 @@
 <template>
-  <el-table v-loading="loading" :data="userList" style="width: 60%">
+  <el-table v-loading="loading" :data="userList" style="width: 80%">
     <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
     <el-table-column prop="nickname" label="昵称" min-width="100" align="center"></el-table-column>
     <el-table-column prop="userName" label="用户名" width="180" align="center"></el-table-column>

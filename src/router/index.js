@@ -24,7 +24,7 @@ const routes = [
 
 // 创建路由，并设置url为'history'模式需要后台支持（相关内容查看官网介绍），以及模仿浏览器跳转效果以及每次跳转页面后置顶设置
 const router = new VueRouter({
-  mode: 'history',
+  // mode: 'history',
   routes,
   scrollBehavior (to, from, savedPosition) {
     if (savedPosition) {

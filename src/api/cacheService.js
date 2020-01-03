@@ -26,13 +26,13 @@ const KEYS_DATA = {
     uId: '',
     permissions: '',
     userName: '',
-    Password: '',
+    password: '',
     nickname: '',
     sex: '',
     registerTime: '',
     endTime: '',
     state: '',
-    HeadPortraitSrc: '',
+    headPortraitSrc: '',
     // 登录页是否记住密码
     setPasswordStyle: false,
     // 用户密码修改的验证码按钮读秒
@@ -44,7 +44,13 @@ const KEYS_DATA = {
     // 后台导航缩进
     isCollapse: false,
     // 用户是否登录
-    judgeLogin: ''
+    judgeLogin: '',
+    // 文章总数
+    articleAll: 5,
+    // 总页数
+    pageNum: 0,
+    // 每页条数
+    articlePageNum: 1,
   },
   webInfo: {
     // 注册/找回密码的获取验证码按钮成功后的读秒
@@ -119,17 +125,17 @@ export function removeAccessToken () {
 }
 
 // localStorage格式化数据
-export function removeAdminInfo () {
-  if (KEYS.adminInfo.setPasswordStyle) {
-    KEYS_DATA.adminInfo.userName = KEYS.adminInfo.userName
-    KEYS_DATA.adminInfo.Password = KEYS.adminInfo.Password
-    KEYS_DATA.adminInfo.setPasswordStyle = KEYS.adminInfo.setPasswordStyle
+export function removeAdminInfo (adminInfo, keys_data) {
+  if (adminInfo.setPasswordStyle) {
+    keys_data.adminInfo.userName = adminInfo.userName
+    keys_data.adminInfo.Password = adminInfo.Password
+    KEYS_DATA.adminInfo.setPasswordStyle = adminInfo.setPasswordStyle
   } else {
-    KEYS_DATA.adminInfo.userName = ''
-    KEYS_DATA.adminInfo.Password = ''
-    KEYS_DATA.adminInfo.setPasswordStyle = false
+    keys_data.adminInfo.userName = ''
+    keys_data.adminInfo.Password = ''
+    keys_data.adminInfo.setPasswordStyle = false
   }
-  lsCache.set(KEYS.adminInfo, KEYS_DATA.adminInfo)
+  lsCache.set(adminInfo, keys_data.adminInfo)
 }
 
 // 后台key

@@ -20,6 +20,7 @@ export default [
     path: '/backstage',
     name: 'backstage',
     component: backstage,
+    redirect: '/backstage/home',
     children: [
       {
         // 后台首页 也是个人中心

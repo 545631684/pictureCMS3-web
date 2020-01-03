@@ -84,7 +84,7 @@
       },
       // 点击选项卡事件
       handleClick(tab, event) {
-	        console.log(tab, event);
+	        // console.log(tab, event);
       }
     },
     created() {
@@ -93,18 +93,18 @@
       window.setTimeout(() => {_this.localStorageGet()}, 2000)
       this.getPublicInfo()
         .then(function (response) {
-          if (response.code === 200) {
-            if (response.data.groupLabel.length !== 0) {
+          if (response.code === 200 && response.data !== '') {
+            if (response.data.groupLabel !== "[]" && response.data.groupLabel.length !== 0) {
               response.data.groupLabel.find((o, index)=>{
                _this.$set(_this.groupLabel.data, _this.groupLabel.data.length, o)
               })
             }
-            if (response.data.label.length !== 0) {
+            if (response.data.label !== "[]" && response.data.label.length !== 0) {
               response.data.label.find((o, index)=>{
                _this.$set(_this.label.data, _this.label.data.length, o)
               })
             }
-            if (response.data.projects.length !== 0) {
+            if (response.data.projects !== "[]" && response.data.projects.length !== 0) {
               response.data.projects.find((o, index)=>{
                _this.$set(_this.project.data, _this.project.data.length, o)
               })
@@ -115,7 +115,7 @@
               	})
               })
             }
-            if (response.data.types.length !== 0) {
+            if (response.data.types !== "[]" && response.data.types.length !== 0) {
               response.data.types.find((o, index)=>{
                _this.$set(_this.types.data, _this.types.data.length, o)
               })
@@ -126,7 +126,7 @@
               	})
               })
             }
-            if (response.data.details.length !== 0) {
+            if (response.data.details !== "[]" && response.data.details.length !== 0) {
               response.data.details.find((o, index)=>{
                _this.$set(_this.details.data, _this.details.data.length, o)
               })
@@ -137,14 +137,14 @@
               	})
               })
             }
-            
-            // 不管数据有没有所有加载状态都会关闭
-            _this.groupLabel.data.length !== 0 ? _this.groupLabel.loading = false : _this.groupLabel.loading = false
-            _this.groupLabel.data.length !== 0 && _this.label.data.length !== 0 ? _this.label.loading = false : _this.label.loading = false
-            _this.project.data.length !== 0 ? _this.project.loading = false : _this.project.loading = false
-            _this.types.data.length !== 0 ? _this.types.loading = false : _this.types.loading = false
-            _this.details.data.length !== 0 ? _this.details.loading = false : _this.details.loading = false
           }
+            
+          // 不管数据有没有所有加载状态都会关闭
+          _this.groupLabel.data.length !== 0 ? _this.groupLabel.loading = false : _this.groupLabel.loading = false
+          _this.groupLabel.data.length !== 0 && _this.label.data.length !== 0 ? _this.label.loading = false : _this.label.loading = false
+          _this.project.data.length !== 0 ? _this.project.loading = false : _this.project.loading = false
+          _this.types.data.length !== 0 ? _this.types.loading = false : _this.types.loading = false
+          _this.details.data.length !== 0 ? _this.details.loading = false : _this.details.loading = false
         })
         .catch(function (error) {
           console.log(error)

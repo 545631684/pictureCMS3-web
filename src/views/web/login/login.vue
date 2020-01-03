@@ -1,6 +1,6 @@
 <template>
   <el-container class="login">
-    <el-main flex="main:center cross:center">
+    <el-main style="display: flex; justify-content: center; align-items: center;">
       <div class="body" >
         <h1>赛奇<br /><span>因你而精彩</span></h1>
         <div class="mk1">

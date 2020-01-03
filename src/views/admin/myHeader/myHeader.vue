@@ -17,6 +17,7 @@
 
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'
+  import { cachedAdminInfo, cachedKeysData } from 'API/cacheService'
   export default {
   	inject: ['reload'],
     name: 'myHeader',
@@ -27,15 +28,34 @@
     },
     methods: {
       ...mapActions([
-        'adminInfo'
+        'adminInfo',
+        'exitlogin',
       ]),
       urlpage(command) {
+        let _this = this
         switch(command) {
           case "index":
-            this.$router.push("/");
+            this.$router.push("/web");
             break;
           case "quit":
-            // cancellationUser(this)
+            this.exitlogin({uId: this.$store.state.admin.adminInfo.uId})
+              .then(function (response) {
+                if(response.code === 200) {
+                  let adminInfoData = cachedKeysData.adminInfo
+                  if(_this.$store.state.admin.adminInfo.setPasswordStyle === 'true'){
+                    adminInfoData.userName = _this.$store.state.admin.adminInfo.userName
+                    adminInfoData.password = _this.$store.state.admin.adminInfo.password
+                    adminInfoData.setPasswordStyle = _this.$store.state.admin.adminInfo.setPasswordStyle
+                  } else {
+                    adminInfoData.userName = ''
+                    adminInfoData.password = ''
+                    adminInfoData.setPasswordStyle = false
+                  }
+                  cachedAdminInfo.save(adminInfoData)
+                  _this.$router.push("/login")
+                }
+              })
+              .catch(function (error) {})
             break;
         }
       }

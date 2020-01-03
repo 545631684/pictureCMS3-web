@@ -451,6 +451,162 @@ const actions = {
         return Promise.reject(error)
       })
   },
+  /**
+   * 获取用户删除的文章
+   */
+  getRecoveryArticle (store, params) {
+    return api.getRecoveryArticle(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 管理员添加用户
+   */
+  guanliUserAdd (store, params) {
+    return api.guanliUserAdd(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 添加文章
+   */
+  articleAdd (store, params) {
+    return api.articleAdd(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 查询文章标题是否重复
+   */
+  getTitleRepeat (store, params) {
+    return api.getTitleRepeat(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 获取所有文章
+   */
+  getArticleAll (store, params) {
+    return api.getArticleAll(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 删除文章(回收站)
+   */
+  exhibitionDel (store, params) {
+    return api.exhibitionDel(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 还原文章
+   */
+  exhibitionreduction (store, params) {
+    return api.exhibitionreduction(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 删除文章(彻底删除)
+   */
+  delArticle (store, params) {
+    return api.delArticle(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 获取单个文章信息(后台)
+   */
+  getAdminArticle (store, params) {
+    return api.getAdminArticle(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 修改文章
+   */
+  articleUpdate (store, params) {
+    return api.articleUpdate(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 修改文章标题检查
+   */
+  getUpdateTitleRepeat (store, params) {
+    return api.getUpdateTitleRepeat(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 后台首页获取数据
+   */
+  getAdminIndexData (store, params) {
+    return api.getAdminIndexData(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 登录注销
+   */
+  exitlogin (store, params) {
+    return api.exitlogin(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
 }
 
 export default {

@@ -196,38 +196,37 @@
       },
       // 添加用户
       addUser() {
-        console.log(this.guanliUserAdd())
-      	// if (!(/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.adduser.userName))) {
-      	// 	this.$alert('邮箱格式错误，请重新输入', '警告', { confirmButtonText: '确定' })
-      	// } else if (this.adduser.nickname.replace(/\s*/g,"").length === 0) {
-      	// 	this.$alert('请输入昵称', '警告', { confirmButtonText: '确定' })
-      	// } else if (this.adduser.sex.length === 0) {
-      	// 	this.$alert('请选择性别', '警告', { confirmButtonText: '确定' })
-      	// } else if (this.adduser.Password.replace(/\s*/g,"").length === 0) {
-      	// 	this.$alert('请输入密码', '警告', { confirmButtonText: '确定' })
-      	// } else if (!(/(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{8,}/.test(this.adduser.Password))) {
-      	// 	this.$alert('输入的密码过于简单请重新输入', '警告', { confirmButtonText: '确定' })
-      	// } else if (this.adduser.permissions.length === 0) {
-      	// 	this.$alert('请选择权限组名称', '警告', { confirmButtonText: '确定' })
-      	// } else if (this.adduser.webShow.length === 0) {
-      	// 	this.$alert('请选择前台显示，开启/禁用', '警告', { confirmButtonText: '确定' })
-      	// } else if (this.adduser.state.length === 0) {
-      	// 	this.$alert('请选择账号状态，开启/禁用', '警告', { confirmButtonText: '确定' })
-      	// } else {
-       //    let _this = this
-      	// 	this.handleUpdateLoading = true
-      	// 	this.guanliUserAdd({userName:this.adduser.userName, nickname:this.adduser.nickname, sex:this.adduser.sex, password:this.adduser.Password, permissions:this.getUserGroupId(this.adduser.permissions), webShow:this.adduser.webShow, state:this.adduser.state})
-       //      .then(function (response) {
-       //        if (response.code === 200) {
-       //          _this.$message({message: response.msg, type: 'success'})
-       //          // 更新页面调用app.vue的更新方法
-       //          _this.reload()
-       //        }
-       //      })
-       //      .catch(function (error) {
-       //        _this.$alert(error.msg, {confirmButtonText: '确定'})
-       //      })
-      	// }
+      	if (!(/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.adduser.userName))) {
+      		this.$alert('邮箱格式错误，请重新输入', '警告', { confirmButtonText: '确定' })
+      	} else if (this.adduser.nickname.replace(/\s*/g,"").length === 0) {
+      		this.$alert('请输入昵称', '警告', { confirmButtonText: '确定' })
+      	} else if (this.adduser.sex.length === 0) {
+      		this.$alert('请选择性别', '警告', { confirmButtonText: '确定' })
+      	} else if (this.adduser.Password.replace(/\s*/g,"").length === 0) {
+      		this.$alert('请输入密码', '警告', { confirmButtonText: '确定' })
+      	} else if (!(/(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{8,}/.test(this.adduser.Password))) {
+      		this.$alert('输入的密码过于简单请重新输入', '警告', { confirmButtonText: '确定' })
+      	} else if (this.adduser.permissions.length === 0) {
+      		this.$alert('请选择权限组名称', '警告', { confirmButtonText: '确定' })
+      	} else if (this.adduser.webShow.length === 0) {
+      		this.$alert('请选择前台显示，开启/禁用', '警告', { confirmButtonText: '确定' })
+      	} else if (this.adduser.state.length === 0) {
+      		this.$alert('请选择账号状态，开启/禁用', '警告', { confirmButtonText: '确定' })
+      	} else {
+          let _this = this
+      		this.handleUpdateLoading = true
+      		this.guanliUserAdd({userName:this.adduser.userName, nickname:this.adduser.nickname, sex:this.adduser.sex, password:this.adduser.Password, permissions:this.getUserGroupId(this.adduser.permissions), webShow:this.adduser.webShow, state:this.adduser.state})
+            .then(function (response) {
+              if (response.code === 200) {
+                _this.$message({message: response.msg, type: 'success'})
+                // 更新页面调用app.vue的更新方法
+                _this.reload()
+              }
+            })
+            .catch(function (error) {
+              _this.$alert(error.msg, {confirmButtonText: '确定'})
+            })
+      	}
       	
       },
       // 开启添加用户窗口

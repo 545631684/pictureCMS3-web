@@ -19,7 +19,7 @@
   		<el-dialog :title="title" :visible.sync="mixTypeAdd" width="35%" center>
   			<p class="clearfix" style="width: 65%;margin: 0 auto;">
   				<el-select class="ma10" v-model="typeName" placeholder="分类" filterable clearable style="width:200px;margin-left: 20px; color: #409eff;">
-  					<el-option v-for="item in types" :key="item.tid" :label="item.lname" :value="item.lname">
+  					<el-option v-for="item in tList" :key="item.tid" :label="item.lname" :value="item.lname">
   					</el-option>
   				</el-select>
   				<input style="width: 150px;" class="el-input__inner" placeholder="分类" type="text" name="" id="" value="" v-model="name" @keyup.enter="addName()" />
@@ -65,7 +65,7 @@
   						<div class="demo-input-suffix">
   							所属类型:
   							<el-select class="ma10" v-model="typeName" placeholder="类型" filterable clearable style=" margin-left: 15px;">
-  								<el-option v-for="item in types" :key="item.tid" :label="item.lname" :value="item.lname">
+  								<el-option v-for="item in tList" :key="item.tid" :label="item.lname" :value="item.lname">
   								</el-option>
   							</el-select>
   						</div>

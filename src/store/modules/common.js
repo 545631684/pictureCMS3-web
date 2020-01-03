@@ -22,7 +22,7 @@ const getters = {
   },
   // 遍历分类数组，通过id获取name
   getUserMinTypeName: (state, getters) => (id) => {
-    return state.publicInfo.details.find(minType => {if (minType.id === id) {return minType.dname}})
+    return state.publicInfo.details.find(minType => {if (minType.did === id) {return minType.dname}})
   },
   // 遍历权限组数组，通过id获取name
   getUserRecoveryName: (state, getters) => (id) => {

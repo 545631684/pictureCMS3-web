@@ -304,5 +304,95 @@ export default {
   guanliUserAdd (params) {
     return axios.post('a/user_add', Qs.stringify(params))
   },
+  /**
+   * 添加文章
+   */
+  articleAdd (params) {
+    return axios.post('a/articleAdd', Qs.stringify(params))
+  },
+  /**
+   * 查询文章标题是否重复
+   */
+  getTitleRepeat (params) {
+    return axios.post('a/getTitleRepeat', Qs.stringify(params))
+  },
+  /**
+   * 获取所有文章
+   */
+  getArticleAll (params) {
+    return axios.post('a/getArticleAll', Qs.stringify(params))
+  },
+  /**
+   * 删除文章(回收站)
+   */
+  exhibitionDel (params) {
+    return axios.post('a/exhibitionDel', Qs.stringify(params))
+  },
+  /**
+   * 还原文章
+   */
+  exhibitionreduction (params) {
+    return axios.post('a/exhibitionreduction', Qs.stringify(params))
+  },
+  /**
+   * 删除文章(彻底删除)
+   */
+  delArticle (params) {
+    return axios.post('a/delArticle', Qs.stringify(params))
+  },
+  /**
+   * 获取单个文章信息(后台)
+   */
+  getAdminArticle (params) {
+    return axios.post('a/getAdminArticle', Qs.stringify(params))
+  },
+  /**
+   * 获取单个文章信息(前台)
+   */
+  getWebArticle (params) {
+    return axios.post('a/getWebArticle', Qs.stringify(params))
+  },
+  /**
+   * 修改文章
+   */
+  articleUpdate (params) {
+    return axios.post('a/articleUpdate', Qs.stringify(params))
+  },
+  /**
+   * 修改文章标题检查
+   */
+  getUpdateTitleRepeat (params) {
+    return axios.post('a/getUpdateTitleRepeat', Qs.stringify(params))
+  },
+  /**
+   * 后台首页获取数据
+   */
+  getAdminIndexData (params) {
+    return axios.post('a/getAdminIndexData', Qs.stringify(params))
+  },
+  /**
+   * 登录注销
+   */
+  exitlogin (params) {
+    return axios.post('a/exitlogin', Qs.stringify(params))
+  },
+  /**
+   * 前台获取分页数据
+   */
+  getWebArticleAll (params) {
+    return axios.post('w/getWebArticleAll', Qs.stringify(params))
+  },
+  /**
+   * 前台获取单篇文章数据
+   */
+  getWebArticle (params) {
+    return axios.post('w/getWebArticle', Qs.stringify(params))
+  },
+  /**
+   * 前台获取所有用户数据
+   */
+  webUserList (params) {
+    return axios.post('w/webUserList', Qs.stringify(params))
+  },
   
 }
