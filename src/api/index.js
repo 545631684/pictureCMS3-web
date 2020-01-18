@@ -394,5 +394,17 @@ export default {
   webUserList (params) {
     return axios.post('w/webUserList', Qs.stringify(params))
   },
+  /**
+   * 用户操作记录
+   */
+  setOperationInfo (params) {
+    return axios.post('w/setOperationInfo', Qs.stringify(params))
+  },
+  /**
+   * 获取用户操作记录
+   */
+  getOperationInfo (params) {
+    return axios.post('w/getOperationInfo', Qs.stringify(params))
+  },
   
 }

@@ -169,6 +169,7 @@
         'labelAdd',
         'labelsave',
         'labelDel',
+        'setOperationInfo'
       ]),
       // 搜索操作
       search () {
@@ -267,6 +268,7 @@
       		this.labelsave({lid: this.row.lid, gid: this.getgroupLabelId(this.groupLabelName), name: this.row.name, state: this.row.state, webShow: this.row.webShow})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:25})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()
@@ -329,6 +331,7 @@
       		this.labelAdd({gid: this.getgroupLabelId(this.groupLabelName), name: this.name})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:24})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()
@@ -354,6 +357,7 @@
           _this.labelDel({lid: lid})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:26, id:lid})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()

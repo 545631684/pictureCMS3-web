@@ -78,7 +78,8 @@
     },
     methods: {
       ...mapActions([
-        'webLogin'
+        'webLogin',
+        'setOperationInfo'
       ]),
       // 登录提交
       submitForm (formName) { 
@@ -87,6 +88,7 @@
         	this.webLogin({userName: this.ruleForm.email, password: this.ruleForm.pw, 'setPasswordStyle': this.ruleForm.type })
             .then(function (response) {
               if (response.code === 200 && response.data.adminInfo.userName === _this.ruleForm.email) {
+                _this.setOperationInfo({_this:_this, type:27})
                 _this.$message({message: response.msg, type: 'success'})
                 _this.$router.push('/backstage')
               }
@@ -100,6 +102,7 @@
       		    this.webLogin({userName: this.ruleForm.email, password: this.ruleForm.pw, 'setPasswordStyle': this.ruleForm.type })
       		      .then(function (response) {
       		        if (response.code === 200 && response.data.adminInfo.userName === _this.ruleForm.email) {
+                    _this.setOperationInfo({_this:_this, type:27})
       		          _this.$message({message: response.msg, type: 'success'})
       		          _this.$router.push('/backstage')
       		        }

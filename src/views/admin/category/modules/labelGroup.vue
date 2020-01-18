@@ -144,6 +144,7 @@
         'labelsAdd',
         'labelssave',
         'labelsDel',
+        'setOperationInfo',
       ]),
       // 搜索操作
       search () {
@@ -213,6 +214,7 @@
       		this.labelssave({gid: this.row.gid, name: this.row.name, state: this.row.state, webShow: this.row.webShow})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:22})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()
@@ -238,6 +240,7 @@
           _this.labelsDel({gid: gid})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:23, id:gid})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()
@@ -295,6 +298,7 @@
           this.labelsAdd({name: this.name.replace(/\s*/g,"")})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:21, name: _this.name.replace(/\s*/g,"")})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()

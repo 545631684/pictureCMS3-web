@@ -325,15 +325,15 @@ export default {
       seeArticle(mid, typeFile) {
         switch (typeFile) {
             case 'img':
-              this.$router.push('#/web/article/' + mid + '/Index/0/0/')
+              this.$router.push('/web/article/' + mid + '/Index/0/0/')
               this.reload()
               break;
             case 'psd':
-              this.$router.push('#/web/article/' + mid  + '/Index/0/0/')
+              this.$router.push('/web/article/' + mid  + '/Index/0/0/')
               this.reload()
               break;
             case 'video':
-              this.$router.push('#/web/article/' + mid  + '/Index/0/0/')
+              this.$router.push('/web/article/' + mid  + '/Index/0/0/')
               this.reload()
               break;
           }
@@ -384,14 +384,14 @@ export default {
       },
       // 获取当前分类的上级项目名称
       getProjectName(pid) {
-      	return this.$store.getters.getUserProjectsName(pid).xname
+      	return this.$store.getters.getUserProjectsName(pid) === undefined ? "":this.$store.getters.getUserProjectsName(pid).xname
       },
       // 获取当前分类的上级分类名称
       getTypesName(tid) {
-      	return this.$store.getters.getUserTypesName(tid).lname
+      	return this.$store.getters.getUserTypesName(tid) === undefined ? "":this.$store.getters.getUserTypesName(tid).lname
       },
       getUserMinTypeName(did){
-        return this.$store.getters.getUserMinTypeName(did).dname
+        return this.$store.getters.getUserMinTypeName(did) === undefined ? "":this.$store.getters.getUserMinTypeName(did).dname
       }
     },
     created() {

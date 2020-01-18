@@ -8,7 +8,7 @@
           		<img :src="this.$store.state.common.publicInfo.srcUrl + adminInfo.headPortraitSrc" alt=""/>
           	</li>
           	<li>
-          		<span>{{adminInfo.nickname}}<svg v-if="adminInfo.sex === '1'" class="icon2" aria-hidden="true"><use xlink:href="#icon-xingbienan"></use></svg><svg v-else class="icon2" aria-hidden="true"><use xlink:href="#icon-xingbienv"></use></svg></span>
+          		<span>{{adminInfo.nickname}}<svg v-if="adminInfo.sex === '1'" class="icon2" aria-hidden="true"><use xlink:href="#icon-xingbienan"></use></svg><svg v-if="adminInfo.sex === '0'" class="icon2" aria-hidden="true"><use xlink:href="#icon-xingbienv"></use></svg></span>
           	<samp>{{adminInfo.userName}}</samp>	
           	</li>
            </ul>
@@ -46,13 +46,22 @@
         <el-card class="box-card">
           <div slot="header" style="font-weight: bold;">操作日志</div>
           <div class="articleList" >
-            <dl v-if="systemLog.length !== 0">
-              <dd v-for="(itme, index) in systemLog" :key="index">
-                <span>ip地址:{{ itme.ip }}</span>
-                <span>{{ itme.body}}</span>
+            <el-timeline :reverse="true" v-if="operationInfo.length !== 0" style="padding-left: 10px;">
+              <el-timeline-item
+                v-for="(activity, index) in operationInfo"
+                :key="index"
+                :timestamp="formatDate(activity.time)"
+                v-if="index < 100">
+                {{activity.contentText}}
+              </el-timeline-item>
+            </el-timeline>
+            <!-- <dl v-if="operationInfo.length !== 0">
+              <dd v-for="(itme, index) in operationInfo" :key="index">
+                <span>时间:{{ itme.time }}</span>
+                <span>{{ itme.contentText}}</span>
               </dd>
-            </dl>
-            <p v-if="systemLog.length === 0" style="text-align: center;">暂无数据</p>
+            </dl> -->
+            <p v-if="operationInfo.length === 0" style="text-align: center;">暂无数据</p>
           </div>
         </el-card>
       </el-col>
@@ -77,13 +86,15 @@
         downloadNum: 0,
         articleNum: 0,
         articleDeleteNum: 0,
-        systemLog: []
+        systemLog: [],
+        operationInfo:[]
       }
     },
     methods: {
       ...mapActions([
         'getUserList',
         'getAdminIndexData',
+        'getOperationInfo',
       ]),
       formatDate (time) {
         if (time !== null) {
@@ -103,7 +114,7 @@
             window.open('#/web/article/' + mid + '/backstage/0/0/', '_blank')
             break;
           case 'video':
-            window.open('#/web/articleVideo/' + mid + '/backstage/0/0/', '_blank')
+            window.open('#/web/article/' + mid + '/backstage/0/0/', '_blank')
             break;
         }
       },
@@ -139,6 +150,15 @@
         .catch(function (error) {
           // _this.$alert(error.msg, {confirmButtonText: '确定'})
         })
+      this.getOperationInfo({uId:this.$store.state.admin.adminInfo.uId})
+        .then((response) => {
+          if(response.code === 200) {
+            _this.operationInfo = response.data === null ? [] : response.data
+          }
+        })
+        .catch(function (error) {
+          // _this.$alert(error.msg, {confirmButtonText: '确定'})
+        })
     }
   }
 </script>
@@ -161,7 +181,7 @@
 .userInfoyTop li samp,.userInfoyTop li span{display:block;font-size:18px;font-weight:700;color:#606266;height:30px;line-height:30px}
 .icon2{width:1em;height:1em;vertical-align:-.15em;fill:currentColor;overflow:hidden;margin-left:.5em}
 .box-card{width:96%}
-.articleList{}
+.articleList{overflow-y: auto;overflow-x: visible;height:auto ;max-height: 637px;}
 .articleList dl{border: 1px solid #eee; border-left: none; border-right: none; border-bottom: none;}
 .articleList dl dd{    padding: 15px 10px;
     border: 1px solid #eee;
@@ -190,4 +210,5 @@
     .articleList dl dd span.article-title:hover{ color: #29b6f6;}
     .articleList dl dd span.time{    color: #999;
     margin-left: 10px;}
+.el-card{height: auto; max-height: 736px;}
 </style>

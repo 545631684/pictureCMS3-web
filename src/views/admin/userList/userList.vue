@@ -101,7 +101,7 @@
   					</div>
             <div class="demo-input-suffix">
   						密码:
-  						<el-input style="width: auto;" class="el-input--suffix" placeholder="不输入则不会修改密码"  name="" id="" v-model="row.Password" clearable></el-input>
+  						<el-input style="width: auto;" class="el-input--suffix" placeholder="不输入则不会修改密码"  name="" id="" v-model="row.password" ></el-input>
   						 <span class="intro">请用数字+字母+字符（最少8位数）密码结构</span>
   					</div>
   					<div class="demo-input-suffix">
@@ -174,6 +174,7 @@
         'getUserList',
         'guanliuserSave',
         'guanliUserAdd',
+        'setOperationInfo'
       ]),
       // 用户信息编辑框弹出
       handleEdit(index, row) {
@@ -185,6 +186,7 @@
         })
         this.row = JSON.stringify(row)
       	this.row = JSON.parse(this.row)
+        this.row.password = ""
       	// 权限id转名称，清空密码,账号状态修改
       	this.usergroups.find((o, index) => {
       		if (o.id === _this.row.permissions) {
@@ -218,6 +220,7 @@
       		this.guanliUserAdd({userName:this.adduser.userName, nickname:this.adduser.nickname, sex:this.adduser.sex, password:this.adduser.Password, permissions:this.getUserGroupId(this.adduser.permissions), webShow:this.adduser.webShow, state:this.adduser.state})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:6})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
@@ -258,7 +261,7 @@
       		this.$alert('请输入昵称', '警告', { confirmButtonText: '确定' })
       	} else if (this.row.sex === null || this.row.sex.length === 0) {
       		this.$alert('请选择性别', '警告', { confirmButtonText: '确定' })
-      	} else if (this.row.Password.replace(/\s*/g,"").length !== 0 && !(/(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{8,}/.test(this.row.Password))) {
+      	} else if (this.row.password.replace(/\s*/g,"").length !== 0 && !(/(?!^\\d+$)(?!^[a-zA-Z]+$)(?!^[_#@]+$).{8,}/.test(this.row.password))) {
       		this.$alert('输入的密码过于简单请重新输入', '警告', { confirmButtonText: '确定' })
       	} else if (this.row.permissions.length === 0) {
       		this.$alert('请选择权限组名称', '警告', { confirmButtonText: '确定' })
@@ -269,16 +272,18 @@
       	} else {
       		this.handleUpdateLoading = true
           let _this = this
-      		this.guanliuserSave({uId: this.row.uId, nickname: this.row.nickname, sex: this.row.sex, password: this.row.Password, permissions: _this.getUserGroupId(this.row.permissions), webShow: this.row.webShow, state: this.row.state, judgeLogin: this.row.judgeLogin})
+      		this.guanliuserSave({uId: this.row.uId, nickname: this.row.nickname, sex: this.row.sex, password: this.row.password, permissions: _this.getUserGroupId(this.row.permissions), webShow: this.row.webShow, state: this.row.state, judgeLogin: this.row.judgeLogin})
             .then(function (response) {
               if (response.code === 200) {
+                console.log("修改成功")
+                _this.setOperationInfo({_this:_this, type:7})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
             })
             .catch(function (error) {
-              _this.$alert(error.msg, {confirmButtonText: '确定'})
+              // _this.$alert(error.msg, {confirmButtonText: '确定'})
               // 更新页面调用app.vue的更新方法
               _this.reload()
             })

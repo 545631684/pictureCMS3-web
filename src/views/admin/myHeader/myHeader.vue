@@ -30,6 +30,7 @@
       ...mapActions([
         'adminInfo',
         'exitlogin',
+        'setOperationInfo'
       ]),
       urlpage(command) {
         let _this = this
@@ -41,6 +42,7 @@
             this.exitlogin({uId: this.$store.state.admin.adminInfo.uId})
               .then(function (response) {
                 if(response.code === 200) {
+                  _this.setOperationInfo({_this:_this, type:28})
                   let adminInfoData = cachedKeysData.adminInfo
                   if(_this.$store.state.admin.adminInfo.setPasswordStyle === 'true'){
                     adminInfoData.userName = _this.$store.state.admin.adminInfo.userName

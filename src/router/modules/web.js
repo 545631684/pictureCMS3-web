@@ -6,7 +6,7 @@ const article = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/web/art
 
 export default [
   {
-    path: '*',
+    path: '/',
     redirect: '/login'
   },
   {

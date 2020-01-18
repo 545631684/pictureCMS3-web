@@ -71,7 +71,8 @@
           <template slot-scope="scope">
             <el-button size="mini" circle icon="el-icon-view" title="查看" v-on:click.stop="seeArticle(scope.row.mId, scope.row.typeFile)"></el-button>
             <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" v-on:click.stop="modifyArticle(scope.row.mId, scope.row.typeFile, scope.row.uId)"></el-button>
-            <el-button size="mini" type="danger" circle icon="el-icon-delete" title="删除" v-on:click.stop="deleteArticle(scope.row.mId, scope.row.uId)"></el-button>
+            <el-button size="mini" type="danger" circle icon="el-icon-delete" title="删除" v-on:click.stop="deleteArticle(scope.row.mId, scope.row.uId)" v-if="userInfo.permissions === '2' || scope.row.uId === userInfo.uId"></el-button>
+            <el-button size="mini" type="danger" circle icon="el-icon-delete" title="删除" disabled v-on:click.stop="deleteArticle(scope.row.mId, scope.row.uId)" v-if="userInfo.permissions !== '2' && scope.row.uId !== userInfo.uId"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -101,6 +102,7 @@
     components: {},
     data() {
       return {
+        userInfo: this.$store.state.admin.adminInfo,
         loading: true,
         projects: this.$store.state.common.publicInfo.projects,
         types: this.$store.state.common.publicInfo.types,
@@ -166,6 +168,7 @@
         'getUserList',
         'getArticleAll',
         'exhibitionDel',
+        'setOperationInfo'
       ]),
       // 返回查看数据
       viewer (url) {
@@ -344,6 +347,7 @@
       },
       // 查看文章路径跳转
       seeArticle (mid, typeFile) {
+        this.setOperationInfo({_this:this, type:1, id:mid})
         window.open(this.$store.state.common.publicInfo.srcUrl + '#/web/article/' + mid + '/backstage/0/0/', '_blank')
       },
       // 删除文章
@@ -354,11 +358,12 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          _this.exhibitionDel({mId: mid})
+          _this.exhibitionDel({mId: mid, uId: _this.userInfo.uId})
             .then((response) => {
               if(response.code === 200) {
                 _this.article3 = []
-                _this.$alert(response.msg, {confirmButtonText: '确定'})
+                _this.setOperationInfo({_this:_this, type:2, id:mid})
+                _this.$message({message: response.msg, type: 'success'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }

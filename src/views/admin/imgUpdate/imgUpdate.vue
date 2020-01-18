@@ -337,11 +337,11 @@
           this.getUpdateTitleRepeat({title:this.article.title, mId: this.article.mId})
             .then((response) => {
               if(response.code === 200) {
-                if (response.data === '1') {
+                if (response.data === '0') {
                   // 有重复的
                   _this.titleDiv = true
                   _this.titleCf = false
-                } else if (response.data === '0') {
+                } else if (response.data === '1') {
                   // 没有重复的
                   _this.titleDiv = true
                   _this.titleCf = true

@@ -215,20 +215,23 @@
     			Proportion: 0
     		},
     		colors: [
-              {color: '#f56c6c', percentage: 20},
-              {color: '#e6a23c', percentage: 40},
-              {color: '#5cb87a', percentage: 60},
-              {color: '#1989fa', percentage: 80},
-              {color: '#6f7ad3', percentage: 100}
-            ],
-            articleRankingData: [],
-            activeLatelyData: [],
+          {color: '#f56c6c', percentage: 20},
+          {color: '#e6a23c', percentage: 40},
+          {color: '#5cb87a', percentage: 60},
+          {color: '#1989fa', percentage: 80},
+          {color: '#6f7ad3', percentage: 100}
+        ],
+        articleRankingData: [],
+        activeLatelyData: [],
     		articleSubsectionData: {
     			title : {
     		        text: '2019年',
     		        subtext: '',
     		        x:'left'
-    		    },
+    		    }, 
+          tooltip:{
+           confine:true
+          },
     			legend: {},
     		    tooltip: {
     		    	trigger: 'axis',
@@ -283,7 +286,8 @@
     		        x:'left'
     		    },
     		    tooltip: {
-    		        trigger: 'axis'
+    		        trigger: 'axis',
+                confine:true
     		    },
     		    legend: {
     		        data:[]
@@ -316,7 +320,8 @@
     		        x:'left'
     		    },
     		    tooltip: {
-    		        trigger: 'axis'
+    		        trigger: 'axis',
+                confine:true
     		    },
     		    legend: {
     		        data:[]
@@ -1272,7 +1277,7 @@
       }
     },
     created() {
-      let _this = this
+      let _this = this, date = new Date()
       // 获取当前用户页面所需的信息
       this.getAdminStatisticsData({uId:this.$store.state.admin.adminInfo.uId})
       .then((response) => {
@@ -1373,6 +1378,7 @@
           		_this.articleSubsectionData.dataset.source[2].push(num[2])
           		_this.articleSubsectionData.dataset.source[3].push(num[3])
           	})
+            _this.articleSubsectionData.title.text = date.getFullYear() + '年'
           	// 年统计每月img\psd\video类型的数据 初始化图表
           	_this.articleSubsection()
           	
@@ -1381,6 +1387,7 @@
           		_this.articleUserDownloadData.legend.data.push(obj.nickname)
           		_this.articleUserDownloadData.series.push({name:obj.nickname,type:'line',data:[]})
           	})
+            _this.articleUserDownloadData.title.text = date.getFullYear() + '年'
           	response.data.activeDownloadYearAll.find((objs, objsindex) => {
           		if (objs.length === 0) {
           			_this.articleUserDownloadData.series.find((obj, objindex) => {obj.data.push(0)})
@@ -1402,6 +1409,7 @@
           		_this.articleUserSubsectionData.legend.data.push(o.name)
           		_this.articleUserSubsectionData.series.push({name:o.name,type:'line',data:o.data})
           	})
+             _this.articleUserSubsectionData.title.text = date.getFullYear() + '年'
           	
           	// 当月在职用户每日发布情况 初始化图表
           	_this.articleUserSubsection()
@@ -1410,6 +1418,7 @@
           	response.data.projectAll.find((p, index) => {
           		_this.articleTypeProjectAllData.dataset.source[0].push(p.xname)
           	})
+            _this.articleTypeProjectAllData.title.text = date.getFullYear() + '年'
           	_this.articleTypeProjectAllData.dataset.source[0].find((s, indexs) => {
           		if (indexs > 0) {
           			response.data.activeProjectTotalImg.find((i, indexi) => {
@@ -1430,6 +1439,7 @@
           	response.data.projectAll.find((p, index) => {
           		_this.articleTypeProjectMonthAllData.dataset.source[0].push(p.xname)
           	})
+            _this.articleTypeProjectMonthAllData.title.text = date.getFullYear() + '年'
           	_this.articleTypeProjectMonthAllData.dataset.source[0].find((s, indexs) => {
           		if (indexs > 0) {
           			response.data.activeProjectMonthImg.find((i, indexi) => {

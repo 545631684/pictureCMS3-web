@@ -135,6 +135,7 @@
         'projectsave',
         'projectdel',
         'setPublicInfo',
+        'setOperationInfo',
         'getPublicInfo'
       ]),
       // 搜索操作
@@ -195,6 +196,7 @@
       		this.projectsave({pid: this.row.pid, xname: this.row.xname, state: this.row.state, webShow: this.row.webShow})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:13})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()
@@ -243,6 +245,7 @@
       		this.projectAdd({xname: this.name, state: '1', webShow: '1'})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:12})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()
@@ -268,6 +271,7 @@
           _this.projectdel({pid: pid})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:14, id:pid})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()

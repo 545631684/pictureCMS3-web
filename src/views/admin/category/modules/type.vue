@@ -138,6 +138,7 @@
         'getPublicInfo',
         'typeAdd',
         'typesave',
+        'setOperationInfo',
         'typeDel'
       ]),
       // 搜索操作
@@ -207,6 +208,7 @@
           this.typesave({tid: this.row.tid, lname: this.row.lname, state: this.row.state, webShow: this.row.webShow})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:16})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()
@@ -252,6 +254,7 @@
           this.typeAdd({lname: this.name, state: '1', webShow: '1'})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:15})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()
@@ -278,6 +281,7 @@
           _this.typeDel({tid: tid})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:17, id:tid})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()

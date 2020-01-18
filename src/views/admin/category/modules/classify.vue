@@ -185,6 +185,7 @@
         'getPublicInfo',
         'detailsAdd',
         'detailssave',
+        'setOperationInfo',
         'detailsDel'
       ]),
       // 搜索操作
@@ -277,6 +278,7 @@
       		this.detailssave({did: this.row.did, tbid: this.getTypesID(this.typeName), dname: this.row.dname, state: this.row.state, webShow: this.row.webShow})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:19})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()
@@ -336,6 +338,7 @@
           this.detailsAdd({tbid: this.getTypesID(this.typeName), dname: this.name, state: '1', webShow: '1'})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:18})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()
@@ -363,6 +366,7 @@
           _this.detailsDel({did: did})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:20, id: did})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()

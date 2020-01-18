@@ -60,6 +60,7 @@
         'getRecoveryArticle',
         'exhibitionreduction',
         'delArticle',
+        'setOperationInfo'
       ]),
       // 删除操作
       deleteArticle (index, mid) {
@@ -72,7 +73,8 @@
           this.delArticle({mId: mid})
             .then((response) => {
               if(response.code === 200) {
-                _this.$alert(response.msg, {confirmButtonText: '确定'})
+                _this.setOperationInfo({_this:_this, type:4, id:mid})
+                _this.$message({message: response.msg, type: 'success'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -98,7 +100,8 @@
           this.exhibitionreduction({mId: mid})
             .then((response) => {
               if(response.code === 200) {
-                _this.$alert(response.msg, {confirmButtonText: '确定'})
+                _this.setOperationInfo({_this:_this, type:3, id:mid})
+                _this.$message({message: response.msg, type: 'success'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }

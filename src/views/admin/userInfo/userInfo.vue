@@ -41,6 +41,7 @@
     data() {
       return {
         userInfo:this.$store.state.admin.adminInfo,
+        userInfo2:{},
         params: {
           blogName: '',
           avatar: '',
@@ -68,7 +69,8 @@
       ...mapActions([
         'userSave',
         'delfile',
-        'setAdminInfo'
+        'setAdminInfo',
+        'setOperationInfo'
       ]),
       formatDates(time) { // 时间戳转换
         if(time !== null) {
@@ -94,7 +96,8 @@
           this.userSave({uId:this.userInfo.uId, headPortraitSrc:this.userInfo.headPortraitSrc, nickname: this.userInfo.nickname, sex: sex })
             .then((response) => {
               if(response.code === 200) {
-                _this.$alert(response.msg, {confirmButtonText: '确定'})
+                _this.setOperationInfo({_this:_this, type:5, user:{uId:this.userInfo.uId, headPortraitSrc:this.userInfo.headPortraitSrc, nickname: this.userInfo.nickname, sex: sex }})
+                _this.$message({message: response.msg, type: 'success'})
                 _this.uploadFile.find((fileSrc, index) => {
                   if (_this.userInfo.headPortraitSrc === fileSrc) _this.uploadFile.splice(index,1)
                 })
@@ -124,6 +127,8 @@
       this.userInfo.endTime = this.formatDates(this.userInfo.endTime)
       if (this.userInfo.sex === 1 || this.userInfo.sex === '1') this.userInfo.sex = '男'
       if (this.userInfo.sex === 0 || this.userInfo.sex === '0') this.userInfo.sex = '女'
+      this.userInfo2 = JSON.stringify(this.$store.state.admin.adminInfo)
+      this.userInfo2 = JSON.parse(this.userInfo2)
       // 刷新页面时删除上传的文件
       let _this = this
       window.addEventListener('beforeunload', e => {

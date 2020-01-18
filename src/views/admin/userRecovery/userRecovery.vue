@@ -39,6 +39,7 @@
         'userRecovery',
         'reduction',
         'getPublicInfo',
+        'setOperationInfo'
       ]),
       // 还原用户
       handleDelete (index, row) {
@@ -51,6 +52,7 @@
           _this.reduction({uId:row.uId})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:8, id:row.uId})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo()

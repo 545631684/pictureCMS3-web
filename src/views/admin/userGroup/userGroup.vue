@@ -114,7 +114,8 @@
         'authGrouplist',
         'authGroupdel',
         'authGroupone',
-        'authGroupedit'
+        'authGroupedit',
+        'setOperationInfo'
       ]),
       // 新增组单个功能组全选
       handleCheckAllChange(val, index) {
@@ -156,6 +157,7 @@
           _this.authGroupdel({id:id})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:11, id:id})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
@@ -213,6 +215,7 @@
       		this.authGroupedit({id: id, title: this.groupUpdateSingle[0].title, rules: this.groupUpdateSingle[0].rules, disabled: this.groupUpdateSingle[0].disabled ? '2' : '1'})
             .then(function (response) {
               if (response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:10, id:id})
                 _this.$message({message: response.msg, type: 'success'})
                 // 关闭添加用户组弹窗
                 _this.groupUpdate = false
@@ -235,19 +238,20 @@
       	} else if (this.groupAddInspect === false) {
       		this.$alert('请填写权限，不能为空', '警告', {confirmButtonText: '确定'})
       	} else {
-      		// 关闭添加用户组弹窗
-          this.groupAdd = false
+          // 开启loading
+          this.setLoading(true)
       		// 有二级权限的checkedCities字段内容改字符串‘[]’
       		this.groups.find(obj => {
       			obj.checkedCities.length === 0 ? obj.checkedCities = '[]' : obj.checkedCities
       			obj.cityOptions.length === 0 ? obj.cityOptions = '[]' : obj.cityOptions
       		})
-      		// 开启loading
-          this.setLoading(true)
       		// 添加用户组
           this.authGroupadd({title: this.groupNameAdd, rules: this.groups, disabled: !this.groupForbid ? '1' : '2'})
             .then(function (response) {
               if (response.code === 200) {
+                // 关闭添加用户组弹窗
+                _this.groupAdd = false
+                _this.setOperationInfo({_this:_this, type:9})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
