@@ -307,7 +307,7 @@
             .then((response) => {
               if(response.code === 200) {
                 _this.setOperationInfo({_this:_this, type:31, article:{uId:_this.$store.state.admin.adminInfo.uId, typeFile:'video', typeid:_this.$store.getters.getUserTypesId(_this.typeImg).tid, projectid:_this.$store.getters.getUserProjectsId(_this.projectImg).pid, detailsid:_this.$store.getters.getUserMinTypeId(_this.minTypeImg).did, title:_this.title.replace(/\s+/g," "), keyword:_this.dynamicTags.toString(), describe:_this.describe.replace(/\s+/g," "), img:_this.imgCrss.length > 0 && _this.imgCrss !== '[]' ? _this.imgCrss : '[]', psd:'[]', video:_this.video}})
-                _this.$alert(response.msg, {confirmButtonText: '确定'})
+                _this.$message({type: 'success', message: response.msg})
                 // 更新页面调用app.vue的更新方法
                 _this.myReload()
               }

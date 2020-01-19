@@ -124,6 +124,7 @@
         			File: {}
         		}
         	},
+          article2: {},
         	xname: '',
         	did: '',
         	dname: ''
@@ -197,6 +198,7 @@
         'getUpdateTitleRepeat',
         'getAdminArticle',
         'articleUpdate',
+        'setOperationInfo'
       ]),
       // 上传文件数超出限制提示
       limitNum (file, fileList) {
@@ -311,6 +313,8 @@
           this.articleUpdate({mId:this.article.mId, uId:this.article.uId, pid:this.$store.getters.getUserProjectsId(this.projectImg).pid, tid:this.$store.getters.getUserTypesId(this.typeImg).tid, did:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(), describe:this.article.describe.replace(/\s+/g," "), img:this.article.img, psd:'[]', video:'[]', typeFile:this.article.typeFile})
             .then((response) => {
               if(response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:30, article:{mId:_this.article.mId, uId:_this.article.uId, pid:_this.$store.getters.getUserProjectsId(_this.projectImg).pid, tid:_this.$store.getters.getUserTypesId(_this.typeImg).tid, did:_this.$store.getters.getUserMinTypeId(_this.minTypeImg).did, title:_this.article.title.replace(/\s+/g," "), keyword:_this.dynamicTags.toString(), describe:_this.article.describe.replace(/\s+/g," "), img:_this.article.img, psd:'[]', video:'[]', typeFile:_this.article.typeFile}})
+                console.log("img修改接口")
                 _this.$message({type: 'success', message: response.msg})
                 if(this.deleteFiles.length !== 0) {
                   _this.uploadingFiles = []
@@ -391,6 +395,8 @@
         .then((response) => {
           if(response.code === 200) {
             _this.article = response.data
+            _this.article2 = JSON.stringify(response.data)
+            _this.article2 = JSON.parse(_this.article2)
             let tags = _this.article.keyword.split(",")
             tags.find((e, index) => {
             	_this.dynamicTags.push(e)

@@ -128,6 +128,7 @@
         	did: '',
         	dname: ''
         },
+        article2: {},
         uploadingFiles: [],
         deleteFiles: [],
         release: false,
@@ -198,6 +199,7 @@
         'getUpdateTitleRepeat',
         'getAdminArticle',
         'articleUpdate',
+        'setOperationInfo'
       ]),
       // 上传文件数超出限制提示
       limitNumImg (file, fileList) {
@@ -359,6 +361,19 @@
             })
             .then((response) => {
               if(response.code === 200) {
+                _this.setOperationInfo({_this:_this, type:30, article:{
+                  mId:this.article.mId, 
+                  uId:this.article.uId, 
+                  pid:this.$store.getters.getUserProjectsId(this.projectImg).pid, 
+                  tid:this.$store.getters.getUserTypesId(this.typeImg).tid, 
+                  did:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, 
+                  title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(), 
+                  describe:this.article.describe.replace(/\s+/g," "), 
+                  img: img, 
+                  psd:'[]', 
+                  video: this.article.video, 
+                  typeFile:this.article.typeFile,
+                }})
                 _this.$message({type: 'success', message: response.msg})
                 if(this.deleteFiles.length !== 0) {
                   _this.uploadingFiles = []
@@ -440,6 +455,8 @@
     	  .then((response) => {
     	    if(response.code === 200) {
     	      _this.article = response.data
+            _this.article2 = JSON.stringify(response.data)
+            _this.article2 = JSON.parse(_this.article2)
     	      let tags = _this.article.keyword.split(",")
     	      tags.find((e, index) => {
     	      	_this.dynamicTags.push(e)

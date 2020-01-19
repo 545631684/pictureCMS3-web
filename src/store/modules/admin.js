@@ -848,6 +848,8 @@ const actions = {
         break;
       case 30:
         console.log("修改文章")
+        paramsData.content_article.start = params._this.article2
+        paramsData.content_article.end = params.article
         break;
       case 31:
         paramsData.content_article.start = params.article

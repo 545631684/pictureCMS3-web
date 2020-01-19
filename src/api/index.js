@@ -77,12 +77,6 @@ export default {
     return axios.post('u/user_add', Qs.stringify(params))
   },
   /**
-   * 用户找回密码
-   */
-  webRetrievePassword (params) {
-    return axios.post('u/forgetpass', Qs.stringify(params))
-  },
-  /**
    * 邮箱发送验证码
    */
   send (params) {
