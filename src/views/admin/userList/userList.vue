@@ -2,7 +2,7 @@
   <el-container>
     <el-header>
       <el-button icon="el-icon-plus" type="primary" @click="addUserShow()">添加用户</el-button>
-      <el-dialog title="添加用户" :visible.sync="addUserdiv" width="30%" center>
+      <el-dialog title="添加用户" :visible.sync="addUserdiv" width="32%" center>
         <div class="demo-input-suffix">
           邮箱:
           <el-input style="width: auto;" class="el-input--suffix" placeholder="请输入用户名"  name="" id="" v-model="adduser.userName" clearable></el-input>
@@ -53,7 +53,7 @@
         </span>
       </el-dialog>
     </el-header>
-    <el-table v-loading="loading" :data="userList" class="clearfix" :stripe="true" size="mini" style="width: 80% !important;">
+    <el-table v-loading="loading" :data="userList" class="clearfix" :stripe="true" size="mini">
       <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
       <el-table-column prop="nickname" label="昵称" align="center" min-width="200">
       	<template slot-scope="scope">
@@ -67,6 +67,7 @@
           {{scope.row.sex === null ? '暂无' : scope.row.sex === '1' ? '男' : '女'}}
         </template>
       </el-table-column>
+      <el-table-column prop="articleNum" label="发布文章" align="center" width="100"></el-table-column>
       <el-table-column prop="registerTime" label="创建时间" align="center" width="200"></el-table-column>
       <el-table-column prop="endTime" label="最后登陆" align="center" width="200"></el-table-column>
       <el-table-column prop="permissions" label="权限组" align="center" width="100">
@@ -83,7 +84,7 @@
       <el-table-column label="操作" align="center" width="100">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="handleEdit(scope.$index, scope.row)"></el-button>
-          <el-dialog title="编辑用户信息" :visible.sync="centerDialogVisible" width="30%" center>
+          <el-dialog title="编辑用户信息" :visible.sync="centerDialogVisible" width="32%" center>
             <div class="demo-input-suffix">
   						用户名:
   						<el-input style="width: auto;margin-left: 28px;" class="el-input--suffix" placeholder="请输入用户名"  name="" id="" v-model="row.userName" clearable disabled></el-input>
@@ -95,9 +96,9 @@
   					<div class="demo-input-suffix">
   						性别:
   						<el-radio-group v-model="row.sex" style="margin-left: 43px;">
-  					      	<el-radio label="1">男</el-radio>
-  					      	<el-radio label="0">女</el-radio>
-  					    </el-radio-group>
+                  <el-radio label="1">男</el-radio>
+                  <el-radio label="0">女</el-radio>
+              </el-radio-group>
   					</div>
             <div class="demo-input-suffix">
   						密码:
@@ -127,6 +128,29 @@
   				    </el-radio-group>
   				    <span class="intro" style="margin-left: 43px;">选择禁用后可在用户回收站中还原</span>
   					</div>
+            <div class="demo-input-suffix flex">
+              屏蔽：
+              <el-tabs v-if="row.shieldInfo" v-model="editableTabsValue" type="card" closable @tab-remove="handleTabsEdit" style="width: 400px;margin-left: 38px;">
+                <el-tab-pane
+                  :key="item.pid"
+                  v-for="(item, index) in row.shieldInfo"
+                  :label="item.xname"
+                  :name="item.pid"
+                >
+                  <el-tag
+                    v-for="tag in item.type"
+                    :key="tag.tid"
+                    closable
+                    @close="removeState(tag.tid)"
+                    v-if="tag.state == '1'"
+                    type=""
+                    style="margin-right: 10px;">
+                    {{tag.lname}}
+                  </el-tag>
+                </el-tab-pane>
+              </el-tabs>
+              <p v-else style="width: 400px;margin-left: 38px;">暂无屏蔽信息</p>
+            </div>
             <span slot="footer" class="dialog-footer">
               <el-button @click="updatePwdCancel">取 消</el-button>
               <el-button type="primary" @click="updatePwd" :loading="handleUpdateLoading">确 定</el-button>
@@ -147,6 +171,9 @@
     components: {},
     data() {
       return {
+        editableTabsValue: '',
+        editableTabs:[],
+        tabIndex: 2,
         loading: true,
         userList: [],
         centerDialogVisible: false,
@@ -171,11 +198,38 @@
     },
     methods: {
       ...mapActions([
-        'getUserList',
+        'adminManageUserList',
         'guanliuserSave',
         'guanliUserAdd',
         'setOperationInfo'
       ]),
+      handleTabsEdit(name) {
+        let _this = this
+        this.row.shieldInfo.find((o,index)=>{
+          if(o.pid == name){
+            _this.row.shieldInfo.splice(index,1)
+            _this.row.shieldInfo.length != 0 ? _this.editableTabsValue = _this.row.shieldInfo[0].pid : _this.editableTabsValue = ''
+            _this.row.shieldInfo.length == 0 ? _this.row.shieldInfo = '' : _this.row.shieldInfo = _this.row.shieldInfo  
+          }
+        })
+        this.row.shieldInfo == "" ? this.row.shieldInfo = null : this.row.shieldInfo = this.row.shieldInfo
+        // this.row.shieldInfo.find((o,index)=>{
+        //   o.pid == name ? o.state = '0': o = o
+        // })
+      },
+      removeState(tid){
+        let _this = this, num = 0
+        this.row.shieldInfo.find((o,index)=>{
+          if(o.pid == _this.editableTabsValue){
+            o.type.find((t,indext)=>{
+              t.tid == tid ? t.state = '0' : t = t,
+              t.state == '0' ? num++ : t = t
+            })
+            o.type.length == num ? _this.row.shieldInfo.splice(index,1) : o = o
+          }
+        })
+        this.row.shieldInfo == "" ? this.row.shieldInfo = null : this.row.shieldInfo = this.row.shieldInfo
+      },
       // 用户信息编辑框弹出
       handleEdit(index, row) {
       	let _this = this
@@ -187,6 +241,7 @@
         this.row = JSON.stringify(row)
       	this.row = JSON.parse(this.row)
         this.row.password = ""
+        this.row.shieldInfo !== null ? this.editableTabsValue = this.row.shieldInfo[0].pid : this.editableTabsValue = this.editableTabsValue
       	// 权限id转名称，清空密码,账号状态修改
       	this.usergroups.find((o, index) => {
       		if (o.id === _this.row.permissions) {
@@ -272,7 +327,7 @@
       	} else {
       		this.handleUpdateLoading = true
           let _this = this
-      		this.guanliuserSave({uId: this.row.uId, nickname: this.row.nickname, sex: this.row.sex, password: this.row.password, permissions: _this.getUserGroupId(this.row.permissions), webShow: this.row.webShow, state: this.row.state, judgeLogin: this.row.judgeLogin})
+      		this.guanliuserSave({uId: this.row.uId, nickname: this.row.nickname, sex: this.row.sex, password: this.row.password, permissions: _this.getUserGroupId(this.row.permissions), webShow: this.row.webShow, state: this.row.state, judgeLogin: this.row.judgeLogin, shieldInfo: this.row.shieldInfo})
             .then(function (response) {
               if (response.code === 200) {
                 console.log("修改成功")
@@ -283,7 +338,7 @@
               }
             })
             .catch(function (error) {
-              // _this.$alert(error.msg, {confirmButtonText: '确定'})
+              _this.$alert(error.msg, {confirmButtonText: '确定'})
               // 更新页面调用app.vue的更新方法
               _this.reload()
             })
@@ -313,7 +368,7 @@
     created() {
       let _this = this
       // 获取用户list
-      this.getUserList()
+      this.adminManageUserList()
         .then(function (response) {
           if (response.code === 200) {
             _this.userList = response.data

@@ -115,7 +115,7 @@
   						    <input type="text" id="title" name="title" :value="article.title" />
   						    <input type="text" id="zipfiles" name="zipfiles"  />
   						    <input type="text" id="name" name="name"  />
-  						    <input type="text" id="mId" name="mId" :value="article.mid"/>
+  						    <input type="text" id="mId" name="mId" :value="article.mId"/>
   						    <input type="text" id="froid" name="froid" />
   						    <input type="text" id="inid" name="inid" :value="article.uId" />
   						</form>

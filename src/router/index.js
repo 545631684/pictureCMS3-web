@@ -39,7 +39,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   // 判断是否登录
   if (to.path.indexOf('/backstage') === 0 || to.path.indexOf('/web') === 0) {
-    console.log(getAccessToken(),"登录token状态")
+    // console.log(getAccessToken(),"登录token状态")
     if (!getAccessToken()) {
       // 页面跳转置顶进度条开始
       NProgress.start()

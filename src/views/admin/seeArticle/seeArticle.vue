@@ -5,7 +5,7 @@
         <p>用户：</p>
         <ul>
           <li :class="{on:num4 === ''}" @click="tab4('', '全部', '')">全部</li>
-          <li v-for="(item, index) in userList" :key="index" :class="{on:index === num4}" v-on:click.stop="tab4(index, item.nickname, item.uId)" v-if="item.state !== '1'">{{item.nickname}}</li>
+          <li v-for="(item, index) in userList" :key="index" :class="{on:index === num4}" v-on:click.stop="tab4(index, item.nickname, item.uId)" v-if="item.articleNum !== 0">{{item.nickname}}</li>
         </ul>
       </div>
       <div class="tab clearfix">
@@ -61,6 +61,11 @@
           </template>
         </el-table-column>
         <el-table-column prop="title" label="标题" min-width="400" align="center"></el-table-column>
+        <el-table-column prop="projectid" label="项目" width="100" align="center">
+          <template slot-scope="scope">
+            {{getProjectName(scope.row.projectid)}}
+          </template>
+        </el-table-column>
         <el-table-column prop="click" label="查看" width="100" align="center"></el-table-column>
         <el-table-column prop="registerTimeImg" label="发布时间" align="center" width="160">
           <template slot-scope="scope">
@@ -156,6 +161,23 @@
        //  	}
        //  })
       },
+      'xname.name':function (newQuestion, oldQuestion) {
+        let _this = this, num = []
+      	if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+          this.userInfo.shieldInfo.find((o,index)=>{
+            if(o.xname == _this.xname.name && o.state == '0'){
+              o.type.find((e,indexe)=>{
+                if(e.state == '1'){
+                  _this.types.find((x,indexx)=>{
+                    e.tid == x.tid ? x.state = '0' : x = x
+                    _this.$set(_this.types,indexx,x)
+                  })
+                }
+              })
+            }
+          })
+        }
+      },
       'lname.name':function (newQuestion, oldQuestion) {
       	if (this.num3 !== '') {
         	this.num3 = this.dnames.pbid = this.dnames.tbid = this.dnames.did = this.dnames.name = this.dnames.index = ''
@@ -187,7 +209,8 @@
           pid: this.xname.id !== '' ? this.xname.id : null,
           tid: this.lname.id !== '' ? this.lname.id : null,
           did: this.dnames.did !== '' ? this.dnames.did : null,
-          uid: this.user.id !== '' ? this.user.id : null
+          uid: this.user.id !== '' ? this.user.id : null,
+          userId: this.userInfo.uId
           })
         // console.log('每页 ' + val + '条');
       },
@@ -198,7 +221,8 @@
           pid: this.xname.id !== '' ? this.xname.id : null,
           tid: this.lname.id !== '' ? this.lname.id : null,
           did: this.dnames.did !== '' ? this.dnames.did : null,
-          uid: this.user.id !== '' ? this.user.id : null
+          uid: this.user.id !== '' ? this.user.id : null,
+          userId: this.userInfo.uId
           })
       },
       // 项目按钮
@@ -308,7 +332,8 @@
           pid: this.xname.id !== '' ? this.xname.id : null,
           tid: this.lname.id !== '' ? this.lname.id : null,
           did: this.dnames.did !== '' ? this.dnames.did : null,
-          uid: this.user.id !== '' ? this.user.id : null
+          uid: this.user.id !== '' ? this.user.id : null,
+          userId: this.userInfo.uId
           })
       },
       formatDate (time) { 
@@ -377,6 +402,10 @@
             message: '已取消删除'
           })
         })
+      },
+      // 获取当前分类的上级项目名称
+      getProjectName(pid) {
+      	return this.$store.getters.getUserProjectsName(pid) === undefined ? "":this.$store.getters.getUserProjectsName(pid).xname
       },
       // 💗️标出时当前用户的文章
       myarticle (uid, mid) {
@@ -461,7 +490,8 @@
         pid: this.xname.id !== '' ? this.xname.id : null,
         tid: this.lname.id !== '' ? this.lname.id : null,
         did: this.dnames.did !== '' ? this.dnames.did : null,
-        uid: this.user.id !== '' ? this.user.id : null
+        uid: this.user.id !== '' ? this.user.id : null,
+        userId: this.userInfo.uId
         })
       this.getUserList()
         .then((response) => {
@@ -482,6 +512,16 @@
         .catch(function (error) {
           // _this.$alert(error.msg, {confirmButtonText: '确定'})
         })
+      
+      // 屏蔽项目设置
+      if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+        this.userInfo.shieldInfo.find((o,index)=>{
+          _this.projects.find((e,indexe)=>{
+            e.pid == o.pid && o.state !== '0' ? e.state = '0' : e = e
+            _this.$set(_this.projects,indexe,e)
+          })
+        })
+      }
     }
   }
 </script>

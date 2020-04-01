@@ -8,6 +8,7 @@
   		</el-row>
   		<el-button type="primary" style="float: left;" @click="search()">搜索</el-button>
   		<el-button style="float: left;" @click="firing('', '3')">添加项目</el-button>
+  		<el-button style="float: left;" @click="firing('', '4')">添加屏蔽人</el-button>
   		<el-dialog :title="title" :visible.sync="centerDialogVisibleAdd" width="20%" center>
   			<p class="upPwd">
   				<input class="el-input__inner" type="text" name="" id="" value="" v-model="name" @keyup.enter="addName()" />
@@ -17,11 +18,50 @@
               <el-button type="primary" @click="addName()">确 定</el-button>
             </span>
   		</el-dialog>
+      <el-dialog :title="title" :visible.sync="centerDialogShield" width="20%" center>
+  			<el-alert
+  			  title="选择项目屏蔽,项目下的类型也会屏蔽!"
+  			  type="warning"
+  			  show-icon>
+  			</el-alert>
+        <div class="upPwd2">
+          <p>项目：</p>
+  				<el-select
+            v-model="shieldPid"
+            style="margin-left: 20px;"
+            placeholder="请选择">
+            <el-option
+              v-for="item in PList"
+              :key="item.pid"
+              :label="item.xname"
+              :value="item.pid">
+            </el-option>
+          </el-select>
+  			</div>
+        <div class="upPwd2">
+          <p>用户：</p>
+  				<el-select
+            v-model="shieldUid"
+            style="margin-left: 20px;"
+            placeholder="请选择">
+            <el-option
+              v-for="item in users"
+              :key="item.uId"
+              :label="item.nickname"
+              :value="item.uId">
+            </el-option>
+          </el-select>
+  			</div>
+  			<span slot="footer" class="dialog-footer">
+              <el-button @click="cancel('4')">取 消</el-button>
+              <el-button type="primary" @click="addShield()">确 定</el-button>
+            </span>
+  		</el-dialog>
       <div class="clearfix"></div>
       <el-alert title="重要提示" description="项目下如果有文章则不可删除,请先转移走文章后在进行删除操作" type="warning" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
   	</el-header>
   	<el-footer style="height: auto;">
-  		<el-table v-loading="loadingP" :data="PList3" class="clearfix" :stripe="true" size="mini" style="width: 60%; min-height: 474px;">
+  		<el-table v-loading="loadingP" :data="PList3" class="clearfix" :stripe="true" size="mini" style="min-height: 474px;">
   			<el-table-column prop="pid" label="id" width="50" align="center"></el-table-column>
   			<el-table-column prop="xname" label="项目名称" min-width="100" align="center"></el-table-column>
   			<el-table-column prop="articlelist" label="文章" width="100" align="center"></el-table-column>
@@ -37,7 +77,7 @@
   					<svg v-if="scope.row.webShow === '0'" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
   				</template>
   			</el-table-column>
-  			<el-table-column label="操作" align="center" width="100">
+  			<el-table-column label="操作" align="center" width="200">
   				<template slot-scope="scope">
             <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="firing(scope.row, '1')" style="margin-left: 20px;"></el-button>
   					<el-dialog :title="title" :visible.sync="centerDialogVisibleP" width="21%" center style="margin-left: -15vw;">
@@ -86,7 +126,9 @@
     props: {
       myProject: Array,
       myProjectSou: Array,
-      myLoading: Boolean
+      myLoading: Boolean,
+      users: Array,
+      myTypes: Array
     },
     name: 'backstage',
     components: {},
@@ -96,10 +138,12 @@
         state2: '',
         loadingP: true,
         loadingT: true,
+        tList: [],
         PList: [],
         PList2: [],
         PList3: [],
         PListSou: [],
+        userALL: [],
         uId: '',
         title: '',
         name: '',
@@ -107,6 +151,9 @@
         handleUpdateLoading: false,
         centerDialogVisibleP: false,
         centerDialogVisibleAdd: false,
+        centerDialogShield: false,
+        shieldPid:[],
+        shieldUid:[],
         currentPage1: 1,
         dataList: 10
       }
@@ -136,7 +183,8 @@
         'projectdel',
         'setPublicInfo',
         'setOperationInfo',
-        'getPublicInfo'
+        'getPublicInfo',
+        'addShieldUser'
       ]),
       // 搜索操作
       search () {
@@ -222,6 +270,9 @@
       	} else if(id === '3') {
       		this.centerDialogVisibleAdd = true
       		this.title = '输入添加的项目名称：'
+      	} else if(id === '4') {
+      		this.centerDialogShield = true
+      		this.title = '请设置需要屏蔽的人和项目：'
       	}
       },
       // 关闭添加/修改
@@ -230,9 +281,36 @@
       		this.centerDialogVisibleP = false
       	} else if(id === '3') {
       		this.centerDialogVisibleAdd = false
+      	} else if(id === '4') {
+      		this.centerDialogShield = false
       	}
-      	this.row = {}, this.name = ''
-      	
+      	this.row = {}, this.name = '', this.shieldPid = '', this.shieldUid = ''
+      },
+      // 添加屏蔽
+      addShield(){
+        let data = [], _this = this, PList = JSON.stringify(this.PList)
+        PList = JSON.parse(PList)
+        if(this.shieldPid.length == 0){
+          this.$alert('请选择项目', {confirmButtonText: '确定'})
+        } else if(this.shieldUid.length == 0){
+          this.$alert('请选择用户', {confirmButtonText: '确定'})
+        }else{
+          PList.find((o, index)=>{ o.pid == _this.shieldPid ? data[0] = o : o = o })
+          this.tList.find((o,index)=>{ o.state = 1 })
+          data[0].state = 1, data[0].type = this.tList, data[0].tid = ""
+          this.addShieldUser({uId: this.shieldUid, shieldInfo: data})
+            .then(function (response) {
+              if (response.code === 200) {
+                _this.$message({message: response.msg, type: 'success'})
+                _this.setOperationInfo({_this:_this, type:32, uId: _this.shieldUid, shieldInfo: data})
+                _this.cancel('4')
+              }
+            })
+            .catch(function (error) {
+              _this.$alert(error.msg, {confirmButtonText: '确定'})
+              _this.cancel('4')
+            })
+        }
       },
       // 添加项目
       addName() {
@@ -313,6 +391,8 @@
       this.PList = this.myProject
       this.PListSou = this.myProjectSou
       this.loadingP = this.myLoading
+      this.userALL = this.users
+      this.tList = this.myTypes
     }
   }
 </script>
@@ -325,4 +405,5 @@
 .titleType b{display:block;float:left;width:50%;height:60px;line-height:60px;font-size:20px}
 .demo-input-suffix{margin-bottom:15px}
 .demo-input-suffix .el-input{margin-left:15px}
+.upPwd2{display: flex; justify-content: center; align-items: center; margin: 20px auto 10px;}
 </style>

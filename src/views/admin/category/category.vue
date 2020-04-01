@@ -2,11 +2,11 @@
   <el-tabs style="height: 91vh;" v-model="activeName" @tab-click="handleClick">
     <el-tab-pane>
       <span slot="label" name="xm"><i class="iconfont icon-fenleiguanli"></i> 项目（一级）</span>
-      <modulesProject v-bind:myProject="project.data" v-bind:myProjectSou="project.souData" v-bind:myLoading="project.loading"></modulesProject>
+      <modulesProject v-bind:myProject="project.data" v-bind:myProjectSou="project.souData" v-bind:myLoading="project.loading" v-bind:users="users" v-bind:myTypes="types.data"></modulesProject>
     </el-tab-pane>
     <el-tab-pane>
     	<span slot="label" name="lx"><i class="iconfont icon-xuanzeleixing"></i> 类型（二级）</span>
-    	<modulesType v-bind:myTypes="types.data" v-bind:myTypesSou="types.souData" v-bind:myLoading="types.loading"></modulesType>
+    	<modulesType v-bind:myTypes="types.data" v-bind:myTypesSou="types.souData" v-bind:myLoading="types.loading" v-bind:users="users" v-bind:myProject="project.data"></modulesType>
     </el-tab-pane>
     <el-tab-pane>
     	<span slot="label" name="fl"><i class="iconfont icon-fenleiguanli1"></i> 分类（三级）</span>
@@ -65,7 +65,8 @@
         label: {
           data: [],
           loading: true
-        }
+        },
+        users: []
       }
     },
     watch: {
@@ -137,6 +138,9 @@
               	})
               })
             }
+            response.data.users.find((o, index)=>{
+             _this.$set(_this.users, _this.users.length, o)
+            })
           }
             
           // 不管数据有没有所有加载状态都会关闭

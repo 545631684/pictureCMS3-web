@@ -46,7 +46,7 @@
         <el-card class="box-card">
           <div slot="header" style="font-weight: bold;">操作日志</div>
           <div class="articleList" >
-            <el-timeline :reverse="true" v-if="operationInfo.length !== 0" style="padding-left: 10px;">
+            <el-timeline :reverse="false" v-if="operationInfo.length !== 0" style="padding-left: 10px;">
               <el-timeline-item
                 v-for="(activity, index) in operationInfo"
                 :key="index"
@@ -154,6 +154,7 @@
         .then((response) => {
           if(response.code === 200) {
             _this.operationInfo = response.data === null ? [] : response.data
+            console.log(response.data)
           }
         })
         .catch(function (error) {

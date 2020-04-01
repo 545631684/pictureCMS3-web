@@ -1,7 +1,8 @@
 <template>
-  <el-table v-loading="loading" :data="userList" style="width: 80%">
+  <el-table v-loading="loading" :data="userList" >
     <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
     <el-table-column prop="nickname" label="昵称" min-width="100" align="center"></el-table-column>
+    <el-table-column prop="articleNum" label="发布文章" width="100" align="center"></el-table-column>
     <el-table-column prop="userName" label="用户名" width="180" align="center"></el-table-column>
     <el-table-column prop="registerTime" label="创建时间" align="center"></el-table-column>
     <el-table-column prop="endTime" label="最后登陆" align="center"></el-table-column>

@@ -77,6 +77,7 @@
         psdDiv: false,
         videoDiv: false,
         imgCrsString: '',
+        userInfo: this.$store.state.admin.adminInfo,
         action: this.$store.state.common.publicInfo.srcUrl + 'a/upfile',
         projects: this.$store.state.common.publicInfo.projects,
         types: this.$store.state.common.publicInfo.types,

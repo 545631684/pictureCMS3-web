@@ -72,6 +72,7 @@
         psd: [],
         video: [],
         imgCrsString: '',
+        userInfo: this.$store.state.admin.adminInfo,
         action: this.$store.state.common.publicInfo.srcUrl + '/a/upfile',
         projects: this.$store.state.common.publicInfo.projects,
         types: this.$store.state.common.publicInfo.types,
@@ -140,7 +141,40 @@
     	},
     	// 小分类的值变动后，清空小类型input的值
     	minTypes2: function(newQuestion, oldQuestion) {
-    	}
+    	},
+      // 屏蔽设置
+      projectImg:function (newQuestion, oldQuestion) {
+        let _this = this, num = []
+      	if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+          this.userInfo.shieldInfo.find((o,index)=>{
+            if(o.xname == _this.projectImg && o.state == '0'){
+              o.type.find((e,indexe)=>{
+                if(e.state == '1'){
+                  _this.types.find((x,indexx)=>{
+                    if(e.tid == x.tid){
+                      x.state = '0'
+                      _this.$set(_this.types,indexx,x)
+                      _this.minTypes.find((s,indexs)=>{
+                        s.tbid == x.tid ? s.state = '0' : s = s,
+                        _this.$set(_this.minTypes,indexs,s)
+                      })
+                    }
+                  })
+                }
+              })
+            } else {
+              _this.types.find((x,indexx)=>{
+                x.state = '1'
+                _this.$set(_this.types,indexx,x)
+                _this.minTypes.find((s,indexs)=>{
+                  s.tbid == x.tid ? s.state = '1' : s = s,
+                  _this.$set(_this.minTypes,indexs,s)
+                })
+              })
+            }
+          })
+        }
+      },
     },
     methods: {
       ...mapActions([
@@ -318,17 +352,26 @@
       }
     },
     created() {
+      let _this = this
     	this.types = this.$store.state.common.publicInfo.types
     	this.projects = this.$store.state.common.publicInfo.projects
     	// 刷新页面时删除上传的文件
     	window.addEventListener('beforeunload', e => {
     	    if(this.uploadFiles.length !== 0) {
-    			let _this = this
     			this.uploadFiles.find((fileSrc, index) => {
     			  _this.delfile({filesrc: fileSrc})
     			})
     		}
     	})
+      // 屏蔽项目设置
+      if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+        this.userInfo.shieldInfo.find((o,index)=>{
+          _this.projects.find((e,indexe)=>{
+            e.pid == o.pid && o.state !== '0' ? e.state = '0' : e = e
+            _this.$set(_this.projects,indexe,e)
+          })
+        })
+      }
     },
     beforeDestroy() {
     	// 注销页面时删除上传的文件

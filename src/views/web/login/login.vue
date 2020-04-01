@@ -23,6 +23,10 @@
           </el-form>
           <router-link class="mk1_a1" tag="a" :to="{path:'/enrollUser'}">没有账号？<b>注册</b></router-link>
         </div>
+        <div class="foot_info">
+          <a href="http://www.beian.miit.gov.cn/">备案号：XXXX</a>
+          <p>联系邮箱：545631684@qq.com</p>
+        </div>
       </div>
     </el-main>
   </el-container>
@@ -135,6 +139,9 @@
 
 <style lang="less" scoped>
 @import '~LESS/color.less';
+.foot_info{width:600px;height:auto;line-height:1.5;text-align:center;font-size:18px;color:#fff;position:absolute;bottom:10px;left:50%;margin-left:-300px}
+.foot_info a{color:#fff;text-decoration:none}
+.foot_info a:hover{color:#f00000}
 .login{height:100vh;background:url('~IMAGES/beiji.jpg') 100% no-repeat;}
 .el-main{position:relative;}
 .body{width:432px;height:504px;background:#FFF;border-radius:5px;}

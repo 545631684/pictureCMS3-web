@@ -39,7 +39,7 @@
       <el-alert title="重要提示" description="项目下如果有文章则不可删除,请先转移走文章后在进行删除操作" type="warning" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
   	</el-header>
   	<el-footer style="height: auto;">
-  		<el-table v-loading="loadingP" :data="label3" class="clearfix" :stripe="true" size="mini" style="width: 60%; min-height: 474px;">
+  		<el-table v-loading="loadingP" :data="label3" class="clearfix" :stripe="true" size="mini" style=" min-height: 474px;">
   			<el-table-column prop="lid" label="id" width="50" align="center"></el-table-column>
   			<el-table-column prop="name" label="标签名称" min-width="150" align="center"></el-table-column>
   			<el-table-column prop="gid" label="标签组名称" width="100" align="center">
@@ -60,7 +60,7 @@
   					<svg v-if="scope.row.webShow === '0'" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
   				</template>
   			</el-table-column>
-  			<el-table-column label="操作" align="center" width="100">
+  			<el-table-column label="操作" align="center" width="200">
   				<template slot-scope="scope">
             <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="firing(scope.row, '1')" style="margin-left: 20px;"></el-button>
   					<el-dialog :title="title" :visible.sync="centerDialogVisibleP" width="21%" center style="margin-left: -15vw;">

@@ -101,6 +101,12 @@ export default {
     return axios.get('a/user_list', Qs.stringify(params))
   },
   /**
+   * 用户列表(权限管理用户列表页)
+   */
+  adminManageUserList (params) {
+    return axios.get('a/manageUser_list', Qs.stringify(params))
+  },
+  /**
    * 获取权限功能页参数
    */
   authList (params) {
@@ -363,6 +369,18 @@ export default {
    */
   getAdminIndexData (params) {
     return axios.post('a/getAdminIndexData', Qs.stringify(params))
+  },
+  /**
+   * 添加项目屏蔽人
+   */
+  addShieldUser (params) {
+    return axios.post('a/addShieldUser', Qs.stringify(params))
+  },
+  /**
+   * 添加类型屏蔽人
+   */
+  addShieldUserType (params) {
+    return axios.post('a/addShieldUserType', Qs.stringify(params))
   },
   /**
    * 登录注销

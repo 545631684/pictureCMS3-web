@@ -50,6 +50,18 @@ const actions = {
       })
   },
   /**
+   * 用户列表(权限管理用户列表页)
+   */
+  adminManageUserList (store, params) {
+    return api.adminManageUserList(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
    * 获取权限功页
    */
   authList (store, params) {
@@ -620,6 +632,30 @@ const actions = {
       })
   },
   /**
+   * 添加项目屏蔽人
+   */
+  addShieldUser (store, params) {
+    return api.addShieldUser(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 添加类型屏蔽人
+   */
+  addShieldUserType (store, params) {
+    return api.addShieldUserType(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
    * 用户操作记录
    */
   setOperationInfo (store, params) {
@@ -689,7 +725,7 @@ const actions = {
             paramsData.content_user.start = o
           } 
         })
-        paramsData.content_user.end = {uId: params._this.row.uId, nickname: params._this.row.nickname, sex: params._this.row.sex, password: params._this.row.Password, permissions: params._this.getUserGroupId(params._this.row.permissions), webShow: params._this.row.webShow, state: params._this.row.state, judgeLogin: params._this.row.judgeLogin}
+        paramsData.content_user.end = {uId: params._this.row.uId, nickname: params._this.row.nickname, sex: params._this.row.sex, password: params._this.row.Password, permissions: params._this.getUserGroupId(params._this.row.permissions), webShow: params._this.row.webShow, state: params._this.row.state, judgeLogin: params._this.row.judgeLogin, shieldInfo: params._this.row.shieldInfo == "" ? null : params._this.row.shieldInfo}
         console.log("修改用户信息")
         break;
       case 8:
@@ -855,6 +891,16 @@ const actions = {
         paramsData.content_article.start = params.article
         paramsData.content_article.end = 'null'
         console.log("发布文章")
+        break;
+      case 32:
+        paramsData.content_user = params.uId
+        paramsData.content_project = params.shieldInfo
+        console.log("添加项目屏蔽人")
+        break;
+      case 33:
+        paramsData.content_user = params.uId
+        paramsData.content_type = params.shieldInfo
+        console.log("添加类型屏蔽人")
         break;
     } 
     return api.setOperationInfo(paramsData)
