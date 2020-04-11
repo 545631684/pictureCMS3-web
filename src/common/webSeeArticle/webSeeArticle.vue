@@ -5,7 +5,7 @@
   			<p>用户：</p>
   			<ul>
   				<li :class="{on:num4 === '-1'}" @click="tab4('', '-1', '')">全部</li>
-  				<li v-for="(item, index) in userList" :key="index" :class="{on:index === num4}" v-on:click.stop="tab4(index, item.nickname, item.uId)" v-if="item.webShow === '1' && item.articleNum !== 0">{{item.nickname}}</li>
+  				<li v-for="(item, index) in userList" :key="index" :class="{on:index === num4}" v-on:click.stop="tab4(index, item.nickname, item.uId)" v-if="item.webShow === '1' && item.articleNum !== 0 && item.state == '0'">{{item.nickname}}</li>
   			</ul>
   		</div>
   		<div class="tab clearfix">

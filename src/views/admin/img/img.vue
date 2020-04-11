@@ -42,7 +42,8 @@
   			<el-dialog :visible.sync="dialogVisible">
   				<img width="100%" :src="dialogImageUrl" alt="">
   			</el-dialog>
-  			<el-alert title="提示" description="※上传第一个文件时会自动获取文件名称并填写到标题。※一次最多上传130张图片，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
+  			<el-alert title="提示" description="※上传第一个文件时会自动获取文件名称并填写到标题。" type="warning" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
+  			<el-alert title="提示" description="※上传图片出现显示不在正上方显示,请不用担心,发布后不会影响正常显示" type="warning" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
   		</div>
   	</el-footer>
   	<el-row class="buttonImg">
