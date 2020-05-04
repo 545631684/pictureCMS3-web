@@ -11,9 +11,11 @@
   					<p class="nav" v-if="nav.num.length === 1"><a :href="nav.num[0].href">{{nav.num[0].name}}</a><i>/</i><a>详情页</a></p>
   					<p class="nav" v-if="nav.num.length === 2"><a :href="nav.num[0].href">{{nav.num[0].name}}</a><i>/</i><a :href="nav.num[1].href">{{nav.num[1].name}}</a><i>/</i><a>{{nav.num[2].name}}</a></p>
   				</div>
+          <link href="//cdn.bootcss.com/github-markdown-css/2.4.1/github-markdown.css" rel="stylesheet">
   				<div class="describe">
-  					<p>描述：{{article.describe}}</p>
-  				</div>
+            <p>描述：</p>
+            <div class="markdown-body" v-html="article.describe"></div>
+          </div>
   				<div class="content clearfix">
   					<div v-if="article.typeFile === 'img'">
   						<viewer :images="imgs">
@@ -371,6 +373,7 @@ export default {
               _this.videoFile = response.data.video !== '[]' ? response.data.video : []
               _this.headPortraitSrc = response.data.user.headPortraitSrc
               _this.nickname = response.data.user.nickname
+              console.log(typeof _this.article.describe,'：类型')
             }
           })
           .catch(function (error) {})
@@ -412,9 +415,8 @@ export default {
 .article .l .nav{padding-top: 15px;    line-height: 30px;}
 .article .l .nav,.article .l .nav a{font-size: 18px;color: #bbbbbb;display: inline-block;vertical-align: middle;*vertical-align: auto;zoom: 1;*display: inline;}
 .article .l .nav i{color: #dddddd;margin: 0 30px;font-style:normal;}
-.describe{padding: 28px 0;line-height: 30px;color: #666666;background: #f8f8f8;}
-.describe p{width: 800px;font-size: 18px;margin: 0 auto;word-wrap: break-word;}
-.describe{padding: 28px 0;}
+.describe{padding: 15px;line-height: 30px;color: #666666;background: #f8f8f8;}
+.describe p{width: auto;font-size: 18px;margin: 0 auto;word-wrap: break-word;}
 .content{margin-top: 20px;}
 .img{}
 .img li, .img dd{width: 32%;float: left;padding: 5px;}

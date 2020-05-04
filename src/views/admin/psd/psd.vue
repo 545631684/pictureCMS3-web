@@ -30,7 +30,8 @@
   	</el-footer>
   	<el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
   		<div class="title"><samp>描述：</samp>
-  			<el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="describe"></el-input>
+        <!-- <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="describe"></el-input> -->
+  			<wangeditor :describe="describe" :type="'add'" @catchData="catchData"></wangeditor>
   		</div>
   	</el-footer>
   	<el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;">
@@ -51,13 +52,15 @@
 
 <script>
   import labelComponent from 'COMMON/labelComponent/labelComponent'
+  import wangeditor from 'COMMON/wangeditor/wangeditor'
   import { mapActions, mapGetters, mapMutations } from 'vuex'
   import { getProjectID, getProjectName, getTypesID, getTypesName, getMinTypesID, getMinTypesName } from 'UTIL/publicAPI'
   export default {
     inject: ['reload'],
     name: 'backstage',
     components: {
-      labelComponent
+      labelComponent,
+      wangeditor
     },
     data() {
       return {
@@ -349,6 +352,10 @@
       setDynamicTags (data) {
       	console.log("返回值：" + data)
       	this.dynamicTags = data
+      },
+      // 描述富文本框组件返回值
+      catchData (data) {
+        this.describe = data
       }
     },
     created() {

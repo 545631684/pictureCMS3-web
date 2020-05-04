@@ -34,8 +34,8 @@
           </div>
         </ul>
       </div>
-       <el-alert title="带💗️标志为当前用户发布的文章" type="info" show-icon style="width: 80% !important;"></el-alert>
-      <el-table v-loading="loading" :data="article" style="width: 80% !important;">
+       <el-alert title="带💗️标志为当前用户发布的文章" type="info" show-icon style="width: 100% !important;"></el-alert>
+      <el-table v-loading="loading" :data="article" style="width: 100% !important;">
         <el-table-column prop="mId" label="id" width="100" align="center">
         	<template slot-scope="scope">
         		{{myarticle(scope.row.uId, scope.row.mId)}}<br />
@@ -75,13 +75,13 @@
         <el-table-column label="操作" align="center" width="220">
           <template slot-scope="scope">
             <el-button size="mini" circle icon="el-icon-view" title="查看" v-on:click.stop="seeArticle(scope.row.mId, scope.row.typeFile)"></el-button>
-            <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" v-on:click.stop="modifyArticle(scope.row.mId, scope.row.typeFile, scope.row.uId)"></el-button>
+            <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" v-on:click.stop="modifyArticle(scope.row.mId, scope.row.typeFile, scope.row.uId)" ></el-button>
             <el-button size="mini" type="danger" circle icon="el-icon-delete" title="删除" v-on:click.stop="deleteArticle(scope.row.mId, scope.row.uId)" v-if="userInfo.permissions === '2' || scope.row.uId === userInfo.uId"></el-button>
             <el-button size="mini" type="danger" circle icon="el-icon-delete" title="删除" disabled v-on:click.stop="deleteArticle(scope.row.mId, scope.row.uId)" v-if="userInfo.permissions !== '2' && scope.row.uId !== userInfo.uId"></el-button>
           </template>
         </el-table-column>
       </el-table>
-      <div class="block" style="width: 470px;margin: 0 0 0 20%;">
+      <div class="block" style="width: 470px;margin:10px auto;">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"

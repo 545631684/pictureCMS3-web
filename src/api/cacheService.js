@@ -46,11 +46,11 @@ const KEYS_DATA = {
     // 用户是否登录
     judgeLogin: '',
     // 文章总数
-    articleAll: 5,
+    articleAll: 0,
     // 总页数
     pageNum: 0,
     // 每页条数
-    articlePageNum: 1,
+    articlePageNum: 5,
   },
   webInfo: {
     // 注册/找回密码的获取验证码按钮成功后的读秒

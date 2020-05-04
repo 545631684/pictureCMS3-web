@@ -27,7 +27,8 @@
   	</el-footer>
   	<el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
   		<div class="title"><samp>描述：</samp>
-  			<el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="article.describe"></el-input>
+        <!-- <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="article.describe"></el-input> -->
+  			<wangeditor :describe="article.describe" :type="'up'" @catchData="catchData"></wangeditor>
   		</div>
   	</el-footer>
   	<el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
@@ -52,13 +53,15 @@
 
 <script>
   import labelComponent from 'COMMON/labelComponent/labelComponent'
+  import wangeditor from 'COMMON/wangeditor/wangeditor'
   import { mapActions, mapGetters, mapMutations } from 'vuex'
   import { getProjectID, getProjectName, getTypesID, getTypesName, getMinTypesName, getMinTypesID } from 'UTIL/publicAPI'
   export default {
     inject: ['reload'],
     name: 'backstage',
     components: {
-      labelComponent
+      labelComponent,
+      wangeditor
     },
     data() {
       return {
@@ -70,6 +73,7 @@
         describe: '',
         dialogImageUrl: '',
         dialogVisible: false,
+        upState: false,
         userInfo: this.$store.state.admin.adminInfo,
         action: this.$store.state.common.publicInfo.srcUrl + 'a/upfile',
         types: this.$store.state.common.publicInfo.types,
@@ -287,6 +291,7 @@
             .then((response) => {
               if(response.code === 200) {
                 _this.setOperationInfo({_this:_this, type:30, article:{mId:_this.article.mId, uId:_this.article.uId, pid:_this.$store.getters.getUserProjectsId(_this.projectImg).pid, tid:_this.$store.getters.getUserTypesId(_this.typeImg).tid, did:_this.$store.getters.getUserMinTypeId(_this.minTypeImg).did, title:_this.article.title.replace(/\s+/g," "), keyword:_this.dynamicTags.toString(), describe:_this.article.describe.replace(/\s+/g," "), img:'[]', psd:_this.article.psd, video:'[]', typeFile:_this.article.typeFile}})
+                _this.upState = true
                 _this.$message({type: 'success', message: response.msg})
                 if(_this.deleteFiles.length !== 0) {
                   _this.uploadingFiles = []
@@ -353,6 +358,10 @@
       setDynamicTags (data) {
       	console.log("返回值：" + data)
       	this.dynamicTags = data
+      },
+      // 描述富文本框组件返回值
+      catchData (data) {
+        this.article.describe = data
       }
     },
     created() {
@@ -401,7 +410,7 @@
         })
     	// 刷新页面时删除上传的文件
     	window.addEventListener('beforeunload', e => {
-        if(this.uploadingFiles.length !== 0) {
+        if(this.uploadingFiles.length !== 0 && this.upState == false) {
           _this.uploadingFiles.find((fileSrc, index) => {
             _this.delfile({filesrc: fileSrc})
           })
@@ -411,7 +420,7 @@
     beforeDestroy() {
       let _this = this
     	// 注销页面时删除上传的文件
-    	if(this.uploadingFiles.length !== 0) {
+    	if(this.uploadingFiles.length !== 0 && this.upState == false) {
         _this.uploadingFiles.find((fileSrc, index) => {
           _this.delfile({filesrc: fileSrc})
         })

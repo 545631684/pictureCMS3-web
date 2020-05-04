@@ -121,6 +121,9 @@
     },
     created() {
       let _this = this
+      if(/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/.test(this.$store.state.admin.adminInfo.nickname)){
+        this.$alert('第一次登陆后台,请到用户信息=>个人信息中修改自己的真实姓名,谢谢配合。', '提示', {confirmButtonText: '确定'})
+      }
       this.getAdminIndexData({uId:this.$store.state.admin.adminInfo.uId})
         .then((response) => {
           if(response.code === 200) {
