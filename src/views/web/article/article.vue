@@ -233,11 +233,17 @@ export default {
     	},
       videoFile: function (newQuestion, oldQuestion) {
         let _this = this
-      	if (this.videoFile.length !== 0 && this.typeFile === "video") {
+      	if (this.videoFile.length !== 0 && this.article.typeFile === "video") {
       		this.videoFile.find(obj => {
       			_this.videos.push(obj.Videoview)
       			_this.cityOptions.push(obj.dataVideo.name)
       		})
+          if(this.imgFile.length !== 0){
+            this.imgFile.find(obj => {
+            	_this.imgs.push(obj.miniImg)
+            	_this.cityOptions.push(obj.dataImg.name)
+            })
+          }
           this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.videoFile[0].dataVideo.url}
           this.playerOptions.poster = this.URLS2 + this.videoFile[0].Videoview
       	}
@@ -364,7 +370,7 @@ export default {
       getPost () {
         let _this = this
         // 获取文章数据
-        this.getWebArticle({mId: this.$route.params.id})
+        this.getWebArticle({mId: this.$route.params.id, uId: this.$store.state.admin.adminInfo.uId})
           .then((response) => {
             if (response.code === 200) {
               _this.article = response.data

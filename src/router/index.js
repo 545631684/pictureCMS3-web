@@ -37,13 +37,19 @@ const router = new VueRouter({
 
 // 全局前置守卫
 router.beforeEach((to, from, next) => {
+  
   // 判断是否登录
   if (to.path.indexOf('/backstage') === 0 || to.path.indexOf('/web') === 0) {
-    // console.log(getAccessToken(),"登录token状态")
     if (!getAccessToken()) {
       // 页面跳转置顶进度条开始
       NProgress.start()
-      next('/login') // 确保一定要调用 next()
+      if(to.fullPath !== '/login'){
+        next('/login') // 确保一定要调用 next()
+      } else {
+        // console.log(to,'前置钩子')
+        // 确保一定要调用 next()
+        next() 
+      }
     }
   }
   // 页面跳转置顶进度条开始
@@ -53,6 +59,7 @@ router.beforeEach((to, from, next) => {
 
 // 全局后置钩子
 router.afterEach((to, from) => {
+  // console.log(to,'后置钩子')
   // 页面跳转置顶进度条结束
   NProgress.done()
 })

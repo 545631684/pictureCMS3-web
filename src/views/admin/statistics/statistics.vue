@@ -28,58 +28,76 @@
   			</el-col>
   		</el-row>
   	</el-header>
+    <el-header style="margin: 10px 0;">
+    	<el-row :gutter="20">
+    		<el-col :span="8">
+    			<el-card>
+    				<div style="height: 100px;">
+    					<div class="icoInfo">
+    						<p>{{activeImg.num}}</p>
+    						<p>img</p>
+    					</div>
+    					<el-progress type="circle" :percentage="activeImg.Proportion" :show-text="true" :width="100" :color="colors" style="float: right;"></el-progress>
+    				</div>
+    			</el-card>
+    		</el-col>
+    		<el-col :span="8">
+    			<el-card>
+    				<div style="height: 100px;">
+    					<div class="icoInfo">
+    						<p>{{activePsd.num}}</p>
+    						<p>psd</p>
+    					</div>
+    					<el-progress type="circle" :percentage="activePsd.Proportion" :show-text="true" :width="100" :color="colors" style="float: right;"></el-progress>
+    				</div>
+    			</el-card>
+    		</el-col>
+    		<el-col :span="8">
+    			<el-card>
+    				<div style="height: 100px;">
+    					<div class="icoInfo">
+    						<p>{{activeVideo.num}}</p>
+    						<p>video</p>
+    					</div>
+    					<el-progress type="circle" :percentage="activeVideo.Proportion" :show-text="true" :width="100" :color="colors" style="float: right;"></el-progress>
+    				</div>
+    			</el-card>
+    		</el-col>
+    	</el-row>
+    </el-header>
   	<el-header style="margin: 10px 0;">
   		<el-row :gutter="20">
   			<el-col :span="24">
   				<el-card>
   					<el-tabs v-model="activeName" type="card" @tab-click="handleClick" >
+                <el-tab-pane label="用户浏览统计" name="tb4" v-loading="tb4_loading">
+                	<div id="userBrowseWebInfo" ref="pieEcharts" style="height: 600px;"></div>
+                  <div class="tb4Time">
+                      <span class="demonstration">查询设置：</span>
+                      <el-date-picker
+                        v-model="tb4TimeValue"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                      <el-button plain style="margin-left: 20px;" @click="queryUserBrowseWebInfo">查询</el-button>
+                    </div>
+                </el-tab-pane>
   					    <el-tab-pane label="文章类型分布(年)" name="tb1" >
-  					    	<div id="articleSubsection" ref="pieEcharts" style="height: 400px;"></div>
+  					    	<div id="articleSubsection"  style="height: 600px;"></div>
   					    </el-tab-pane>
   					    <el-tab-pane label="用户发布文章(月)" name="tb2">
-  					    	<div id="articleUserSubsection" style="height: 400px;"></div> 	
+  					    	<div id="articleUserSubsection" style="height: 600px;"></div> 	
   					    </el-tab-pane>
   					    <el-tab-pane label="用户下载(年)" name="tb3">
-  					    	<div id="articleUserDownload" style="height: 400px;"></div>
+  					    	<div id="articleUserDownload" style="height: 600px;"></div>
   					    </el-tab-pane>
   					</el-tabs>
-  				</el-card>
-  			</el-col>
-  		</el-row>
-  	</el-header>
-  	<el-header style="margin: 10px 0;">
-  		<el-row :gutter="20">
-  			<el-col :span="8">
-  				<el-card>
-  					<div style="height: 100px;">
-  						<div class="icoInfo">
-  							<p>{{activeImg.num}}</p>
-  							<p>img</p>
-  						</div>
-  						<el-progress type="circle" :percentage="activeImg.Proportion" :show-text="true" :width="100" :color="colors" style="float: right;"></el-progress>
-  					</div>
-  				</el-card>
-  			</el-col>
-  			<el-col :span="8">
-  				<el-card>
-  					<div style="height: 100px;">
-  						<div class="icoInfo">
-  							<p>{{activePsd.num}}</p>
-  							<p>psd</p>
-  						</div>
-  						<el-progress type="circle" :percentage="activePsd.Proportion" :show-text="true" :width="100" :color="colors" style="float: right;"></el-progress>
-  					</div>
-  				</el-card>
-  			</el-col>
-  			<el-col :span="8">
-  				<el-card>
-  					<div style="height: 100px;">
-  						<div class="icoInfo">
-  							<p>{{activeVideo.num}}</p>
-  							<p>video</p>
-  						</div>
-  						<el-progress type="circle" :percentage="activeVideo.Proportion" :show-text="true" :width="100" :color="colors" style="float: right;"></el-progress>
-  					</div>
   				</el-card>
   			</el-col>
   		</el-row>
@@ -193,7 +211,62 @@
     data() {
     	return {
     		loading: true,
-    		activeName: 'tb1',
+        tb4_loading: false,
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }],
+          // 当我们选择日期时的回调方法。返回两个日期的最大值和最小值，第一次返回一个值，第二次返回两个值
+          onPick: ({ maxDate, minDate }) => {
+  　　　　　　//当我们选择两个值的时候，就认为用户已经选择完毕
+            if (maxDate != null && minDate != null) {
+              this.maxDate = maxDate;
+              this.minDate = minDate;
+              let days = maxDate.getTime() - minDate.getTime();
+              if(parseInt(days / (1000 * 60 * 60 * 24)) > 90){
+                this.$alert('只能选择3个月内', {confirmButtonText: '确定'})
+              }
+            }
+          },
+          disabledDate: time => {
+            let maxDate = this.maxDate;
+            let minDate = this.minDate;
+            if (maxDate != null && minDate != null) {
+              let days = maxDate.getTime() - minDate.getTime();
+  　　　　　　　//计算完之后必须清除，否则选择器一直处于禁止选择的状态
+              this.maxDate = null;
+              this.minDate = null;
+              return parseInt(days / (1000 * 60 * 60 * 24)) > 90;
+            } else {
+              //设置当前时间后的时间不可选
+              return time.getTime() > Date.now() - 8.64e6;
+            }
+          }
+        },
+        tb4TimeValue: [],
+    		activeName: 'tb4',
     		activeName2: 'tb01',
     		activeName3: 'tb001',
     		innHtmlWidth: 0,
@@ -939,17 +1012,80 @@
     		    }],
     		    yAxis:[] ,
     		    series: []
-    		}
+    		},
+        userBrowseWebInfoData: {
+            
+            title: {
+                left: 'left',
+                text: '每日浏览用户'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                data: [],
+                boundaryGap: false,
+            },
+            yAxis: {
+                splitLine: {show: true}
+            },
+            grid: {
+                left: '2%',
+                right: '2%',
+                bottom: '5%',
+                containLabel: true
+            },
+            series: {
+                type: 'line',
+                showSymbol: false,
+                data: []
+            }
+        },
+        userBrowseWebInfoData2: {
+            
+            title: {
+              left: 'left',
+              text: '条件查询浏览用户'
+            },
+            tooltip: {
+              trigger: 'axis',
+              confine:true,
+              axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+              }
+            },
+            xAxis:{
+              type: 'category',
+              data: [],
+              boundaryGap: false,
+              axisLabel: {
+                 interval:0,  
+                 rotate:40  
+              },
+            },
+            yAxis:{
+              type: 'value',
+            },
+            grid: {
+              left: '2%',
+              right: '2%',
+              bottom: '5%',
+              containLabel: true
+            },
+            series: []
+        }
     	}
     },
     mounted() {
-    	// 文章类型分布
-    	this.articleSubsection()
-    	// 每月文章类型分布1
+    	// 文章类型分布  头部统计表标签切换
+    	// this.articleSubsection()
+      // 每日用户浏览  头部统计表标签切换
+      this.userBrowseWebInfo()
+    	// 每月文章类型分布1  底部统计表标签切换(右边)
     	this.articleType1()
-    	// 每月文章类型分布2
+    	// 每月文章类型分布2  底部统计表标签切换(右边)
     	this.articleType2()
-    	// 用户发布文章类型分布1
+    	// 用户发布文章类型分布1  底部统计表标签切换(左边)
     	this.articleUserType1()
     	// 获取当前头部切换图标的宽度
     	this.innHtmlWidth = this.$refs.pieEcharts.offsetWidth
@@ -959,6 +1095,7 @@
     methods: {
       ...mapActions([
         'getAdminStatisticsData',
+        'getUserBrowseWebInfo'
       ]),
       
       // 判断文章的img、psd、video是否有数据并返回true/false
@@ -1016,9 +1153,11 @@
       },
       // 头部统计表标签切换
       handleClick(tab, event) {
+        console.log(tab.name)
       	tab.name === 'tb1' ? this.echartsShow('articleSubsection', '0') : tab.name = tab.name
       	tab.name === 'tb2' ? this.echartsShow('articleUserSubsection', '0') : tab.name = tab.name
       	tab.name === 'tb3' ? this.echartsShow('articleUserDownload', '0') : tab.name = tab.name
+      	tab.name === 'tb4' ? this.echartsShow('userBrowseWebInfo2', '0') : tab.name = tab.name
       },
       // 底部统计表标签切换(右边)
       handleClick2(tab, event) {
@@ -1090,6 +1229,12 @@
       	        break;
       	    case 'activeProjectUserMonthAll':
       	        shopCharts.setOption(this.activeProjectUserMonthAllData)
+      	        break;
+            case 'userBrowseWebInfo':
+      	        shopCharts.setOption(this.userBrowseWebInfoData)
+      	        break;
+            case 'userBrowseWebInfo2':
+      	        shopCharts.setOption(this.userBrowseWebInfoData2)
       	        break;
       	} 
       },
@@ -1197,6 +1342,24 @@
       	// 绘制图表
       	myChart.setOption(_this.activeProjectUserMonthAllData)
       },
+      // 每天用户浏览统计
+      userBrowseWebInfo () {
+      	let _this = this
+      	// 基于准备好的dom，初始化echarts实例
+      	let myChart = this.$echarts.init(document.getElementById('userBrowseWebInfo'))
+        myChart.clear()
+      	// 绘制图表
+      	myChart.setOption(_this.userBrowseWebInfoData)
+      },
+      // 条件查询用户浏览统计
+      userBrowseWebInfo2 () {
+      	let _this = this
+      	// 基于准备好的dom，初始化echarts实例
+      	let myChart = this.$echarts.init(document.getElementById('userBrowseWebInfo'))
+        myChart.clear()
+      	// 绘制图表
+      	myChart.setOption(_this.userBrowseWebInfoData2)
+      },
       // 返回各类型数据在其中占比值
       // returnProportion (nums, num) {
       // 	let a = num/nums*100
@@ -1274,6 +1437,66 @@
                     }
                 }]
             });
+      },
+      queryUserBrowseWebInfo(){
+        let _this = this, startDate = '', endDate = '', obj = ''
+        if(this.tb4TimeValue.length !== 0){
+          this.tb4_loading = true
+          this.getUserBrowseWebInfo({startDate:this.tb4TimeValue[0],endDate:this.tb4TimeValue[1]})
+            .then((response) => {
+                console.log(response)
+              if(response.code === 200) {
+                if(response.data.riqi.length === 1){
+                  // 清空数据
+                  _this.userBrowseWebInfoData.xAxis.data.splice(0,_this.userBrowseWebInfoData.xAxis.data.length)
+                  _this.userBrowseWebInfoData.series.data.splice(0,_this.userBrowseWebInfoData.series.data.length)
+                  
+                  // 每天用户浏览统计
+                  response.data.info.find((o,index)=>{
+                    _this.userBrowseWebInfoData.xAxis.data.push(o.name)
+                    _this.userBrowseWebInfoData.series.data.push(o.data[0])
+                  })
+                  
+                  // 每天用户浏览统计 初始化图表
+                  _this.userBrowseWebInfo()
+                  _this.echartsShow('userBrowseWebInfo', '0')
+                } else if(response.data.riqi.length > 1){
+                  // 清空数据
+                  _this.userBrowseWebInfoData2.xAxis.data.splice(0,_this.userBrowseWebInfoData2.xAxis.data.length)
+                  _this.userBrowseWebInfoData2.series.splice(0,_this.userBrowseWebInfoData2.series.length)
+                  
+                  // 条件查询用户浏览统计
+                  response.data.riqi.find((o,index)=>{
+                    _this.userBrowseWebInfoData2.xAxis.data.push(o)
+                  })
+                  response.data.info.find((o,index)=>{
+                    obj = {
+                      name: o.name,
+                      type: 'line',
+                      stack: 'name',
+                      showSymbol: false,
+                      data: o.data
+                    }
+                    _this.userBrowseWebInfoData2.series.push(obj)
+                  })
+                  
+                  // 条件查询用户浏览统计 初始化图表
+                  _this.userBrowseWebInfo2()
+                  _this.echartsShow('userBrowseWebInfo2', '0')
+                }
+                
+                // 关闭加载动画
+                _this.tb4_loading = false
+              }
+            })
+            .catch(function (error) {
+              // _this.$alert('65456', {confirmButtonText: '确定'})
+              _this.tb4_loading = false
+            })
+        } else {
+          _this.$alert("请指定查询日期", {confirmButtonText: '确定'})
+        }
+        
       }
     },
     created() {
@@ -1563,7 +1786,20 @@
           	})
           	// 文章类型项目用户分布（月） 初始化图表
           	_this.activeProjectUserMonthAll()
+            
+            
+            // 每天用户浏览统计
+            response.data.userBrowseWebInfo.find((o,index)=>{
+              _this.userBrowseWebInfoData.xAxis.data.push(o.nickname)
+              _this.userBrowseWebInfoData.series.data.push(o.count)
+            })
+            _this.tb4TimeValue.push(response.data.userBrowseWebInfo[0].sameDay)
+            _this.tb4TimeValue.push(response.data.userBrowseWebInfo[0].sameDay)
+            // 每天用户浏览统计 初始化图表
+            _this.userBrowseWebInfo()
           }
+          
+          
           
           // 关闭加载状态
           _this.loading = false
@@ -1645,4 +1881,5 @@ background: -webkit-linear-gradient(left , rgb(154, 255, 0) , rgb(79, 255, 4) 17
 .articleLately ul li a p:nth-child(2){ color: #909399;}
 .articleLately ul li a p:nth-child(2) samp{ display: inline-flex; float: left; padding: 0 10px 0 0; height: 20px; line-height: 20px;}
 .articleLately ul li a p:nth-child(2) samp svg{margin-top: 2px; margin-right: 5px;}
+.tb4Time{position: absolute;height: 100px;width: 550px;top: 0;right: 0;}
 </style>

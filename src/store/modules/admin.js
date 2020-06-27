@@ -656,6 +656,30 @@ const actions = {
       })
   },
   /**
+   * 添加用户浏览记录
+   */
+  setUserBrowseArticle (store, params) {
+    return api.setUserBrowseArticle(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 条件查询用户浏览记录
+   */
+  getUserBrowseWebInfo (store, params) {
+    return api.getUserBrowseWebInfo(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
    * 用户操作记录
    */
   setOperationInfo (store, params) {

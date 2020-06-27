@@ -20,7 +20,7 @@
   				</el-option>
   			</el-select>
   			<el-select v-model="minTypeImg" placeholder="请选择分类" filterable clearable style="width:200px;margin-left: 50px; color: #409eff;">
-  				<el-option v-for="item in minTypes2" :key="item.did" :label="item.dname" :value="item.dname" v-if="item.states === '1'">
+  				<el-option v-for="item in minTypes2" :key="item.did" :label="item.dname" :value="item.dname" v-if="item.state === '1'">
   				</el-option>
   			</el-select>
   		</div>
@@ -161,7 +161,9 @@
     		let tid = this.typeImg.length !== 0 ? this.$store.getters.getUserTypesId(this.typeImg).tid : ''
     		if(this.typeImg.length !== 0) {
     			this.minTypes.find(obj => {
-    				obj.tbid === tid ? _this.minTypes2.push(obj) : console.log()
+            if(obj.tbid === tid){
+             obj.tbid === tid ? _this.minTypes2[_this.minTypes2.length] = obj : console.log()
+            }
     			})
     			this.minTypes2.find(obj => {
     				obj.dname === _this.minTypeImg ? minTypeImgzj = true : console.log()
@@ -171,6 +173,7 @@
     			this.minTypeImg = ''
     			this.minTypes2 = this.minTypes
     		}
+        console.log(this.minTypes2,'类型变更后')
     	},
     	// 小分类值的变更，有值的情况下获取小分类id联动填选它的上级分类，如果没有值而类型有值则只显示该类型的所有小分类，类型没有值则显示全部小分类
     	minTypeImg: function(newQuestion, oldQuestion) {
@@ -182,17 +185,18 @@
     				_this.minTypeImg === obj.dname ? _this.typeImg = _this.$store.getters.getUserTypesName(obj.tbid).lname : _this.typeImg = _this.typeImg
     				})
     			this.minTypes.find(obj => {
-    				obj.tbid === tid ? _this.minTypes2.push(obj) : console.log()
+    				obj.tbid === tid ? _this.minTypes2[_this.minTypes2.length] = obj : console.log()
     			})
     		} else if(this.minTypeImg.length === 0) {
     			if(this.typeImg.length !== 0) {
     				this.minTypes.find(obj => {
-    					obj.tbid === tid ? _this.minTypes2.push(obj) : console.log()
+    					obj.tbid === tid ? _this.minTypes2[_this.minTypes2.length] = obj : console.log()
     				})
     			} else {
     				this.minTypes2 = this.minTypes
     			}
     		}
+        console.log(this.minTypes2,'分类变更后')
     	},
     	// 小分类的值变动后，清空小类型input的值
     	minTypes2: function(newQuestion, oldQuestion) {
@@ -217,8 +221,8 @@
       // 删除上传的文件img
       handleRemoveImg(file, fileList) {
       	// 特别说明下：fileListImg在修改时只做读取之用，不做写入（多个文件写入时会报错status值为null），上传组件会自己显示修改上传的文件
-      	// img需要展示 则必须把域名部分删除 http://192.168.0.130:81/
-      	// 这里img的url获取有2种情况，已上传的url：http://192.168.0.130:81/xxxxx，重新上传的url：blob:http://192.168.0.130:81/xxxxx，这里需要判断下，重新上传的直接调用response里的值即可
+      	// img需要展示 则必须把域名部分删除 http://192.168.1.130:81/
+      	// 这里img的url获取有2种情况，已上传的url：http://192.168.1.130:81/xxxxx，重新上传的url：blob:http://192.168.1.130:81/xxxxx，这里需要判断下，重新上传的直接调用response里的值即可
       	let _this = this, fileUrl = ''
         if (file.url !== undefined && file.url.substring(0, 5) !== 'blob:') {
           fileUrl = file.url.substring(this.$store.state.common.publicInfo.srcUrl.length)

@@ -115,7 +115,7 @@ export function saveAccessToken (token, expiredIn) {
 
 // localStorage获取Token变量
 export function getAccessToken () {
-  const token = lsCache.get(KEYS.token)
+  const token = lsCache.get(KEYS.token) || false
   return token
 }
 

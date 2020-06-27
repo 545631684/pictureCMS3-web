@@ -30,13 +30,22 @@ export default {
     },
     methods: {
       ...mapActions([
+        'setUserBrowseArticle'
       ]),
       getKeyword(payload){
         console.log(3)
         this.keywordIndex = payload
       }
     },
-    created() {}
+    created() {
+      this.setUserBrowseArticle({uId: this.$store.state.admin.adminInfo.uId})
+        .then(function (response) {
+          if(response.code === 200) {
+            console.log(response.msg)
+          }
+        })
+        .catch(function (error) {})
+    }
 }
 </script>
 

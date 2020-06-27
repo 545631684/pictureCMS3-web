@@ -5,7 +5,7 @@
   			<router-link tag="a" class="" to="/web"><img src="~IMAGES/sqlog.png" alt="" /></router-link>
   			<dl>
   				<dd v-if="!show">
-    				<router-link tag="a" class="" to="#/login">登陆</router-link> | <router-link tag="a" class="" to="#/enrollUser">注册</router-link>
+    				<router-link tag="a" class="" to="#/login">登陆</router-link> <!-- | <router-link tag="a" class="" to="#/enrollUser">注册</router-link> -->
     			</dd>
   				<dd v-if="show">
   					<el-dropdown @command="urlpage($event)">
@@ -26,7 +26,7 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { cachedAdminInfo, cachedKeysData } from 'API/cacheService'
+import { cachedAdminInfo, cachedKeysData, removeAccessToken } from 'API/cacheService'
 export default {
     inject: ['reload'],
     name: 'backstage',
@@ -63,6 +63,7 @@ export default {
       			        adminInfoData.password = ''
       			        adminInfoData.setPasswordStyle = false
       			      }
+                  removeAccessToken()
       			      cachedAdminInfo.save(adminInfoData)
       			      _this.$router.push("/login")
       			    }

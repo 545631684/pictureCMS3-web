@@ -17,7 +17,7 @@
 
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'
-  import { cachedAdminInfo, cachedKeysData } from 'API/cacheService'
+  import { cachedAdminInfo, cachedKeysData, removeAccessToken } from 'API/cacheService'
   export default {
   	inject: ['reload'],
     name: 'myHeader',
@@ -53,6 +53,7 @@
                     adminInfoData.password = ''
                     adminInfoData.setPasswordStyle = false
                   }
+                  removeAccessToken()
                   cachedAdminInfo.save(adminInfoData)
                   _this.$router.push("/login")
                 }

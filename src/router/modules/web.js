@@ -24,14 +24,14 @@ export default [
     name: 'login',
     component: login
   },
-  {
-    path: '/enrollUser',
-    name: 'enrollUser',
-    component: enrollUser
-  },
-  {
-    path: '/retrieveUser',
-    name: 'retrieveUser',
-    component: retrieveUser
-  },
+  // {
+  //   path: '/enrollUser',
+  //   name: 'enrollUser',
+  //   component: enrollUser
+  // },
+  // {
+  //   path: '/retrieveUser',
+  //   name: 'retrieveUser',
+  //   component: retrieveUser
+  // },
 ]

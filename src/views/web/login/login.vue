@@ -21,7 +21,7 @@
               <el-button type="primary" @click="submitForm('ruleForm')" style="width: 100%;">登录</el-button>
             </el-form-item>
           </el-form>
-          <router-link class="mk1_a1" tag="a" :to="{path:'/enrollUser'}">没有账号？<b>注册</b></router-link>
+          <!-- <router-link class="mk1_a1" tag="a" :to="{path:'/enrollUser'}">没有账号？<b>注册</b></router-link> -->
         </div>
         <div class="foot_info">
           <a href="http://www.beian.miit.gov.cn/">备案号：XXXX</a>
