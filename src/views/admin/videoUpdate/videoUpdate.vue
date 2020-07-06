@@ -93,7 +93,7 @@
         upState: false,
         imgCrsString: '',
         userInfo: this.$store.state.admin.adminInfo,
-        action: this.$store.state.common.publicInfo.srcUrl + 'a/upfile',
+        action: this.$store.state.common.publicInfo.srcUrl + 'u/upfile',
         types: this.$store.state.common.publicInfo.types,
         projects: this.$store.state.common.publicInfo.projects,
         minTypes: this.$store.state.common.publicInfo.details,
@@ -221,8 +221,8 @@
       // 删除上传的文件img
       handleRemoveImg(file, fileList) {
       	// 特别说明下：fileListImg在修改时只做读取之用，不做写入（多个文件写入时会报错status值为null），上传组件会自己显示修改上传的文件
-      	// img需要展示 则必须把域名部分删除 http://192.168.1.130:81/
-      	// 这里img的url获取有2种情况，已上传的url：http://192.168.1.130:81/xxxxx，重新上传的url：blob:http://192.168.1.130:81/xxxxx，这里需要判断下，重新上传的直接调用response里的值即可
+      	// img需要展示 则必须把域名部分删除 http://192.168.0.130:81/
+      	// 这里img的url获取有2种情况，已上传的url：http://192.168.0.130:81/xxxxx，重新上传的url：blob:http://192.168.0.130:81/xxxxx，这里需要判断下，重新上传的直接调用response里的值即可
       	let _this = this, fileUrl = ''
         if (file.url !== undefined && file.url.substring(0, 5) !== 'blob:') {
           fileUrl = file.url.substring(this.$store.state.common.publicInfo.srcUrl.length)

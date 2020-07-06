@@ -87,7 +87,7 @@
         psd: [],
         video: [],
         userInfo: this.$store.state.admin.adminInfo,
-        action: this.$store.state.common.publicInfo.srcUrl + '/a/upfile',
+        action: this.$store.state.common.publicInfo.srcUrl + '/u/upfile',
         projects: this.$store.state.common.publicInfo.projects,
         types: this.$store.state.common.publicInfo.types,
         minTypes: this.$store.state.common.publicInfo.details,

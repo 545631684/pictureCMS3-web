@@ -82,7 +82,7 @@
         upState: false,
         imgCrsString: '',
         userInfo: this.$store.state.admin.adminInfo,
-        action: this.$store.state.common.publicInfo.srcUrl + 'a/upfile',
+        action: this.$store.state.common.publicInfo.srcUrl + 'u/upfile',
         // action: '/a' + '/a/upfile',
         projects: this.$store.state.common.publicInfo.projects,
         types: this.$store.state.common.publicInfo.types,
@@ -237,7 +237,7 @@
       // 删除上传的文件img
       handleRemoveImg(file, fileList) {
       	let fileUrl = '', _this = this
-      	// img需要展示 则必须把域名部分删除 http://192.168.1.130:81/
+      	// img需要展示 则必须把域名部分删除 http://192.168.0.130:81/
         if (file.url !== undefined) fileUrl = file.url.substring(this.$store.state.common.publicInfo.srcUrl.length)
         if (file.response !== undefined) fileUrl = file.response.data.dataImg
       	this.article.img.find((obj, index) => {

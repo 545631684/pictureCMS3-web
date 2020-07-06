@@ -21,7 +21,7 @@ import {
 } from 'STORE/mutation-types'
 
 /* eslint-disable */
-const API_ROOT = 'http://192.168.1.130/'
+const API_ROOT = 'http://192.168.0.130/'
 const API_ROOT_DEV = '/a'
 
 /* eslint-enable */
@@ -210,7 +210,7 @@ export default {
   },
   /**
    * 编辑标签组
-   */ 
+   */
   labelssave (params) {
     return axios.post('a/labelssave', Qs.stringify(params))
   },
@@ -417,7 +417,7 @@ export default {
    */
   getOperationInfo (params) {
     return axios.post('w/getOperationInfo', Qs.stringify(params))
-  }, 
+  },
   /**
    * 添加用户浏览记录
    */
@@ -430,5 +430,5 @@ export default {
   getUserBrowseWebInfo (params) {
     return axios.post('a/getUserBrowseWebInfo', Qs.stringify(params))
   },
-  
+
 }

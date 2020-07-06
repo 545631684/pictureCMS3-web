@@ -75,7 +75,7 @@
         dialogVisible: false,
         upState: false,
         userInfo: this.$store.state.admin.adminInfo,
-        action: this.$store.state.common.publicInfo.srcUrl + 'a/upfile',
+        action: this.$store.state.common.publicInfo.srcUrl + 'u/upfile',
         types: this.$store.state.common.publicInfo.types,
         projects: this.$store.state.common.publicInfo.projects,
         minTypes: this.$store.state.common.publicInfo.details,
