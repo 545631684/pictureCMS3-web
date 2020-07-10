@@ -668,6 +668,18 @@ const actions = {
       })
   },
   /**
+   * 检查用户状态
+   */
+  userState (store, params) {
+    return api.userState(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
    * 条件查询用户浏览记录
    */
   getUserBrowseWebInfo (store, params) {

@@ -83,7 +83,6 @@
         imgCrsString: '',
         userInfo: this.$store.state.admin.adminInfo,
         action: this.$store.state.common.publicInfo.srcUrl + 'u/upfile',
-        // action: '/a' + '/a/upfile',
         projects: this.$store.state.common.publicInfo.projects,
         types: this.$store.state.common.publicInfo.types,
         minTypes: this.$store.state.common.publicInfo.details,
@@ -317,11 +316,11 @@
       		})
       	} else {
       		this.loading = true
-          this.articleUpdate({mId:this.article.mId, uId:this.article.uId, pid:this.$store.getters.getUserProjectsId(this.projectImg).pid, tid:this.$store.getters.getUserTypesId(this.typeImg).tid, did:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(), describe:this.article.describe.replace(/\s+/g," "), img:this.article.img, psd:'[]', video:'[]', typeFile:this.article.typeFile})
+          this.articleUpdate({mId:this.article.mId, uId:this.article.uId, pid:this.$store.getters.getUserProjectsId(this.projectImg).pid, tid:this.$store.getters.getUserTypesId(this.typeImg).tid, did:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(), describe:this.article.describe.replace(/\s+/g," "), img:this.article.img, psd:'', video:'', typeFile:this.article.typeFile})
             .then((response) => {
               if(response.code === 200) {
                 console.log(this.$store.state.admin.adminInfo,'修改后用户信息')
-                _this.setOperationInfo({_this:_this, type:30, article:{mId:_this.article.mId, uId:_this.article.uId, pid:_this.$store.getters.getUserProjectsId(_this.projectImg).pid, tid:_this.$store.getters.getUserTypesId(_this.typeImg).tid, did:_this.$store.getters.getUserMinTypeId(_this.minTypeImg).did, title:_this.article.title.replace(/\s+/g," "), keyword:_this.dynamicTags.toString(), describe:_this.article.describe.replace(/\s+/g," "), img:_this.article.img, psd:'[]', video:'[]', typeFile:_this.article.typeFile}})
+                _this.setOperationInfo({_this:_this, type:30, article:{mId:_this.article.mId, uId:_this.article.uId, pid:_this.$store.getters.getUserProjectsId(_this.projectImg).pid, tid:_this.$store.getters.getUserTypesId(_this.typeImg).tid, did:_this.$store.getters.getUserMinTypeId(_this.minTypeImg).did, title:_this.article.title.replace(/\s+/g," "), keyword:_this.dynamicTags.toString(), describe:_this.article.describe.replace(/\s+/g," "), img:_this.article.img, psd:'', video:'', typeFile:_this.article.typeFile}})
                 console.log("img修改接口")
                 _this.upState = true
                 _this.$message({type: 'success', message: response.msg})

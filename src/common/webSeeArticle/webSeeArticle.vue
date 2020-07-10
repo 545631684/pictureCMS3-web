@@ -37,7 +37,7 @@
   		<dl class="articleList clearfix" v-loading="loading">
   			<dt v-if="article.length === 0 && loading === 'false'">没有查到相关数据</dt>
   			<dd v-for="(item, index) in article" :key="index" v-if="article.length !== 0">
-  				<router-link target="_blank" :title="item.title + '   ▉发布人：' + getUserInfo(item.uId) + '-发布时间：' + formatDate(item.registerTimeImg)" tag="a" :to="'/web/article/' + item.mId + '/Index/0/0/'">
+  				<router-link target="_blank" :title="'🔺《'+item.title + '》 💂发布人：' + getUserInfo(item.uId).nickname + '🕛发布时间：' + formatDate(item.registerTimeImg)" tag="a" :to="'/web/article/' + item.mId + '/Index/0/0/'">
   				<p>
   					<img :src="URLS2 + item.srcs[0]" alt="" />
   				</p>
@@ -48,14 +48,29 @@
   					<samp :title="formatDate(item.registerTimeImg)">
   						{{formatDate(item.registerTimeImg)}}
   						<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('img', item.mId)">
-  		                  <use xlink:href="#icon-picture"></use>
-  		                </svg>
+                <use xlink:href="#icon-picture"></use>
+              </svg>
   						<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('psd', item.mId)">
-  		                  <use xlink:href="#icon-web-psd"></use>
-  		                </svg>
+                <use xlink:href="#icon-web-psd"></use>
+              </svg>
   						<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('video', item.mId)">
-  		                  <use xlink:href="#icon-shipinbofangyingpian"></use>
-  		                </svg>
+                <use xlink:href="#icon-shipinbofangyingpian"></use>
+              </svg>
+              <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('ai', item.mId)">
+                <use xlink:href="#icon-Ai"></use>
+              </svg>
+              <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('pdf', item.mId)">
+                <use xlink:href="#icon-Pdf"></use>
+              </svg>
+              <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('word', item.mId)">
+                <use xlink:href="#icon-word1"></use>
+              </svg>
+              <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('excel', item.mId)">
+                <use xlink:href="#icon-excel1"></use>
+              </svg>
+              <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('engineering', item.mId)">
+                <use xlink:href="#icon-gongcheng-"></use>
+              </svg>
   					</samp>
   				</p>
   				</router-link>
@@ -336,7 +351,7 @@ export default {
           userId: _this.userInfo.uId
           })
       },
-      formatDate(time) { 
+      formatDate(time) {
         if(time !== null) {
           let date = new Date(parseInt(time) * 1000)
           return formatDate(date, 'yyyy-MM-dd')
@@ -411,12 +426,22 @@ export default {
               _this.loading = true
               _this.article = response.data.article
               _this.article.find(obj => {
-              	obj.img = obj.img === '[]' ? eval('(' + obj.img + ')') : JSON.parse(obj.img)
-              	obj.psd = obj.psd === '[]' ? eval('(' + obj.psd + ')') : JSON.parse(obj.psd)
-              	obj.video = obj.video === '[]' ? eval('(' + obj.video + ')') : JSON.parse(obj.video)
+              	// obj.img = obj.img === '[]' ? eval('(' + obj.img + ')') : JSON.parse(obj.img)
+              	// obj.psd = obj.psd === '[]' ? eval('(' + obj.psd + ')') : JSON.parse(obj.psd)
+              	// obj.video = obj.video === '[]' ? eval('(' + obj.video + ')') : JSON.parse(obj.video)
+               //  obj.ai = obj.ai === '[]' ? eval('(' + obj.ai + ')') : JSON.parse(obj.ai)
+               //  obj.pdf = obj.pdf === '[]' ? eval('(' + obj.pdf + ')') : JSON.parse(obj.pdf)
+               //  obj.word = obj.word === '[]' ? eval('(' + obj.word + ')') : JSON.parse(obj.word)
+               //  obj.excel = obj.excel === '[]' ? eval('(' + obj.excel + ')') : JSON.parse(obj.excel)
+               //  obj.engineering = obj.engineering === '[]' ? eval('(' + obj.engineering + ')') : JSON.parse(obj.engineering)
               	obj.typeFile === 'img' ? srcs[srcs.length] = obj.img[0].miniImg : obj.typeFile = obj.typeFile
               	obj.typeFile === 'psd' ? srcs[srcs.length] = obj.psd[0].Psdview : obj.typeFile = obj.typeFile
               	obj.typeFile === 'video' ? srcs[srcs.length] = obj.video[0].Videoview : obj.typeFile = obj.typeFile
+                obj.typeFile === 'ai' ? srcs[srcs.length] = obj.img[0].miniImg : obj.typeFile = obj.typeFile
+                obj.typeFile === 'pdf' ? srcs[srcs.length] = 'image/pdf.jpg' : obj.typeFile = obj.typeFile
+                obj.typeFile === 'word' ? srcs[srcs.length] = 'image/word.jpg' : obj.typeFile = obj.typeFile
+                obj.typeFile === 'excel' ? srcs[srcs.length] = 'image/excel.jpg' : obj.typeFile = obj.typeFile
+                obj.typeFile === 'engineering' ? srcs[srcs.length] = obj.img[0].miniImg : obj.typeFile = obj.typeFile
               	obj.srcs = srcs.length !== 0 ? srcs : new Array()
               	srcs = []
               })
@@ -448,7 +473,7 @@ export default {
           case 'img':
             this.article.find((obj, index) => {
               if (obj.mId === mid) {
-                obj.img !== '[]' ? time = true : time = false
+                obj.img.length !== 0 ? time = true : time = false
               }
             })
             return time
@@ -456,7 +481,7 @@ export default {
           case 'psd':
             this.article.find((obj, index) => {
               if (obj.mId === mid) {
-                obj.psd !== '[]' ? time = true : time = false
+                obj.psd.length !== 0 ? time = true : time = false
               }
             })
             return time
@@ -464,7 +489,47 @@ export default {
           case 'video':
             this.article.find((obj, index) => {
               if (obj.mId === mid) {
-                obj.video !== '[]' ? time = true : time = false
+                obj.video.length !== 0 ? time = true : time = false
+              }
+            })
+            return time
+            break;
+          case 'ai':
+            this.article.find((obj, index) => {
+              if (obj.mId === mid) {
+                obj.ai.length !== 0 ? time = true : time = false
+              }
+            })
+            return time
+            break;
+          case 'pdf':
+            this.article.find((obj, index) => {
+              if (obj.mId === mid) {
+                obj.pdf.length !== 0 ? time = true : time = false
+              }
+            })
+            return time
+            break;
+          case 'word':
+            this.article.find((obj, index) => {
+              if (obj.mId === mid) {
+                obj.word.length !== 0 ? time = true : time = false
+              }
+            })
+            return time
+            break;
+          case 'excel':
+            this.article.find((obj, index) => {
+              if (obj.mId === mid) {
+                obj.excel.length !== 0 ? time = true : time = false
+              }
+            })
+            return time
+            break;
+          case 'engineering':
+            this.article.find((obj, index) => {
+              if (obj.mId === mid) {
+                obj.engineering.length !== 0 ? time = true : time = false
               }
             })
             return time
@@ -485,7 +550,7 @@ export default {
         userId: _this.userInfo.uId
         })
       this.webUserList()
-        .then((response) => { 
+        .then((response) => {
           if(response.code === 200) {
             _this.loading = true
             _this.userList = response.data
@@ -540,9 +605,9 @@ table{width:100%!important}
 .articleList dd p:nth-child(1){width: 266px; height: 215px; position: relative; border-radius: 10px 10px 0 0;overflow: hidden;}
 .articleList dd p:nth-child(1) img{position: absolute; display: block; width: 266px; }
 .articleList dd p:nth-child(2){ height: 40px; padding: 5px; border-bottom: 1px solid #e5e5e5; font-size: 18px; line-height: 1.2;}
-.articleList dd p:nth-child(3){height: 45px; padding: 15px; line-height: 45px;}
+.articleList dd p:nth-child(3){height: 45px; padding: 15px; line-height: 45px; display: flex; justify-content: center; align-items: center;}
 .articleList dd p:nth-child(3) img{ width: 40px; height: 40px; float: left; display: block;border-radius: 50px;}
 .articleList dd p:nth-child(3) span{float: left; display: block; width: 50%; text-indent: 10px;}
-.articleList dd p:nth-child(3) samp{float: left; display: block;width: 32%; text-align: center; color: #999999;line-height: .5;padding: 17px 0 0 0;}
+.articleList dd p:nth-child(3) samp{float: left; display: block;width: 32%; text-align: center; color: #999999;line-height: .5;}
 .icon {width: 20px;height: 20px;vertical-align: -0.15em;fill: currentColor;overflow: hidden; padding-top: 10px;}
 </style>

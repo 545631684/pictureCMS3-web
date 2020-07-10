@@ -35,14 +35,28 @@
   		<labelComponent :dynamicTags2="dynamicTags" @setDynamicTags="setDynamicTags"></labelComponent>
   	</el-footer>
   	<el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;">
-  		<p class="imgName">PSD：</p>
-  		<div class="imgs shangchuan" style="width: 40%;">
-  			<el-upload  :file-list="fileList" class="upload-demo2" :limit="20" :multiple="true" accept=".psd,.psb" :action="action + '?id=4'" :on-remove="handleRemovePsd" :on-change="obtainImgSrc" :on-exceed="limitNum">
-  				<el-button size="small" type="primary">点击上传</el-button>
-  				<div slot="tip" class="el-upload__tip">只能上传psd文件，文件大小不要超过1GB</div>
+  		<p class="imgName">图片：<br /><span style="display: block;width: 67px;float: right; text-align: center;font-size: 12px;">{{article.img.length}}/130</span></p>
+  		<div class="imgs shangchuan2">
+  			<div class="clearfix"></div>
+  			<el-upload class="clearfix" :file-list="fileListImg" :limit="130" :multiple="true" ref="fliesImg" accept=".jpg,.png,.gif" :action="action + '?id=1'" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemoveImg" :on-change="obtainImgSrc" :on-exceed="limitNumImg">
+  				<div class="" style="font-size: 12px;line-height: 20px;padding: 55px 0 0;">上传图片<br />（.jpg/.png/.gif）</div>
   			</el-upload>
-  			<el-alert title="提示" description="※上传第一个文件时会自动获取文件名称并填写到标题。※一次最多上传20个psd文件，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
+  			<el-alert title="提示" description="※上传第一个文件时会自动获取文件名称并填写到标题。※一次最多上传130张图片，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
+  			<el-dialog :visible.sync="dialogVisible">
+  				<img width="100%" :src="dialogImageUrl" alt="">
+  			</el-dialog>
   		</div>
+  	</el-footer>
+  	<el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;">
+  		<p class="imgName">AI：</p>
+  		<div class="imgs shangchuan" style="width: 40%;">
+  			<el-upload :multiple="true" :file-list="fileListEngineering" :limit="20" ref="aiFile" accept=".rar,.zip" class="upload-demo" :action="action + '?id=8'" :on-remove="handleRemoveEngineering" :on-change="obtainImgSrc" :on-exceed="limitNum">
+  				<el-button size="small" type="primary">点击上传工程文件</el-button>
+  				<div slot="tip" class="el-upload__tip">只能上传.rar,.zip格式文件，文件大小不要超过1GB</div>
+  			</el-upload>
+  			<el-alert title="提示" description="※上传第一个文件时会自动获取文件名称并填写到标题。※一次最多上传20个工程文件，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
+  		</div>
+
   	</el-footer>
   	<el-row class="buttonImg">
   		<el-button type="primary" v-on:click.stop="submitImg" :loading="loading">提交修改</el-button>
@@ -73,7 +87,11 @@
         describe: '',
         dialogImageUrl: '',
         dialogVisible: false,
+        imgDiv: false,
+        psdDiv: false,
+        videoDiv: false,
         upState: false,
+        imgCrsString: '',
         userInfo: this.$store.state.admin.adminInfo,
         action: this.$store.state.common.publicInfo.srcUrl + 'u/upfile',
         types: this.$store.state.common.publicInfo.types,
@@ -111,6 +129,11 @@
         	uId: '',
         	userName: '',
         	video: [],
+        	ai: [],
+        	pdf: [],
+        	word: [],
+        	excel: [],
+        	engineering: [],
         	xname: '',
         	did: '',
         	dname: ''
@@ -126,7 +149,10 @@
         marginLeft: {
         	'margin-left': '0px'
         },
-        fileList: []
+        fileListImg: [],
+        fileListAi: [],
+        fileListVideo: [],
+        fileListEngineering: []
       }
     },
     watch: {
@@ -142,7 +168,9 @@
     		let tid = this.typeImg.length !== 0 ? this.$store.getters.getUserTypesId(this.typeImg).tid : ''
     		if(this.typeImg.length !== 0) {
     			this.minTypes.find(obj => {
-    				obj.tbid === tid ? _this.minTypes2.push(obj) : console.log()
+            if(obj.tbid === tid){
+             obj.tbid === tid ? _this.minTypes2[_this.minTypes2.length] = obj : console.log()
+            }
     			})
     			this.minTypes2.find(obj => {
     				obj.dname === _this.minTypeImg ? minTypeImgzj = true : console.log()
@@ -152,6 +180,7 @@
     			this.minTypeImg = ''
     			this.minTypes2 = this.minTypes
     		}
+        console.log(this.minTypes2,'类型变更后')
     	},
     	// 小分类值的变更，有值的情况下获取小分类id联动填选它的上级分类，如果没有值而类型有值则只显示该类型的所有小分类，类型没有值则显示全部小分类
     	minTypeImg: function(newQuestion, oldQuestion) {
@@ -161,23 +190,23 @@
     		if(this.minTypeImg.length !== 0) {
     			this.minTypes.find(obj => {
     				_this.minTypeImg === obj.dname ? _this.typeImg = _this.$store.getters.getUserTypesName(obj.tbid).lname : _this.typeImg = _this.typeImg
-    			})
+    				})
     			this.minTypes.find(obj => {
-    				obj.tbid === tid ? _this.minTypes2.push(obj) : console.log()
+    				obj.tbid === tid ? _this.minTypes2[_this.minTypes2.length] = obj : console.log()
     			})
     		} else if(this.minTypeImg.length === 0) {
     			if(this.typeImg.length !== 0) {
     				this.minTypes.find(obj => {
-    					obj.tbid === tid ? _this.minTypes2.push(obj) : console.log()
+    					obj.tbid === tid ? _this.minTypes2[_this.minTypes2.length] = obj : console.log()
     				})
     			} else {
     				this.minTypes2 = this.minTypes
     			}
     		}
+        console.log(this.minTypes2,'分类变更后')
     	},
     	// 小分类的值变动后，清空小类型input的值
     	minTypes2: function(newQuestion, oldQuestion) {
-    		
     	}
     },
     methods: {
@@ -189,62 +218,107 @@
         'setOperationInfo'
       ]),
       // 上传文件数超出限制提示
+      limitNumImg (file, fileList) {
+      	if (fileList.length > 130) {
+      		this.$alert('最大上传130张图片，你已超出限制！', '警告', {
+      			confirmButtonText: '确定'
+      		})
+      	}
+      },
+      // 删除上传的文件img
+      handleRemoveImg(file, fileList) {
+      	// 特别说明下：fileListImg在修改时只做读取之用，不做写入（多个文件写入时会报错status值为null），上传组件会自己显示修改上传的文件
+      	// img需要展示 则必须把域名部分删除 http://192.168.0.130:81/
+      	// 这里img的url获取有2种情况，已上传的url：http://192.168.0.130:81/xxxxx，重新上传的url：blob:http://192.168.0.130:81/xxxxx，这里需要判断下，重新上传的直接调用response里的值即可
+      	let _this = this, fileUrl = ''
+        if (file.url !== undefined && file.url.substring(0, 5) !== 'blob:') {
+          fileUrl = file.url.substring(this.$store.state.common.publicInfo.srcUrl.length)
+          this.article.img.find((obj, index) => {
+          	if (obj !== undefined) {
+          		if (obj.dataImg.url === fileUrl) {
+          			_this.article.img.splice(index,1)
+          			_this.deleteFiles.push(obj.dataImg.url, obj.miniImg)
+          		}
+          	}
+          })
+        } else if (file.response !== undefined) {
+          fileUrl = file.response.data.dataImg
+          this.article.img.find((obj, index) => {
+          	if (obj !== undefined) {
+          		if (obj.dataImg.url === fileUrl) {
+          			_this.article.img.splice(index,1)
+          			_this.deleteFiles.push(obj.dataImg.url, obj.miniImg)
+          		}
+          	}
+          })
+        }
+      },
+      // 查看上传的图片
+      handlePictureCardPreview(file) {
+      	this.dialogImageUrl = file.url
+      	this.dialogVisible = true
+      },
+      // 上传文件数超出限制提示
       limitNum (file, fileList) {
       	if (fileList.length > 20) {
-      		this.$alert('最大上传20个psd文件，你已超出限制！', '警告', {
+      		this.$alert('最多上传20个工程文件，你已超出限制！', '警告', {
       			confirmButtonText: '确定'
       		})
       	}
       },
       // 获取上传图片的服务器端实际路径地址并保存到数组中
       obtainImgSrc(file, fileList) {
+      	let srcBoolean = false
       	if(file.response !== undefined) {
-      		if(file.response.data.type === '4') {
-      			// 使用视图更新方法赋值文章的psd，防止视图不更新的情况
+      		if(file.response.data.type === '1') {
+      			// 是空数组字符串时赋值成空数组
+      			this.article.img === '[]' ? this.article.img = [] : this.article.img = this.article.img
+      			// 防止重复文件名上传
+      			this.article.img.length !== 0 ? this.article.img.find(obj => {obj.dataImg.url === file.response.data.dataImg ? srcBoolean = false : srcBoolean = true}) : srcBoolean = true
+      			if(srcBoolean) {
+      				// 文章的img赋值
+      				this.article.img.push({
+      					dataImg: { size: file.size, name: file.name, url: file.response.data.dataImg, type: file.raw.type, File: file.raw, title: file.name},
+      					miniImg: file.response.data.miniImg
+      				})
+      				// 防止刷新等其他情况的统一上传文件存放地
+      				this.uploadingFiles.push(file.response.data.dataImg, file.response.data.miniImg)
+      			}
+      		} else if(file.response.data.type === '8') {
+      			// 使用视图更新方法赋值文章的ai，防止视图不更新的情况
       			// 这里也可以用数组的push()方法也可以保证视图的更新
-            console.log(file.response)
       			this.$set(
-      				this.article.psd,
-      				this.article.psd.length, {
-      					dataPsd: {
-      						size: file.size.toString(),
-      						name: file.name,
-      						url: file.response.data.dataPsd,
-      						type: 'image/x-photoshop',
-      						File: file.raw,
-      						title: file.name
-      					},
-      					Psdview: file.response.data.Psdview
+      				this.article.engineering,
+      				this.article.engineering.length, {
+      					file: {size: file.size, name: file.name, url: file.response.data.file, type: file.raw.type, File: file.raw, title: file.name},
       				}
       			)
       			// 防止刷新等其他情况的统一上传文件存放地
-      			this.uploadingFiles.push(file.response.data.dataPsd, file.response.data.Psdview)
+      			this.uploadingFiles.push(file.response.data.file)
       		}
+
       	}
       },
-      // 删除上传的文件psd
-      handleRemovePsd(file, fileList) {
-      	let _this = this
-      	this.article.psd.find((obj, index) => {
+      // 删除上传的文件Engineering
+      handleRemoveEngineering(file, fileList) {
+      	// 特别说明下：fileListEngineering在修改时只做读取之用，不做写入（多个文件写入时会报错status值为null），上传组件会自己显示修改上传的文件
+      	let _this = this, fileUrl = ''
+        if (file.response === undefined) fileUrl = file.url
+        if (file.response !== undefined) fileUrl = file.response.data.file
+      	this.article.engineering.find((obj, index) => {
       		if (obj !== undefined) {
-      			if (file.response !== undefined && obj.dataPsd.url === file.response.data.dataPsd) {
-      				_this.article.psd.splice(index,1)
-      				_this.deleteFiles.push(obj.dataPsd.url, obj.Psdview)
-      			} else if (file.url !== undefined && obj.dataPsd.url === file.url) {
-      				_this.article.psd.splice(index,1)
-      				_this.deleteFiles.push(file.url, file.url+'.jpg')
+      			if (obj.file.url === fileUrl) {
+      				// 删除文章Engineering的
+      				_this.article.engineering.splice(index,1)
+      				// 统一删除变量里添加删除的文件路径
+      				_this.deleteFiles.push(obj.file.url)
       			}
-            
-      		}
-      	})
-      	this.fileList.find((obj, index) => {
-      		if (obj !== undefined) {
-      			obj.url === file.url ? _this.fileList.splice(index,1) : obj = obj
       		}
       	})
       },
       // 发布用户文章，把数组中的路径拼接成字符串,以及Uid、title发送给后台接口
-      submitImg() { 
+      submitImg() {
+        let _this = this
       	if (this.$store.state.admin.adminInfo.nickname === this.$store.state.admin.adminInfo.userName) {
       		this.$alert('请修改昵称（个人真实姓名）后在修改文件', '警告', {
                 confirmButtonText: '确定',
@@ -280,20 +354,56 @@
       		this.$alert('请填写描述内容', '警告', {
       			confirmButtonText: '确定'
       		})
-      	} else if(this.article.psd.length === 0) {
-      		this.$alert('请添加需要上传的PSD文件', '警告', {
+      	} else if(this.article.img.length === 0 ) {
+      		this.$alert('请添加缩略图，至少上传一张', '警告', {
+      			confirmButtonText: '确定'
+      		})
+      	}  else if(this.article.engineering.length === 0) {
+      		this.$alert('请添加需要上传的工程文件', '警告', {
       			confirmButtonText: '确定'
       		})
       	} else {
-          let _this = this
       		this.loading = true
-          this.articleUpdate({mId:this.article.mId, uId:this.article.uId, pid:this.$store.getters.getUserProjectsId(this.projectImg).pid, tid:this.$store.getters.getUserTypesId(this.typeImg).tid, did:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(), describe:this.article.describe.replace(/\s+/g," "), img:'', psd:this.article.psd, video:'', typeFile:this.article.typeFile})
+      		let img = this.article.img.length > 0 && this.article.img !== '[]' ? this.article.img : '[]'
+          this.articleUpdate({
+              mId:this.article.mId,
+              uId:this.article.uId,
+              pid:this.$store.getters.getUserProjectsId(this.projectImg).pid,
+              tid:this.$store.getters.getUserTypesId(this.typeImg).tid,
+              did:this.$store.getters.getUserMinTypeId(this.minTypeImg).did,
+              title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(),
+              describe:this.article.describe.replace(/\s+/g," "),
+              img: img,
+              psd:'',
+              video:'',
+              ai:'',
+              pdf:'',
+              word:'',
+              excel:'',
+              engineering: this.article.engineering,
+              typeFile:this.article.typeFile,
+            })
             .then((response) => {
               if(response.code === 200) {
-                _this.setOperationInfo({_this:_this, type:30, article:{mId:_this.article.mId, uId:_this.article.uId, pid:_this.$store.getters.getUserProjectsId(_this.projectImg).pid, tid:_this.$store.getters.getUserTypesId(_this.typeImg).tid, did:_this.$store.getters.getUserMinTypeId(_this.minTypeImg).did, title:_this.article.title.replace(/\s+/g," "), keyword:_this.dynamicTags.toString(), describe:_this.article.describe.replace(/\s+/g," "), img:'', psd:_this.article.psd, video:'', typeFile:_this.article.typeFile}})
+                _this.setOperationInfo({_this:_this, type:30, article:{
+                  mId:this.article.mId,
+                  uId:this.article.uId,
+                  pid:this.$store.getters.getUserProjectsId(this.projectImg).pid,
+                  tid:this.$store.getters.getUserTypesId(this.typeImg).tid,
+                  did:this.$store.getters.getUserMinTypeId(this.minTypeImg).did,
+                  title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(),
+                  describe:this.article.describe.replace(/\s+/g," "),
+                  img: img,
+                  ai:'',
+                  pdf:'',
+                  word:'',
+                  excel:'',
+                  engineering: this.article.engineering,
+                  typeFile:this.article.typeFile,
+                }})
                 _this.upState = true
                 _this.$message({type: 'success', message: response.msg})
-                if(_this.deleteFiles.length !== 0) {
+                if(this.deleteFiles.length !== 0) {
                   _this.uploadingFiles = []
                   _this.deleteFiles.find((fileSrc, index) => {
                     _this.delfile({filesrc: fileSrc})
@@ -310,24 +420,24 @@
       // 判断标题是否重复，并提示用户
       titleRepeat() {
       	if(this.title.length !== 0) {
-          let _this = this
-          this.getUpdateTitleRepeat({title:this.article.title, mId: this.article.mId})
-            .then((response) => {
-              if(response.code === 200) {
-                if (response.data === '0') {
-                  // 有重复的
-                  _this.titleDiv = true
-                  _this.titleCf = false
-                } else if (response.data === '1') {
-                  // 没有重复的
-                  _this.titleDiv = true
-                  _this.titleCf = true
-                }
-              }
-            })
-            .catch(function (error) {
-              _this.$message.error(error.msg)
-            })
+      		let _this = this
+      		this.getUpdateTitleRepeat({title:this.article.title, mId: this.article.mId})
+      		  .then((response) => {
+      		    if(response.code === 200) {
+      		      if (response.data === '0') {
+      		        // 有重复的
+      		        _this.titleDiv = true
+      		        _this.titleCf = false
+      		      } else if (response.data === '1') {
+      		        // 没有重复的
+      		        _this.titleDiv = true
+      		        _this.titleCf = true
+      		      }
+      		    }
+      		  })
+      		  .catch(function (error) {
+      		    _this.$message.error(error.msg)
+      		  })
       	}
       },
       // 删除标签按钮
@@ -350,6 +460,11 @@
       	this.inputVisible = false;
       	this.inputValue = '';
       },
+      // 清空数据，为下次上传做准备
+      myReload () {
+      	this.uploadFiles = []
+      	this.reload()
+      },
       // 返回文章列表页
       jumpUrl() {
       	this.$router.push('/backstage/seeArticle')
@@ -368,53 +483,61 @@
       let _this = this
     	this.types = this.$store.state.common.publicInfo.types
     	this.projects = this.$store.state.common.publicInfo.projects
-      this.getAdminArticle({mId: this.$route.params.id})
-        .then((response) => {
-          if(response.code === 200) {
-            _this.article = response.data
+    	this.getAdminArticle({mId: this.$route.params.id})
+    	  .then((response) => {
+    	    if(response.code === 200) {
+    	      _this.article = response.data
             _this.article2 = JSON.stringify(response.data)
             _this.article2 = JSON.parse(_this.article2)
-            let tags = _this.article.keyword.split(",")
-            tags.find((e, index) => {
-            	_this.dynamicTags.push(e)
-            })
-            _this.title = _this.article.title
-            _this.projectImg = _this.article.xname
-            _this.typeImg = _this.article.lname
-            _this.did = _this.article.detailsid
-            _this.minTypeImg = _this.article.dname
-            _this.article.img = _this.article.img !== '[]' ? JSON.parse(_this.article.img) : new Array()
-            _this.article.psd = _this.article.psd !== '[]' ? JSON.parse(_this.article.psd) : new Array()
-            _this.article.video = _this.article.video !== '[]' ? JSON.parse(_this.article.video) : new Array()
-            _this.article.typeFile === 'img' ? _this.imgDiv = true : _this.imgDiv = false
-            _this.article.typeFile === 'psd' ? _this.psdDiv = true : _this.psdDiv = false
-            _this.article.typeFile === 'video' ? _this.videoDiv = true : _this.videoDiv = false
-            
-            // 以下代码是针对element的上传组件在修改中对已上传的文件显示变量赋值
-            var num = []
-            if (response.data.typeFile === 'psd') {
-            	_this.fileList = response.data.psd
-            	_this.fileList.find(obj => {
-                	num[num.length] = {
-            				name: obj.dataPsd.name,
-            				url: obj.dataPsd.url
-            			}
-            	})
-            	_this.fileList = num
-            }
-            _this.loading2 = false
-          }
-        })
-        .catch(function (error) {
-          _this.$message.error(error.msg)
-        })
+    	      let tags = _this.article.keyword.split(",")
+    	      tags.find((e, index) => {
+    	      	_this.dynamicTags.push(e)
+    	      })
+    	      _this.title = _this.article.title
+    	      _this.projectImg = _this.article.xname
+    	      _this.typeImg = _this.article.lname
+    	      _this.did = _this.article.detailsid
+    	      _this.minTypeImg = _this.article.dname
+    	      _this.article.img = _this.article.img !== '[]' ? JSON.parse(_this.article.img) : new Array()
+    	      _this.article.psd = _this.article.psd !== '[]' ? JSON.parse(_this.article.psd) : new Array()
+    	      _this.article.video = _this.article.video !== '[]' ? JSON.parse(_this.article.video) : new Array()
+    	      _this.article.ai = _this.article.ai !== '[]' ? JSON.parse(_this.article.ai) : new Array()
+    	      _this.article.pdf = _this.article.pdf !== '[]' ? JSON.parse(_this.article.pdf) : new Array()
+    	      _this.article.word = _this.article.word !== '[]' ? JSON.parse(_this.article.word) : new Array()
+    	      _this.article.excel = _this.article.excel !== '[]' ? JSON.parse(_this.article.excel) : new Array()
+    	      _this.article.engineering = _this.article.engineering !== '[]' ? JSON.parse(_this.article.engineering) : new Array()
+
+    	      // 以下代码是针对element的上传组件在修改中对已上传的文件显示变量赋值
+    	      var num = []
+    	       if (response.data.typeFile === 'engineering') {
+    	      	response.data.engineering.find(obj => {
+    	          	_this.fileListEngineering.push({
+    	      				name: obj.file.name,
+    	      				url: obj.file.url
+    	      			})
+    	      	})
+    	      	if (response.data.img.lengt !== 0) {
+    	      		response.data.img.find(obj => {
+    	            	_this.fileListImg.push({
+    	      					name: obj.dataImg.name,
+    	      					url: _this.URLS2 + obj.dataImg.url
+    	      				})
+    	        	})
+    	      	}
+    	      }
+    	      _this.loading2 = false
+    	    }
+    	  })
+    	  .catch(function (error) {
+    	    _this.$message.error(error.msg)
+    	  })
     	// 刷新页面时删除上传的文件
     	window.addEventListener('beforeunload', e => {
-        if(this.uploadingFiles.length !== 0 && this.upState == false) {
-          _this.uploadingFiles.find((fileSrc, index) => {
-            _this.delfile({filesrc: fileSrc})
-          })
-        }
+    		if(this.uploadingFiles.length !== 0 && this.upState == false) {
+    			_this.uploadingFiles.find((fileSrc, index) => {
+    			  _this.delfile({filesrc: fileSrc})
+    			})
+    		}
     	});
     },
     beforeDestroy() {

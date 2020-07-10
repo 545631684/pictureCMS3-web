@@ -9,7 +9,7 @@
           	</li>
           	<li>
           		<span>{{adminInfo.nickname}}<svg v-if="adminInfo.sex === '1'" class="icon2" aria-hidden="true"><use xlink:href="#icon-xingbienan"></use></svg><svg v-if="adminInfo.sex === '0'" class="icon2" aria-hidden="true"><use xlink:href="#icon-xingbienv"></use></svg></span>
-          	<samp>{{adminInfo.userName}}</samp>	
+          	<samp>{{adminInfo.userName}}</samp>
           	</li>
            </ul>
         </dd>
@@ -66,13 +66,14 @@
         </el-card>
       </el-col>
     </el-row>
-    
-      
+
+
   </el-container>
 </template>
 
 <script>
   import { formatDate, getProjectID, getProjectName, getTypesID, getTypesName } from 'UTIL/publicAPI'
+  import { cachedAdminInfo, cachedKeysData, removeAccessToken } from 'API/cacheService'
   import { mapActions, mapGetters, mapMutations } from 'vuex'
   export default {
     inject: ['reload'],
@@ -95,6 +96,9 @@
         'getUserList',
         'getAdminIndexData',
         'getOperationInfo',
+        'userState',
+        'setOperationInfo',
+        'exitlogin',
       ]),
       formatDate (time) {
         if (time !== null) {
@@ -106,17 +110,18 @@
       },
       // 查看文章路径跳转
       seeArticle (mid, typeFile) {
-        switch (typeFile) {
-          case 'img':
-            window.open('#/web/article/' + mid + '/backstage/0/0/', '_blank')
-            break;
-          case 'psd':
-            window.open('#/web/article/' + mid + '/backstage/0/0/', '_blank')
-            break;
-          case 'video':
-            window.open('#/web/article/' + mid + '/backstage/0/0/', '_blank')
-            break;
-        }
+        window.open('#/web/article/' + mid + '/backstage/0/0/', '_blank')
+        // switch (typeFile) {
+        //   case 'img':
+        //     window.open('#/web/article/' + mid + '/backstage/0/0/', '_blank')
+        //     break;
+        //   case 'psd':
+        //     window.open('#/web/article/' + mid + '/backstage/0/0/', '_blank')
+        //     break;
+        //   case 'video':
+        //     window.open('#/web/article/' + mid + '/backstage/0/0/', '_blank')
+        //     break;
+        // }
       },
     },
     created() {
@@ -124,40 +129,72 @@
       if(/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/.test(this.$store.state.admin.adminInfo.nickname)){
         this.$alert('第一次登陆后台,请到用户信息=>个人信息中修改自己的真实姓名,谢谢配合。', '提示', {confirmButtonText: '确定'})
       }
-      this.getAdminIndexData({uId:this.$store.state.admin.adminInfo.uId})
+      this.userState({uId:this.$store.state.admin.adminInfo.uId})
         .then((response) => {
           if(response.code === 200) {
-            _this.article = response.data.article === null ? [] : response.data.article
-            _this.downloadNum = response.data.downloadNum
-            _this.articleNum = response.data.articleNum
-            _this.articleDeleteNum = response.data.articleDeleteNum
-          }
-        })
-        .catch(function (error) {
-          // _this.$alert(error.msg, {confirmButtonText: '确定'})
-        })
-      this.getUserList()
-        .then((response) => {
-          if(response.code === 200) {
-            _this.userList = response.data
-            if (_this.userList.length !== 0) {
-              _this.userList.find((o, index) => {
-                o.registerTime = _this.formatDate(o.registerTime)
-                o.endTime = _this.formatDate(o.endTime)
-              })
+            if(response.data.state === '1'){
+              _this.$alert("账号过期，请重新登录", {confirmButtonText: '确定'})
+              _this.exitlogin({uId: _this.$store.state.admin.adminInfo.uId})
+                .then(function (response) {
+                  if(response.code === 200) {
+                    _this.setOperationInfo({_this:_this, type:28})
+                    let adminInfoData = cachedKeysData.adminInfo
+                    if(_this.$store.state.admin.adminInfo.setPasswordStyle === 'true'){
+                      adminInfoData.userName = _this.$store.state.admin.adminInfo.userName
+                      adminInfoData.password = _this.$store.state.admin.adminInfo.password
+                      adminInfoData.setPasswordStyle = _this.$store.state.admin.adminInfo.setPasswordStyle
+                    } else {
+                      adminInfoData.userName = ''
+                      adminInfoData.password = ''
+                      adminInfoData.setPasswordStyle = false
+                    }
+                    removeAccessToken()
+                    cachedAdminInfo.save(adminInfoData)
+                    _this.$router.push("/login")
+                  }
+                })
+                .catch(function (error) {})
             } else {
-              _this.userList = []
+              _this.getAdminIndexData({uId:_this.$store.state.admin.adminInfo.uId})
+                .then((response) => {
+                  if(response.code === 200) {
+                    _this.article = response.data.article === null ? [] : response.data.article
+                    _this.downloadNum = response.data.downloadNum
+                    _this.articleNum = response.data.articleNum
+                    _this.articleDeleteNum = response.data.articleDeleteNum
+                  }
+                })
+                .catch(function (error) {
+                  // _this.$alert(error.msg, {confirmButtonText: '确定'})
+                })
+              _this.getUserList()
+                .then((response) => {
+                  if(response.code === 200) {
+                    _this.userList = response.data
+                    if (_this.userList.length !== 0) {
+                      _this.userList.find((o, index) => {
+                        o.registerTime = _this.formatDate(o.registerTime)
+                        o.endTime = _this.formatDate(o.endTime)
+                      })
+                    } else {
+                      _this.userList = []
+                    }
+                  }
+                })
+                .catch(function (error) {
+                  // _this.$alert(error.msg, {confirmButtonText: '确定'})
+                })
+              _this.getOperationInfo({uId:_this.$store.state.admin.adminInfo.uId})
+                .then((response) => {
+                  if(response.code === 200) {
+                    _this.operationInfo = response.data === null ? [] : response.data
+                    console.log(response.data)
+                  }
+                })
+                .catch(function (error) {
+                  // _this.$alert(error.msg, {confirmButtonText: '确定'})
+                })
             }
-          }
-        })
-        .catch(function (error) {
-          // _this.$alert(error.msg, {confirmButtonText: '确定'})
-        })
-      this.getOperationInfo({uId:this.$store.state.admin.adminInfo.uId})
-        .then((response) => {
-          if(response.code === 200) {
-            _this.operationInfo = response.data === null ? [] : response.data
-            console.log(response.data)
           }
         })
         .catch(function (error) {

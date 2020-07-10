@@ -354,7 +354,7 @@
       		})
       	} else {
       		this.loading = true
-      		let img = this.article.img.length > 0 && this.article.img !== '[]' ? this.article.img : '[]'
+      		let img = this.article.img.length > 0 && this.article.img !== '[]' ? this.article.img : ''
           this.articleUpdate({
               mId:this.article.mId, 
               uId:this.article.uId, 
@@ -364,7 +364,7 @@
               title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(), 
               describe:this.article.describe.replace(/\s+/g," "), 
               img: img, 
-              psd:'[]', 
+              psd:'', 
               video: this.article.video, 
               typeFile:this.article.typeFile,
             })
@@ -379,7 +379,7 @@
                   title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(), 
                   describe:this.article.describe.replace(/\s+/g," "), 
                   img: img, 
-                  psd:'[]', 
+                  psd:'', 
                   video: this.article.video, 
                   typeFile:this.article.typeFile,
                 }})

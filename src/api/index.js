@@ -430,5 +430,11 @@ export default {
   getUserBrowseWebInfo (params) {
     return axios.post('a/getUserBrowseWebInfo', Qs.stringify(params))
   },
+  /**
+   * 检查用户状态
+   */
+  userState (params) {
+    return axios.post('a/userState', Qs.stringify(params))
+  },
 
 }

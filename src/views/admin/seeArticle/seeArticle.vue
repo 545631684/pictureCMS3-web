@@ -48,6 +48,21 @@
   					<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('video', scope.row.mId)">
               <use xlink:href="#icon-shipinbofangyingpian"></use>
             </svg>
+            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('ai', scope.row.mId)">
+              <use xlink:href="#icon-Ai"></use>
+            </svg>
+            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('pdf', scope.row.mId)">
+              <use xlink:href="#icon-Pdf"></use>
+            </svg>
+            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('word', scope.row.mId)">
+              <use xlink:href="#icon-word1"></use>
+            </svg>
+            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('excel', scope.row.mId)">
+              <use xlink:href="#icon-excel1"></use>
+            </svg>
+            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('engineering', scope.row.mId)">
+              <use xlink:href="#icon-gongcheng-"></use>
+            </svg>
         	</template>
         </el-table-column>
         <el-table-column prop="img" label="缩略图" width="100" align="left">
@@ -336,7 +351,7 @@
           userId: this.userInfo.uId
           })
       },
-      formatDate (time) { 
+      formatDate (time) {
         if (time !== null) {
           let date = new Date(parseInt(time) * 1000)
           return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
@@ -366,6 +381,21 @@
               break;
             case 'video':
               this.$router.push('/backstage/videoUpdate/' + mid)
+              break;
+            case 'ai':
+              this.$router.push('/backstage/aiUpdate/' + mid)
+              break;
+            case 'pdf':
+              this.$router.push('/backstage/pdfUpdate/' + mid)
+              break;
+            case 'word':
+              this.$router.push('/backstage/wordUpdate/' + mid)
+              break;
+            case 'excel':
+              this.$router.push('/backstage/excelUpdate/' + mid)
+              break;
+            case 'engineering':
+              this.$router.push('/backstage/engineeringUpdate/' + mid)
               break;
           }
         }
@@ -409,7 +439,7 @@
       },
       // 💗️标出时当前用户的文章
       myarticle (uid, mid) {
-        
+
         return uid === this.$store.state.admin.adminInfo.uId ? '💗️' + mid : mid
       },
       // 判断文章的img、psd、video是否有数据并返回true/false
@@ -419,7 +449,7 @@
             case 'img':
               this.article.find((obj, index) => {
                 if (obj.mId === mid) {
-                  obj.img !== '[]' ? time = true : time = false
+                  obj.img.length !== 0 ? time = true : time = false
                 }
               })
               return time
@@ -427,7 +457,7 @@
             case 'psd':
               this.article.find((obj, index) => {
                 if (obj.mId === mid) {
-                  obj.psd !== '[]' ? time = true : time = false
+                  obj.psd.length !== 0 ? time = true : time = false
                 }
               })
               return time
@@ -435,7 +465,47 @@
             case 'video':
               this.article.find((obj, index) => {
                 if (obj.mId === mid) {
-                  obj.video !== '[]' ? time = true : time = false
+                  obj.video.length !== 0 ? time = true : time = false
+                }
+              })
+              return time
+              break;
+            case 'ai':
+              this.article.find((obj, index) => {
+                if (obj.mId === mid) {
+                  obj.ai.length !== 0 ? time = true : time = false
+                }
+              })
+              return time
+              break;
+            case 'engineering':
+              this.article.find((obj, index) => {
+                if (obj.mId === mid) {
+                  obj.engineering.length !== 0 ? time = true : time = false
+                }
+              })
+              return time
+              break;
+            case 'pdf':
+              this.article.find((obj, index) => {
+                if (obj.mId === mid) {
+                  obj.pdf.length !== 0 ? time = true : time = false
+                }
+              })
+              return time
+              break;
+            case 'word':
+              this.article.find((obj, index) => {
+                if (obj.mId === mid) {
+                  obj.word.length !== 0 ? time = true : time = false
+                }
+              })
+              return time
+              break;
+            case 'excel':
+              this.article.find((obj, index) => {
+                if (obj.mId === mid) {
+                  obj.excel.length !== 0 ? time = true : time = false
                 }
               })
               return time
@@ -451,12 +521,23 @@
               _this.loading = true
               _this.article = response.data.article
               _this.article.find(obj => {
-              	obj.img = obj.img === '[]' ? eval('(' + obj.img + ')') : JSON.parse(obj.img)
-              	obj.psd = obj.psd === '[]' ? eval('(' + obj.psd + ')') : JSON.parse(obj.psd)
-              	obj.video = obj.video === '[]' ? eval('(' + obj.video + ')') : JSON.parse(obj.video)
+                console.log(obj.pdf === '[]')
+              	// obj.img = obj.img === '[]' ? eval('(' + obj.img + ')') : JSON.parse(obj.img)
+              	// obj.psd = obj.psd === '[]' ? eval('(' + obj.psd + ')') : JSON.parse(obj.psd)
+              	// obj.video = obj.video === '[]' ? eval('(' + obj.video + ')') : JSON.parse(obj.video)
+              	// obj.ai = obj.ai === '[]' ? eval('(' + obj.ai + ')') : JSON.parse(obj.ai)
+              	// obj.pdf = obj.pdf === '[]' ? eval('(' + obj.pdf + ')') : JSON.parse(obj.pdf)
+              	// obj.word = obj.word === '[]' ? eval('(' + obj.word + ')') : JSON.parse(obj.word)
+              	// obj.excel = obj.excel === '[]' ? eval('(' + obj.excel + ')') : JSON.parse(obj.excel)
+              	// obj.engineering = obj.engineering === '[]' ? eval('(' + obj.engineering + ')') : JSON.parse(obj.engineering)
               	obj.typeFile === 'img' ? srcs[srcs.length] = obj.img[0].miniImg : obj.typeFile = obj.typeFile
               	obj.typeFile === 'psd' ? srcs[srcs.length] = obj.psd[0].Psdview : obj.typeFile = obj.typeFile
               	obj.typeFile === 'video' ? srcs[srcs.length] = obj.video[0].Videoview : obj.typeFile = obj.typeFile
+              	obj.typeFile === 'ai' ? srcs[srcs.length] = obj.img[0].miniImg : obj.typeFile = obj.typeFile
+              	obj.typeFile === 'pdf' ? srcs[srcs.length] = 'image/pdf.jpg' : obj.typeFile = obj.typeFile
+              	obj.typeFile === 'word' ? srcs[srcs.length] = 'image/word.jpg' : obj.typeFile = obj.typeFile
+              	obj.typeFile === 'excel' ? srcs[srcs.length] = 'image/excel.jpg' : obj.typeFile = obj.typeFile
+              	obj.typeFile === 'engineering' ? srcs[srcs.length] = obj.img[0].miniImg : obj.typeFile = obj.typeFile
               	obj.srcs = srcs.length !== 0 ? srcs : new Array()
               	srcs = []
               })
@@ -512,7 +593,7 @@
         .catch(function (error) {
           // _this.$alert(error.msg, {confirmButtonText: '确定'})
         })
-      
+
       // 屏蔽项目设置
       if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
         this.userInfo.shieldInfo.find((o,index)=>{

@@ -78,7 +78,6 @@
         imgCrsString: '',
         userInfo: this.$store.state.admin.adminInfo,
         action: this.$store.state.common.publicInfo.srcUrl + '/u/upfile',
-        // action: '/a' + '/u/upfile',
         projects: this.$store.state.common.publicInfo.projects,
         types: this.$store.state.common.publicInfo.types,
         minTypes: this.$store.state.common.publicInfo.details,
@@ -304,10 +303,10 @@
         } else {
           let _this = this
           this.loading = true
-          this.articleAdd({uId:this.$store.state.admin.adminInfo.uId, typeFile:'img', typeid:this.$store.getters.getUserTypesId(this.typeImg).tid, projectid:this.$store.getters.getUserProjectsId(this.projectImg).pid, detailsid:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.title, keyword:this.dynamicTags.toString(), describe:this.describe, img:this.imgCrss, psd:'[]', video:'[]'})
+          this.articleAdd({uId:this.$store.state.admin.adminInfo.uId, typeFile:'img', typeid:this.$store.getters.getUserTypesId(this.typeImg).tid, projectid:this.$store.getters.getUserProjectsId(this.projectImg).pid, detailsid:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.title, keyword:this.dynamicTags.toString(), describe:this.describe, img:this.imgCrss, psd:'', video:''})
             .then((response) => {
               if(response.code === 200) {
-                _this.setOperationInfo({_this:_this, type:31, article:{uId:_this.$store.state.admin.adminInfo.uId, typeFile:'img', typeid:_this.$store.getters.getUserTypesId(_this.typeImg).tid, projectid:_this.$store.getters.getUserProjectsId(_this.projectImg).pid, detailsid:_this.$store.getters.getUserMinTypeId(_this.minTypeImg).did, title:_this.title, keyword:_this.dynamicTags.toString(), describe:_this.describe, img:_this.imgCrss, psd:'[]', video:'[]'}})
+                _this.setOperationInfo({_this:_this, type:31, article:{uId:_this.$store.state.admin.adminInfo.uId, typeFile:'img', typeid:_this.$store.getters.getUserTypesId(_this.typeImg).tid, projectid:_this.$store.getters.getUserProjectsId(_this.projectImg).pid, detailsid:_this.$store.getters.getUserMinTypeId(_this.minTypeImg).did, title:_this.title, keyword:_this.dynamicTags.toString(), describe:_this.describe, img:_this.imgCrss, psd:'', video:''}})
                 _this.$message({type: 'success', message: response.msg})
                 // 更新页面调用app.vue的更新方法
                 _this.myReload()

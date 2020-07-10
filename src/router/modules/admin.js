@@ -6,6 +6,16 @@ const psd = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/psd/p
 const psdUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/psdUpdate/psdUpdate.vue')
 const video = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/video/video.vue')
 const videoUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/videoUpdate/videoUpdate.vue')
+const ai = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/ai/ai.vue')
+const aiUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/aiUpdate/aiUpdate.vue')
+const engineering = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/engineering/engineering.vue')
+const engineeringUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/engineeringUpdate/engineeringUpdate.vue')
+const pdf = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/pdf/pdf.vue')
+const pdfUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/pdfUpdate/pdfUpdate.vue')
+// const word = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/word/word.vue')
+// const wordUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/wordUpdate/wordUpdate.vue')
+// const excel = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/excel/excel.vue')
+// const excelUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/excelUpdate/excelUpdate.vue')
 const seeArticle = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/seeArticle/seeArticle.vue')
 const recoveryArticle = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/recoveryArticle/recoveryArticle.vue')
 const statistics = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/statistics/statistics.vue')
@@ -47,6 +57,36 @@ export default [
         component: video
       },
       {
+        // 上传ai
+        path: 'ai',
+        name: 'backstageAi',
+        component: ai
+      },
+      {
+        // 上传pdf
+        path: 'pdf',
+        name: 'backstagePdf',
+        component: pdf
+      },
+      {
+        // 上传word
+        path: 'word',
+        name: 'backstageWord',
+        component: ai
+      },
+      {
+        // 上传excel
+        path: 'excel',
+        name: 'backstageExcel',
+        component: ai
+      },
+      {
+        // 上传engineering
+        path: 'engineering',
+        name: 'backstageEngineering',
+        component: engineering
+      },
+      {
         // 修改img
         path: 'imgUpdate/:id',
         name: 'backstageImgUpdate',
@@ -63,6 +103,36 @@ export default [
         path: 'videoUpdate/:id',
         name: 'backstageVideoUpdate',
         component: videoUpdate
+      },
+      {
+        // 修改ai
+        path: 'aiUpdate/:id',
+        name: 'backstageAiUpdate',
+        component: aiUpdate
+      },
+      {
+        // 修改pdf
+        path: 'pdfUpdate/:id',
+        name: 'backstagePdfUpdate',
+        component: pdfUpdate
+      },
+      // {
+      //   // 修改word
+      //   path: 'wordUpdate/:id',
+      //   name: 'backstageWordUpdate',
+      //   component: wordUpdate
+      // },
+      // {
+      //   // 修改excel
+      //   path: 'excelUpdate/:id',
+      //   name: 'backstageExcelUpdate',
+      //   component: excelUpdate
+      // },
+      {
+        // 修改engineering
+        path: 'engineeringUpdate/:id',
+        name: 'backstageEngineeringUpdate',
+        component: engineeringUpdate
       },
       {
         // 查看文章

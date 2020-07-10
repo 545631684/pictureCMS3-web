@@ -27,8 +27,8 @@
   							</ul>
   						</viewer>
   					</div>
-  					<div v-if="article.typeFile === 'psd'">
-  						<viewer :images="psds">
+  					<div v-if="article.typeFile === 'psd' || article.typeFile === 'ai' || article.typeFile === 'pdf' || article.typeFile === 'engineering'">
+  						<viewer :images="psds" v-if="article.typeFile === 'psd'">
   							<ul class="psd" v-if="psds.length !== 0">
   								<li v-for="(item, index) in psdFile" :key="index">
   									<img :src="URLS2 + item.Psdview" alt="" />
@@ -36,12 +36,31 @@
   								</li>
   							</ul>
   						</viewer>
+              <viewer :images="imgs" v-if="article.typeFile === 'ai'">
+              	<ul class="psd" v-if="imgs.length !== 0">
+              		<li v-for="(item, index) in imgFile" :key="index">
+              			<img :src="URLS2 + item.miniImg" alt="" />
+              			<el-button class="download" type="primary" icon="el-icon-download" size="mini" @click="singleDownload(item.dataImg.url,item.dataImg.name)">下载</el-button>
+              		</li>
+              	</ul>
+              </viewer>
+              <viewer :images="imgs" v-if="article.typeFile === 'engineering'">
+              	<ul class="psd" v-if="imgs.length !== 0">
+              		<li v-for="(item, index) in imgFile" :key="index">
+              			<img :src="URLS2 + item.miniImg" alt="" />
+              			<el-button class="download" type="primary" icon="el-icon-download" size="mini" @click="singleDownload(item.dataImg.url,item.dataImg.name)">下载</el-button>
+              		</li>
+              	</ul>
+              </viewer>
+              <div v-if="article.typeFile === 'pdf'">
+                <seePdf :src="URLS2 + pdfFile[0].file.url"></seePdf>
+              </div>
   					</div>
-            
+
             <div v-if="article.typeFile === 'video'">
               <div class="video">
                 <div class="body">
-                  <video-player  
+                  <video-player
                   class="video-player vjs-custom-skin"
                   ref="videoPlayer"
                   :playsinline="true"
@@ -65,8 +84,8 @@
                   </ul>
                 </div>
               </div>
-              
-              <div class="imgall" v-if="imgFile !== '[]'">
+
+              <div class="imgall" v-if="imgFile.length !== 0">
                 <p class="imgTitle">补充图</p>
                 <viewer :images="imgFile">
                   <dl class="img" v-if="imgFile.length !== 0">
@@ -78,8 +97,8 @@
                 </viewer>
               </div>
             </div>
-            
-            
+
+
   				</div>
   			</div>
   			<div class="r">
@@ -127,7 +146,7 @@
   			</div>
   		</div>
   	</div>
-  	
+
   	<!-- 底部 -->
   	<webFoot></webFoot>
   </div>
@@ -138,12 +157,14 @@ import { formatDate, getProjectID, getProjectName, getTypesID, getTypesName } fr
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import webHead from 'COMMON/webHead/webHead'
 import webFoot from 'COMMON/webFoot/webFoot'
+import seePdf from 'COMMON/seePdf/seePdf'
 export default {
     inject: ['reload'],
     name: 'backstage',
     components: {
       webHead,
-      webFoot
+      webFoot,
+      seePdf
     },
     data() {
       return {
@@ -156,9 +177,19 @@ export default {
         imgFile: [],
         psdFile: [],
         videoFile: [],
+        aiFile: [],
+        pdfFile: [],
+        wordFile: [],
+        excelFile: [],
+        engineeringFile: [],
         imgs:[],
         psds:[],
         videos:[],
+        ais:[],
+        pdfs:[],
+        words:[],
+        excels:[],
+        engineerings:[],
         typeFile: '',
         loading: false,
         xiangguan: [],
@@ -182,26 +213,26 @@ export default {
         headPortraitSrc:'',
         nickname:'',
         playerOptions: {
-          playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度 
+          playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
           autoplay: false, //如果true,浏览器准备好时开始回放。
-          lmuted: false, // 默认情况下将会消除任何音频。 
-          oop: false, // 导致视频一结束就重新开始。 
-          preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持） 
-          language: 'zh-CN', 
-          aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"） 
-          fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。 
-          sources: [{ 
-            type: "", 
-            src: "" //url地址 
-            }], 
-          poster: "", //你的封面地址  
-          // width: document.documentElement.clientWidth, 
+          lmuted: false, // 默认情况下将会消除任何音频。
+          oop: false, // 导致视频一结束就重新开始。
+          preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+          language: 'zh-CN',
+          aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+          fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+          sources: [{
+            type: "",
+            src: "" //url地址
+            }],
+          poster: "", //你的封面地址
+          // width: document.documentElement.clientWidth,
           notSupportedMessage: '不是MP4格式视频无法播放，请下载后自行观看', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-          controlBar: { 
-            timeDivider: true, 
-            durationDisplay: true, 
-            remainingTimeDisplay: false, 
-            fullscreenToggle: true //全屏按钮 
+          controlBar: {
+            timeDivider: true,
+            durationDisplay: true,
+            remainingTimeDisplay: false,
+            fullscreenToggle: true //全屏按钮
             }
         },
       }
@@ -246,6 +277,51 @@ export default {
           }
           this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.videoFile[0].dataVideo.url}
           this.playerOptions.poster = this.URLS2 + this.videoFile[0].Videoview
+      	}
+      },
+      aiFile: function (newQuestion, oldQuestion) {
+        let _this = this
+      	if (this.aiFile.length !== 0 && this.article.typeFile === "ai") {
+      		this.aiFile.find(obj => {
+      			_this.ais.push(obj.dataAi)
+      			_this.cityOptions.push(obj.dataAi.name)
+      		})
+          if(this.imgFile.length !== 0){
+            this.imgFile.find(obj => {
+            	_this.imgs.push(obj.miniImg)
+            	_this.cityOptions.push(obj.dataImg.name)
+            })
+          }
+          this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.aiFile[0].dataAi.url}
+          this.playerOptions.poster = this.URLS2 + this.aiFile[0].dataAi
+      	}
+      },
+      engineeringFile: function (newQuestion, oldQuestion) {
+        let _this = this
+      	if (this.engineeringFile.length !== 0 && this.article.typeFile === "engineering") {
+      		this.engineeringFile.find(obj => {
+      			_this.engineerings.push(obj.file)
+      			_this.cityOptions.push(obj.file.name)
+      		})
+          if(this.imgFile.length !== 0){
+            this.imgFile.find(obj => {
+            	_this.imgs.push(obj.miniImg)
+            	_this.cityOptions.push(obj.dataImg.name)
+            })
+          }
+          this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.engineeringFile[0].file.url}
+          this.playerOptions.poster = this.URLS2 + this.engineeringFile[0].file
+      	}
+      },
+      pdfFile: function (newQuestion, oldQuestion) {
+        let _this = this
+      	if (this.pdfFile.length !== 0 && this.article.typeFile === "pdf") {
+      		this.pdfFile.find(obj => {
+      			_this.engineerings.push(obj.file)
+      			_this.cityOptions.push(obj.file.name)
+      		})
+          this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.pdfFile[0].file.url}
+          this.playerOptions.poster = this.URLS2 + this.pdfFile[0].file
       	}
       },
     },
@@ -299,7 +375,7 @@ export default {
           	})
           })
           // 判断图片是否为空数组字符串"[]",在不为字符串并且长度大于0
-          if (this.imgFile !== '[]' && this.imgFile.length > 0) {
+          if (this.imgFile.length !== 0 && this.imgFile.length > 0) {
           	this.checkedCities.find(strings => {
           		_this.imgFile.find(obj => {
           			if (obj.dataImg.name === strings) {
@@ -310,6 +386,57 @@ export default {
           		})
           	})
           }
+        } else if(this.article.typeFile === 'ai'){
+          this.checkedCities.find(strings => {
+          	_this.aiFile.find(obj => {
+          		if (obj.dataAi.name === strings) {
+          			_this.zipfiles.push(obj.dataAi.url)
+          			_this.downloadName.push(obj.dataAi.name)
+          		}
+          	})
+          })
+          // 判断图片是否为空数组字符串"[]",在不为字符串并且长度大于0
+          if (this.imgFile.length !== 0 && this.imgFile.length > 0) {
+          	this.checkedCities.find(strings => {
+          		_this.imgFile.find(obj => {
+          			if (obj.dataImg.name === strings) {
+          				_this.zipfiles.push(obj.dataImg.url)
+          				_this.downloadName.push(obj.dataImg.name)
+          			}
+          			return obj
+          		})
+          	})
+          }
+        } else if(this.article.typeFile === 'engineering'){
+          this.checkedCities.find(strings => {
+          	_this.engineeringFile.find(obj => {
+          		if (obj.file.name === strings) {
+          			_this.zipfiles.push(obj.file.url)
+          			_this.downloadName.push(obj.file.name)
+          		}
+          	})
+          })
+          // 判断图片是否为空数组字符串"[]",在不为字符串并且长度大于0
+          if (this.imgFile.length !== 0 && this.imgFile.length > 0) {
+          	this.checkedCities.find(strings => {
+          		_this.imgFile.find(obj => {
+          			if (obj.dataImg.name === strings) {
+          				_this.zipfiles.push(obj.dataImg.url)
+          				_this.downloadName.push(obj.dataImg.name)
+          			}
+          			return obj
+          		})
+          	})
+          }
+        } else if (this.article.typeFile === 'pdf') {
+          this.checkedCities.find(strings => {
+            this.pdfFile.find(obj => {
+              if (obj.file.name === strings) {
+                this.zipfiles.push(obj.file.url)
+                this.downloadName.push(obj.file.name)
+              }
+            })
+          })
         }
         if (this.zipfiles.length !== 0 && this.downloadName.length !== 0 && this.article.title.length !== 0) {
           document.getElementById('zipfiles').value = this.zipfiles.join(',')
@@ -331,20 +458,22 @@ export default {
       },
       // 点击跳转文章页
       seeArticle(mid, typeFile) {
-        switch (typeFile) {
-            case 'img':
-              this.$router.push('/web/article/' + mid + '/Index/0/0/')
-              this.reload()
-              break;
-            case 'psd':
-              this.$router.push('/web/article/' + mid  + '/Index/0/0/')
-              this.reload()
-              break;
-            case 'video':
-              this.$router.push('/web/article/' + mid  + '/Index/0/0/')
-              this.reload()
-              break;
-          }
+        this.$router.push('/web/article/' + mid + '/Index/0/0/')
+        this.reload()
+        // switch (typeFile) {
+        //     case 'img':
+        //       this.$router.push('/web/article/' + mid + '/Index/0/0/')
+        //       this.reload()
+        //       break;
+        //     case 'psd':
+        //       this.$router.push('/web/article/' + mid  + '/Index/0/0/')
+        //       this.reload()
+        //       break;
+        //     case 'video':
+        //       this.$router.push('/web/article/' + mid  + '/Index/0/0/')
+        //       this.reload()
+        //       break;
+        //   }
       },
       // 手风琴模块点击事件
       handleChange(val) {
@@ -362,8 +491,8 @@ export default {
       // 面包屑导航赋值
       navfunction () {
         if (this.nav.tid === '0' && this.nav.searchTerms === '0') {
-          this.nav.name === 'Index' ? this.nav.num.push({href: this.URLS2 + 'web', name: '首页'}) : console.log()
-          this.nav.name === 'backstage' ? this.nav.num.push({href: this.URLS2 + 'backstage/home', name: '后台'}) : console.log()
+          this.nav.name === 'Index' ? this.nav.num.push({href: this.URLS2 + '/#/web', name: '首页'}) : console.log()
+          this.nav.name === 'backstage' ? this.nav.num.push({href: this.URLS2 + '/#/backstage/home', name: '后台'}) : console.log()
         }
       },
       // 获取数据
@@ -374,9 +503,14 @@ export default {
           .then((response) => {
             if (response.code === 200) {
               _this.article = response.data
-              _this.imgFile = response.data.img !== '[]' ? response.data.img : []
-              _this.psdFile = response.data.psd !== '[]' ? response.data.psd : []
-              _this.videoFile = response.data.video !== '[]' ? response.data.video : []
+              _this.imgFile = response.data.img.length !== 0 ? response.data.img : []
+              _this.psdFile = response.data.psd.length !== 0 ? response.data.psd : []
+              _this.videoFile = response.data.video.length !== 0 ? response.data.video : [],
+              _this.aiFile = response.data.ai.length !== 0 ? response.data.ai : [],
+              _this.pdfFile = response.data.pdf.length !== 0 ? response.data.pdf : [],
+              _this.wordFile = response.data.word.length !== 0 ? response.data.word : [],
+              _this.excelFile = response.data.excel.length !== 0 ? response.data.excel : [],
+              _this.engineeringFile = response.data.engineering.length !== 0 ? response.data.engineering : [],
               _this.headPortraitSrc = response.data.user.headPortraitSrc
               _this.nickname = response.data.user.nickname
               console.log(typeof _this.article.describe,'：类型')
@@ -415,7 +549,7 @@ export default {
 <style lang="less" scoped>
 @import '~LESS/color.less';
 .article{width: 1200px; margin: 0 auto; height: auto;}
-.article .l{border-radius: 10px; background: #FFFFFF; width: 910px; float: left; margin-right: 10px; padding: 10px;}
+.article .l{border-radius: 10px; background: #FFFFFF; width: 910px; float: left; margin-right: 10px; padding: 10px 10px 30px;}
 .article .l .title{color: #333333;font-size: 24px;font-weight: normal;display: inline-block;}
 .article .l .time{padding-top: 15px;font-size: 18px;color: #bbbbbb;}
 .article .l .nav{padding-top: 15px;    line-height: 30px;}

@@ -161,6 +161,26 @@
 						this.$router.push("/backstage/video");
 						this.localStorageSet(event.index)
 						break;
+          case "ai":
+						this.$router.push("/backstage/ai");
+						this.localStorageSet(event.index)
+						break;
+          case "pdf":
+          	this.$router.push("/backstage/pdf");
+          	this.localStorageSet(event.index)
+          	break;
+          case "word":
+          	this.$router.push("/backstage/word");
+          	this.localStorageSet(event.index)
+          	break;
+          case "excel":
+          	this.$router.push("/backstage/excel");
+          	this.localStorageSet(event.index)
+          	break;
+          case "engineering":
+          	this.$router.push("/backstage/engineering");
+          	this.localStorageSet(event.index)
+          	break;
 					case "recoveryArticle":
 						this.$router.push("/backstage/recoveryArticle");
 						this.localStorageSet(event.index)

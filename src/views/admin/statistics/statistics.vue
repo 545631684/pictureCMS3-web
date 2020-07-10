@@ -92,7 +92,7 @@
   					    	<div id="articleSubsection"  style="height: 600px;"></div>
   					    </el-tab-pane>
   					    <el-tab-pane label="用户发布文章(月)" name="tb2">
-  					    	<div id="articleUserSubsection" style="height: 600px;"></div> 	
+  					    	<div id="articleUserSubsection" style="height: 600px;"></div>
   					    </el-tab-pane>
   					    <el-tab-pane label="用户下载(年)" name="tb3">
   					    	<div id="articleUserDownload" style="height: 600px;"></div>
@@ -150,7 +150,7 @@
   						    	<div id="articleUserType1" ref="pieEcharts2" style="height: 506px;"></div>
   						    </el-tab-pane>
   						    <el-tab-pane label="用户发布类型2" name="tb02">
-  						    	<div id="articleUserType2" style="height: 506px;"></div> 	
+  						    	<div id="articleUserType2" style="height: 506px;"></div>
   						    </el-tab-pane>
   						    <el-tab-pane label="发布排行榜" name="tb03">
   						    	<div id="articleRanking" class="articleRanking" style="height: 506px;">
@@ -177,14 +177,29 @@
   						    						<samp><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chakan"></use></svg>{{item.click}}</samp>
   						    						<samp>
   						    							<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('img', item.mId)">
-  										                  <use xlink:href="#icon-picture"></use>
-  										                </svg>
-  														<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('psd', item.mId)">
-  										                  <use xlink:href="#icon-ps"></use>
-  										                </svg>
-  														<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('video', item.mId)">
-  										                  <use xlink:href="#icon-shipin"></use>
-  										                </svg>
+                                  <use xlink:href="#icon-picture"></use>
+                                </svg>
+                                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('psd', item.mId)">
+                                  <use xlink:href="#icon-web-psd"></use>
+                                </svg>
+                                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('video', item.mId)">
+                                  <use xlink:href="#icon-shipinbofangyingpian"></use>
+                                </svg>
+                                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('ai', item.mId)">
+                                  <use xlink:href="#icon-Ai"></use>
+                                </svg>
+                                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('pdf', item.mId)">
+                                  <use xlink:href="#icon-Pdf"></use>
+                                </svg>
+                                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('word', item.mId)">
+                                  <use xlink:href="#icon-word1"></use>
+                                </svg>
+                                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('excel', item.mId)">
+                                  <use xlink:href="#icon-excel1"></use>
+                                </svg>
+                                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('engineering', item.mId)">
+                                  <use xlink:href="#icon-gongcheng-"></use>
+                                </svg>
   						    						</samp>
   						    					</p>
   						    				</router-link>
@@ -301,7 +316,7 @@
     		        text: '2019年',
     		        subtext: '',
     		        x:'left'
-    		    }, 
+    		    },
           tooltip:{
            confine:true
           },
@@ -921,14 +936,14 @@
     		        bottom: '3%',
     		        gridIndex: 1,
     		        containLabel: true
-    		        
+
     		    },{
     		        left: '67%',
     		        right: '3%',
     		        bottom: '3%',
     		        gridIndex: 2,
     		        containLabel: true
-    		        
+
     		    }],
     		    xAxis: [ {
     		        type: 'value',
@@ -991,14 +1006,14 @@
     		        bottom: '3%',
     		        gridIndex: 1,
     		        containLabel: true
-    		        
+
     		    },{
     		        left: '67%',
     		        right: '3%',
     		        bottom: '3%',
     		        gridIndex: 2,
     		        containLabel: true
-    		        
+
     		    }],
     		    xAxis: [ {
     		        type: 'value',
@@ -1014,7 +1029,7 @@
     		    series: []
     		},
         userBrowseWebInfoData: {
-            
+
             title: {
                 left: 'left',
                 text: '每日浏览用户'
@@ -1042,7 +1057,7 @@
             }
         },
         userBrowseWebInfoData2: {
-            
+
             title: {
               left: 'left',
               text: '条件查询浏览用户'
@@ -1059,8 +1074,8 @@
               data: [],
               boundaryGap: false,
               axisLabel: {
-                 interval:0,  
-                 rotate:40  
+                 interval:0,
+                 rotate:40
               },
             },
             yAxis:{
@@ -1097,7 +1112,7 @@
         'getAdminStatisticsData',
         'getUserBrowseWebInfo'
       ]),
-      
+
       // 判断文章的img、psd、video是否有数据并返回true/false
       returnArticleType (type,mid) {
       	let time = false
@@ -1105,31 +1120,71 @@
       		case 'img':
       			this.activeLatelyData.find((obj, index) => {
       				if (obj.mId === mid) {
-      					obj.img !== '[]' ? time = true : time = false
+      					obj.img.length !== 0 ? time = true : time = false
       				}
       			})
       			return time
-      		    break;
+            break;
       		case 'psd':
           		this.activeLatelyData.find((obj, index) => {
       				if (obj.mId === mid) {
-      					obj.psd !== '[]' ? time = true : time = false
+      					obj.psd.length !== 0 ? time = true : time = false
       				}
       			})
       			return time
-      		    break;
+            break;
       		case 'video':
           		this.activeLatelyData.find((obj, index) => {
       				if (obj.mId === mid) {
-      					obj.video !== '[]' ? time = true : time = false
+      					obj.video.length !== 0 ? time = true : time = false
       				}
       			})
       			return time
-      		    break;
+            break;
+      		case 'ai':
+          		this.activeLatelyData.find((obj, index) => {
+      				if (obj.mId === mid) {
+      					obj.ai.length !== 0 ? time = true : time = false
+      				}
+      			})
+      			return time
+            break;
+      		case 'pdf':
+          		this.activeLatelyData.find((obj, index) => {
+      				if (obj.mId === mid) {
+      					obj.pdf.length !== 0 ? time = true : time = false
+      				}
+      			})
+      			return time
+            break;
+      		case 'word':
+          		this.activeLatelyData.find((obj, index) => {
+      				if (obj.mId === mid) {
+      					obj.word.length !== 0 ? time = true : time = false
+      				}
+      			})
+      			return time
+            break;
+      		case 'excel':
+          		this.activeLatelyData.find((obj, index) => {
+      				if (obj.mId === mid) {
+      					obj.excel.length !== 0 ? time = true : time = false
+      				}
+      			})
+      			return time
+            break;
+      		case 'engineering':
+          		this.activeLatelyData.find((obj, index) => {
+      				if (obj.mId === mid) {
+      					obj.engineering.length !== 0 ? time = true : time = false
+      				}
+      			})
+      			return time
+            break;
       	}
       },
       // 时间戳转换
-      formatDate(time) { 
+      formatDate(time) {
       	if(time !== null) {
       		let date = new Date(parseInt(time) * 1000)
       		return formatDate(date, 'yyyy-MM-dd')
@@ -1139,17 +1194,18 @@
       },
       // 跳转文章页
       seeArticle(mid, typeFile) {
-      	switch (typeFile) {
-      		case 'img':
-      			 return {path:'/web/article/' + mid + '/backstage/0/0/'}
-      		    break;
-      		case 'psd':
-          		return {path:'/web/article/' + mid  + '/backstage/0/0/'}
-      		    break;
-      		case 'video':
-          		return {path:'/web/articleVideo/' + mid  + '/backstage/0/0/'}
-      		    break;
-      	}
+        return {path:'/web/article/' + mid + '/backstage/0/0/'}
+      	// switch (typeFile) {
+      	// 	case 'img':
+      	// 		 return {path:'/web/article/' + mid + '/backstage/0/0/'}
+      	// 	    break;
+      	// 	case 'psd':
+       //    		return {path:'/web/article/' + mid  + '/backstage/0/0/'}
+      	// 	    break;
+      	// 	case 'video':
+       //    		return {path:'/web/article/' + mid  + '/backstage/0/0/'}
+      	// 	    break;
+      	// }
       },
       // 头部统计表标签切换
       handleClick(tab, event) {
@@ -1236,7 +1292,7 @@
             case 'userBrowseWebInfo2':
       	        shopCharts.setOption(this.userBrowseWebInfoData2)
       	        break;
-      	} 
+      	}
       },
       // 每月文章分布
       articleSubsection () {
@@ -1372,12 +1428,12 @@
       },
       // 当前用户最近一周发布情况
       articleWeek() {
-      	let _this = this 
+      	let _this = this
       		// 基于准备好的dom，初始化echarts实例
             let myChart = this.$echarts.init(document.getElementById('articleWeek'))
             // 绘制图表
             myChart.setOption({
-                title: { 
+                title: {
                   text: '一周发布',
                   subtext: '',
                   x:'left'
@@ -1450,13 +1506,13 @@
                   // 清空数据
                   _this.userBrowseWebInfoData.xAxis.data.splice(0,_this.userBrowseWebInfoData.xAxis.data.length)
                   _this.userBrowseWebInfoData.series.data.splice(0,_this.userBrowseWebInfoData.series.data.length)
-                  
+
                   // 每天用户浏览统计
                   response.data.info.find((o,index)=>{
                     _this.userBrowseWebInfoData.xAxis.data.push(o.name)
                     _this.userBrowseWebInfoData.series.data.push(o.data[0])
                   })
-                  
+
                   // 每天用户浏览统计 初始化图表
                   _this.userBrowseWebInfo()
                   _this.echartsShow('userBrowseWebInfo', '0')
@@ -1464,7 +1520,7 @@
                   // 清空数据
                   _this.userBrowseWebInfoData2.xAxis.data.splice(0,_this.userBrowseWebInfoData2.xAxis.data.length)
                   _this.userBrowseWebInfoData2.series.splice(0,_this.userBrowseWebInfoData2.series.length)
-                  
+
                   // 条件查询用户浏览统计
                   response.data.riqi.find((o,index)=>{
                     _this.userBrowseWebInfoData2.xAxis.data.push(o)
@@ -1479,12 +1535,12 @@
                     }
                     _this.userBrowseWebInfoData2.series.push(obj)
                   })
-                  
+
                   // 条件查询用户浏览统计 初始化图表
                   _this.userBrowseWebInfo2()
                   _this.echartsShow('userBrowseWebInfo2', '0')
                 }
-                
+
                 // 关闭加载动画
                 _this.tb4_loading = false
               }
@@ -1496,7 +1552,7 @@
         } else {
           _this.$alert("请指定查询日期", {confirmButtonText: '确定'})
         }
-        
+
       }
     },
     created() {
@@ -1511,7 +1567,7 @@
           	_this.activeImg = {num: response.data.activeImg, Proportion: parseInt((response.data.activeImg/response.data.activeAll*100).toFixed(1))}
           	_this.activePsd = {num: response.data.activePsd, Proportion: parseInt((response.data.activePsd/response.data.activeAll*100).toFixed(1))}
           	_this.activeVideo = {num: response.data.activeVideo, Proportion: parseInt((response.data.activeVideo/response.data.activeAll*100).toFixed(1))}
-          		
+
           		// 用户发布占比（全部）数据填充
           	response.data.activeUsers.find((obj, index) => {
           		_this.articleUserReportData.legend.data.push(obj.nickname)
@@ -1519,18 +1575,18 @@
           	})
           	// 用户发布文章占比 初始化图表
           	_this.articleUserReport()
-          	
+
           	// 文章发布排行榜 数据填充
           	_this.articleRankingData = response.data.articleRanking
-          	
+
           	// 最近发布文章（20篇） 数据填充
           	_this.activeLatelyData = response.data.activeLately
           	// 判断之前先把数据转换成json格式
-          	_this.activeLatelyData.find((obj, index) => {
-            	obj.img = obj.img === '[]' ? eval('(' + obj.img + ')') : JSON.parse(obj.img)
-            	obj.psd = obj.psd === '[]' ? eval('(' + obj.psd + ')') : JSON.parse(obj.psd)
-            	obj.video = obj.video === '[]' ? eval('(' + obj.video + ')') : JSON.parse(obj.video)
-            })
+          	// _this.activeLatelyData.find((obj, index) => {
+           //  	obj.img = obj.img === '[]' ? eval('(' + obj.img + ')') : JSON.parse(obj.img)
+           //  	obj.psd = obj.psd === '[]' ? eval('(' + obj.psd + ')') : JSON.parse(obj.psd)
+           //  	obj.video = obj.video === '[]' ? eval('(' + obj.video + ')') : JSON.parse(obj.video)
+           //  })
           	// 项目文章占比（全部）数据填充
           	response.data.activeProject.find((obj, index) => {
           		_this.articleProjectData.legend.data.push(obj.xname)
@@ -1538,7 +1594,7 @@
           	})
           	// 项目文章占比 初始化图表
           	_this.articleProject()
-          		
+
           	// 文章类型分布（总）数据填充
           	_this.articleType1Data.series[0].data = [
           		{value:response.data.activeImg, name:'img'},
@@ -1551,7 +1607,7 @@
           	})
           	// 文章类型分布（总） 初始化图表
           	_this.articleType1()
-          		
+
           	// 文章类型分布（月）数据填充
           	_this.articleType2Data.series[0].data = [
           		{value:response.data.activeImgMonth, name:'img'},
@@ -1564,7 +1620,7 @@
           	})
           	// 文章类型分布（月） 初始化图表
           	_this.articleType2()
-          	
+
           	// 用户文章类型1（img/psd/video） 数据填充
           	let objImg = {}, objPsd = {}, objVideo = {}
           	response.data.userNicknameAll.find((obj, index) => {
@@ -1578,7 +1634,7 @@
           	})
           	// 用户文章类型1（img/psd/video） 初始化图表
           	_this.articleUserType1()
-          	
+
           	// 用户文章类型2（类型分类） 数据填充
           	let temp = {},temp2 = [],temp3 = 0
           	let typeNum = response.data.typeAll.length
@@ -1594,7 +1650,7 @@
           	})
           	// 用户文章类型1（类型分类） 初始化图表
           	_this.articleUserType2()
-          	
+
           	// 年统计每月img\psd\video类型的数据  数据填充
           	response.data.activeTypeYear.find((num, index) => {
           		_this.articleSubsectionData.dataset.source[1].push(num[1])
@@ -1604,7 +1660,7 @@
             _this.articleSubsectionData.title.text = date.getFullYear() + '年'
           	// 年统计每月img\psd\video类型的数据 初始化图表
           	_this.articleSubsection()
-          	
+
           	// 年统计每个在职用户的月下载数量
           	response.data.userNicknameAll.find((obj, index) => {
           		_this.articleUserDownloadData.legend.data.push(obj.nickname)
@@ -1633,10 +1689,10 @@
           		_this.articleUserSubsectionData.series.push({name:o.name,type:'line',data:o.data})
           	})
              _this.articleUserSubsectionData.title.text = date.getFullYear() + '年'
-          	
+
           	// 当月在职用户每日发布情况 初始化图表
           	_this.articleUserSubsection()
-          	
+
           	// 文章类型项目分布（总）
           	response.data.projectAll.find((p, index) => {
           		_this.articleTypeProjectAllData.dataset.source[0].push(p.xname)
@@ -1657,7 +1713,7 @@
           	})
           	// 文章类型项目分布（总） 初始化图表
           	_this.articleTypeProjectAll()
-          	
+
           	// 文章类型项目分布（月）
           	response.data.projectAll.find((p, index) => {
           		_this.articleTypeProjectMonthAllData.dataset.source[0].push(p.xname)
@@ -1678,7 +1734,7 @@
           	})
           	// 文章类型项目分布（月） 初始化图表
           	_this.articleTypeProjectMonthAll()
-          	
+
           	// 文章类型项目用户分布（总）
           	temp = {type: 'category',gridIndex: 0,data: []}
           	temp2 = {type: 'category',gridIndex: 1,data: []}
@@ -1732,7 +1788,7 @@
           	})
           	// 文章类型项目用户分布（总） 初始化图表
           	_this.activeProjectUserAll()
-          	
+
           	// 文章类型项目用户分布（月）
           	temp = {type: 'category',gridIndex: 0,data: []}
           	temp2 = {type: 'category',gridIndex: 1,data: []}
@@ -1786,21 +1842,24 @@
           	})
           	// 文章类型项目用户分布（月） 初始化图表
           	_this.activeProjectUserMonthAll()
-            
-            
+
+
             // 每天用户浏览统计
-            response.data.userBrowseWebInfo.find((o,index)=>{
-              _this.userBrowseWebInfoData.xAxis.data.push(o.nickname)
-              _this.userBrowseWebInfoData.series.data.push(o.count)
-            })
-            _this.tb4TimeValue.push(response.data.userBrowseWebInfo[0].sameDay)
-            _this.tb4TimeValue.push(response.data.userBrowseWebInfo[0].sameDay)
-            // 每天用户浏览统计 初始化图表
-            _this.userBrowseWebInfo()
+            if(response.data.userBrowseWebInfo.length !== 0){
+              response.data.userBrowseWebInfo.find((o,index)=>{
+                _this.userBrowseWebInfoData.xAxis.data.push(o.nickname)
+                _this.userBrowseWebInfoData.series.data.push(o.count)
+              })
+              _this.tb4TimeValue.push(response.data.userBrowseWebInfo[0].sameDay)
+              _this.tb4TimeValue.push(response.data.userBrowseWebInfo[0].sameDay)
+              // 每天用户浏览统计 初始化图表
+              _this.userBrowseWebInfo()
+            }
+
           }
-          
-          
-          
+
+
+
           // 关闭加载状态
           _this.loading = false
       })
