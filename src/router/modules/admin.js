@@ -12,10 +12,10 @@ const engineering = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/adm
 const engineeringUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/engineeringUpdate/engineeringUpdate.vue')
 const pdf = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/pdf/pdf.vue')
 const pdfUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/pdfUpdate/pdfUpdate.vue')
-// const word = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/word/word.vue')
-// const wordUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/wordUpdate/wordUpdate.vue')
-// const excel = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/excel/excel.vue')
-// const excelUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/excelUpdate/excelUpdate.vue')
+const word = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/word/word.vue')
+const wordUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/wordUpdate/wordUpdate.vue')
+const excel = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/excel/excel.vue')
+const excelUpdate = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/excelUpdate/excelUpdate.vue')
 const seeArticle = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/seeArticle/seeArticle.vue')
 const recoveryArticle = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/recoveryArticle/recoveryArticle.vue')
 const statistics = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/statistics/statistics.vue')
@@ -72,13 +72,13 @@ export default [
         // 上传word
         path: 'word',
         name: 'backstageWord',
-        component: ai
+        component: word
       },
       {
         // 上传excel
         path: 'excel',
         name: 'backstageExcel',
-        component: ai
+        component: excel
       },
       {
         // 上传engineering
@@ -116,18 +116,18 @@ export default [
         name: 'backstagePdfUpdate',
         component: pdfUpdate
       },
-      // {
-      //   // 修改word
-      //   path: 'wordUpdate/:id',
-      //   name: 'backstageWordUpdate',
-      //   component: wordUpdate
-      // },
-      // {
-      //   // 修改excel
-      //   path: 'excelUpdate/:id',
-      //   name: 'backstageExcelUpdate',
-      //   component: excelUpdate
-      // },
+      {
+        // 修改word
+        path: 'wordUpdate/:id',
+        name: 'backstageWordUpdate',
+        component: wordUpdate
+      },
+      {
+        // 修改excel
+        path: 'excelUpdate/:id',
+        name: 'backstageExcelUpdate',
+        component: excelUpdate
+      },
       {
         // 修改engineering
         path: 'engineeringUpdate/:id',

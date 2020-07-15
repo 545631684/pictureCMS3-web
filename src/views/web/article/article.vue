@@ -57,6 +57,22 @@
               </div>
   					</div>
 
+            <div v-if="article.typeFile === 'word' || article.typeFile === 'excel'">
+              <div class="fileList" v-if="article.typeFile === 'word'">
+                <p v-for="(item, index) in wordFile" :key="index"  @click="fileShow(item.file.url)" :title="item.file.name">
+                  <img :src="URLS2 + 'image/word.jpg'" alt="" style="display: block;height: 80px;width: 80px;"/>
+                  <span class="omit">{{item.file.name}}</span>
+                </p>
+              </div>
+              <div class="fileList" v-if="article.typeFile === 'excel'">
+                <p v-for="(item, index) in excelFile" :key="index" @click="fileShow(item.file.url)" :title="item.file.name">
+                  <img :src="URLS2 + 'image/excel.jpg'" alt="" style="display: block;height: 80px;width: 80px;"/>
+                  <span class="omit">{{item.file.name}}</span>
+                </p>
+              </div>
+              <iframe class="test-1" :src="fileShowSrc" frameborder="0" height="800px" scrolling="auto" width="100%"></iframe>
+            </div>
+
             <div v-if="article.typeFile === 'video'">
               <div class="video">
                 <div class="body">
@@ -168,6 +184,7 @@ export default {
     },
     data() {
       return {
+        fileShowSrc:'',
         mid: '',
         uId: '',
         title: '',
@@ -324,11 +341,40 @@ export default {
           this.playerOptions.poster = this.URLS2 + this.pdfFile[0].file
       	}
       },
+      wordFile: function (newQuestion, oldQuestion) {
+        let _this = this
+      	if (this.wordFile.length !== 0 && this.article.typeFile === "word") {
+      		this.wordFile.find(obj => {
+      			_this.engineerings.push(obj.file)
+      			_this.cityOptions.push(obj.file.name)
+      		})
+          this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.wordFile[0].file.url}
+          this.playerOptions.poster = this.URLS2 + this.wordFile[0].file
+          this.fileShow(this.wordFile[0].file.url)
+      	}
+      },
+      excelFile: function (newQuestion, oldQuestion) {
+        let _this = this
+      	if (this.excelFile.length !== 0 && this.article.typeFile === "excel") {
+      		this.excelFile.find(obj => {
+      			_this.engineerings.push(obj.file)
+      			_this.cityOptions.push(obj.file.name)
+      		})
+          this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.excelFile[0].file.url}
+          this.playerOptions.poster = this.URLS2 + this.excelFile[0].file
+          this.fileShow(this.wordFile[0].file.url)
+      	}
+      },
     },
     methods: {
       ...mapActions([
         'getWebArticle'
       ]),
+      // 文档文件预览
+      fileShow(src){
+        // window.open('http://192.168.0.130:8012/' + 'onlinePreview?url='+encodeURIComponent(this.URLS2 + src));
+        this.fileShowSrc = 'http://192.168.0.130:8012/' + 'onlinePreview?url='+encodeURIComponent(this.URLS2 + src)
+      },
       // 视频切换
       videoSwitch (obj) {
       	this.playerOptions.sources[0] = {type: '', src: this.URLS2 + obj.dataVideo.url}
@@ -581,25 +627,34 @@ export default {
 .el-checkbox+.el-checkbox{margin: 0;}
 .el-collapse-item .el-collapse-item__header{ text-indent: 1em !important;}
 .video{}
-	.video .body{padding:0 30px; }
-	.video .videoListInfo{margin: 0 30px; background: #333333;}
-	.video .videoListInfo .videoListInfoTitle{color: #FFFFFF; font-size: 20px; padding: 10px; background: #252121;}
-	.video .videoListInfo ul{}
-	.video .videoListInfo ul div li{width: 186px; height: 125px; float: left;margin: 10px;cursor: pointer;}
-	.video .videoListInfo ul div li p:nth-child(1){width: 50px; float: left;height: 125px; position: relative; overflow: hidden;}
-	.video .videoListInfo ul div li p:nth-child(1) span{display: block; line-height: 125px; text-align: center; color: #FFFFFF; font-size: 18px;}
-	.video .videoListInfo ul div li p:nth-child(1) span:nth-child(1){}
-	.video .videoListInfo ul div li p:nth-child(1) button:nth-child(2){position: absolute; left: 12px; bottom: -28px; display: block; width: 28px; height: 28px;}
-	.video .videoListInfo ul div li:hover p:nth-child(1) button:nth-child(2){bottom: 5px;}
-	.video .videoListInfo ul div li p:nth-child(2){width: 136px; float: left;height: 125px;}
-	.video .videoListInfo ul div li p:nth-child(2) img{width: 140px; display: block;}
-	.video .videoListInfo ul div li p:nth-child(2) span{padding: 5px 0; font-size: 16px; color: #FFFFFF; text-align: center;display: block;}
-	.video .videoListInfo ul div li:hover p:nth-child(1) span{ color: #ff5e00;}
-	.video .videoListInfo ul div li:hover p:nth-child(2) span{ color: #ff5e00;}
-	.test{width: 840px;height: 135px;overflow: auto;float: left;margin: 5px;border: none;}
-	.scrollbar{width: auto;height: auto;margin: 0 auto;}
-	.test-1::-webkit-scrollbar {/*滚动条整体样式*/width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/height: 1px;}
-	.test-1::-webkit-scrollbar-thumb {/*滚动条里面小方块*/border-radius: 10px;-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);background: #535353;}
-	.test-1::-webkit-scrollbar-track {/*滚动条里面轨道*/-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);border-radius: 10px;background: #EDEDED;}
-  .imgall .imgTitle{color: #333333;font-size: 24px;font-weight: normal;display: inline-block;    padding: 55px 30px 20px;}
+.video .body{padding:0 30px; }
+.video .videoListInfo{margin: 0 30px; background: #333333;}
+.video .videoListInfo .videoListInfoTitle{color: #FFFFFF; font-size: 20px; padding: 10px; background: #252121;}
+.video .videoListInfo ul{}
+.video .videoListInfo ul div li{width: 186px; height: 125px; float: left;margin: 10px;cursor: pointer;}
+.video .videoListInfo ul div li p:nth-child(1){width: 50px; float: left;height: 125px; position: relative; overflow: hidden;}
+.video .videoListInfo ul div li p:nth-child(1) span{display: block; line-height: 125px; text-align: center; color: #FFFFFF; font-size: 18px;}
+.video .videoListInfo ul div li p:nth-child(1) span:nth-child(1){}
+.video .videoListInfo ul div li p:nth-child(1) button:nth-child(2){position: absolute; left: 12px; bottom: -28px; display: block; width: 28px; height: 28px;}
+.video .videoListInfo ul div li:hover p:nth-child(1) button:nth-child(2){bottom: 5px;}
+.video .videoListInfo ul div li p:nth-child(2){width: 136px; float: left;height: 125px;}
+.video .videoListInfo ul div li p:nth-child(2) img{width: 140px; display: block;}
+.video .videoListInfo ul div li p:nth-child(2) span{padding: 5px 0; font-size: 16px; color: #FFFFFF; text-align: center;display: block;}
+.video .videoListInfo ul div li:hover p:nth-child(1) span{ color: #ff5e00;}
+.video .videoListInfo ul div li:hover p:nth-child(2) span{ color: #ff5e00;}
+.test{width: 840px;height: 135px;overflow: auto;float: left;margin: 5px;border: none;}
+.scrollbar{width: auto;height: auto;margin: 0 auto;}
+.test-1::-webkit-scrollbar {/*滚动条整体样式*/width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/height: 1px;}
+.test-1::-webkit-scrollbar-thumb {/*滚动条里面小方块*/border-radius: 10px;-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);background: #535353;}
+.test-1::-webkit-scrollbar-track {/*滚动条里面轨道*/-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);border-radius: 10px;background: #EDEDED;}
+iframe::-webkit-scrollbar {/*滚动条整体样式*/width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/height: 1px;}
+iframe::-webkit-scrollbar-thumb {/*滚动条里面小方块*/border-radius: 10px;-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);background: #535353;}
+iframe::-webkit-scrollbar-track {/*滚动条里面轨道*/-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);border-radius: 10px;background: #EDEDED;}
+.imgall .imgTitle{color: #333333;font-size: 24px;font-weight: normal;display: inline-block;    padding: 55px 30px 20px;}
+.fileList{display: flex; justify-content: flex-start; align-items: center;    padding: 0 0 30px; flex-wrap: wrap;}
+.fileList p{width: 100px; height: auto; border: 1px solid #bbb; padding: 10px;cursor: pointer; margin-right: 20px;}
+.fileList p:hover{border: 1px solid #B10202;}
+.fileList p:hover span{color: #B10202;}
+.fileList p img{margin: auto;}
+.fileList p span{text-align: center; width: 100px; display: block;}
 </style>
