@@ -136,8 +136,10 @@ export default {
         .then((response) => {
           if(response.code === 200) {
             if (this.token.token === response.data.access_token) {
+              console.log("token相等")
               this.$refs.upload.submit()
             }
+            console.log("token不相等")
           }
         })
         .catch(function (error) {
@@ -146,6 +148,7 @@ export default {
         })
     },
     handleAvatarSuccess (response, file) {
+      console.log(response.data,'上传成功')
       this.$emit('uploadSuccess', response.data)
       this.$refs.cropperBox.close()
     },
