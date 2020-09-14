@@ -7,8 +7,30 @@
   					<div class="clearfix" >
   						<el-tabs :tab-position="tabPosition" style="">
   						    <el-tab-pane :label="item.name" v-for="(item, index) in groupLabel" :key="index" @mouseenter="leave()" v-if="item.state === '1' && item.webShow === '1'">
-                    <div class="tabs" v-bind:style="{'max-height': maxHeight + 'px'}">
+                    <div class="tabs" v-bind:style="{'max-height': maxHeight + 'px'}" v-if="item.name !== '耳鼻喉病种'">
                       <samp class="label_samp" v-for="(label, index) in item.lid" :key="index" @click="searchLabel(label.name)" v-if="label.state === '1' && label.webShow === '1'">{{label.name}}</samp>
+                    </div>
+                    <div class="tabs" v-bind:style="{'max-height': maxHeight + 'px'}" v-if="item.name === '耳鼻喉病种'">
+                      <div style="">
+                        <b style="font-size: 20px; padding-left: 20px;">鼻部</b>
+                        <div style="display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap;">
+                          <span class="label_samp2" v-for="(label, index) in item.lid" :key="index" @click="searchLabel(label.name)" v-if="label.state === '1' && label.webShow === '1' && label.type === 'b'">{{label.name}}</span>
+                        </div>
+
+                      </div>
+                      <div>
+                        <b style="font-size: 20px; padding-left: 20px;">耳部</b>
+                        <div style="display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap;">
+                          <span class="label_samp2" v-for="(label, index) in item.lid" :key="index" @click="searchLabel(label.name)" v-if="label.state === '1' && label.webShow === '1' && label.type === 'e'">{{label.name}}</span>
+                        </div>
+                      </div>
+                      <div>
+                        <b style="font-size: 20px; padding-left: 20px;">咽喉</b>
+                        <div style="display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap;">
+                          <span class="label_samp2" v-for="(label, index) in item.lid" :key="index" @click="searchLabel(label.name)" v-if="label.state === '1' && label.webShow === '1' && label.type === 'yh'">{{label.name}}</span>
+                        </div>
+                      </div>
+
                     </div>
   						    </el-tab-pane>
   						</el-tabs>
@@ -58,7 +80,7 @@ export default {
       	// 	this.$router.push("/web/search/" + this.searchKeyword)
       	// 	this.reload()
       	// }
-        
+
         // if (this.searchKeyword.length === 0) {
         // 	this.$alert('请填写需要查找的关键词', '警告', {
         // 		confirmButtonText: '确定'
@@ -87,7 +109,7 @@ export default {
       this.groupLabel = this.$store.state.common.publicInfo.groupLabel
       _this.groupLabel.find((gobj, index) => {
       	gobj.lid = []
-        if(gobj.state === '1' && gobj.webShow === '1') this.maxHeight++ 
+        if(gobj.state === '1' && gobj.webShow === '1') this.maxHeight++
       	_this.labelAll.find((lobj, index) => {
       		gobj.gid === lobj.gid ? gobj.lid.push(lobj) : lobj = lobj
       	})
@@ -126,6 +148,8 @@ export default {
 .label dl dd{padding:10px 5px; float: left; width: 720px; margin-left: 20px;}
 .label_samp{display: block; float: left;cursor:pointer;padding:10px 30px;margin:10px;  font-size: 16px; border-radius: 10px; border: 1px solid #CCCCCC;}
 .label_samp:hover{color: #F56C6C; border: 1px solid #F56C6C;}
+.label_samp2{display: block; float: left;cursor:pointer;padding:10px 30px;margin:10px;  font-size: 16px; border-radius: 10px; border: 1px solid #CCCCCC;}
+.label_samp2:hover{color: #F56C6C; border: 1px solid #F56C6C;}
 .tabs{overflow: auto;}
 .el-input-group__append{    background-color: rgb(80, 185, 152) !important;}
 </style>

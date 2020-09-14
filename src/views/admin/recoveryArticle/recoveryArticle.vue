@@ -1,6 +1,6 @@
 <template>
-  <el-container style="width:80% !important;">
-    <el-table v-loading="loading" :data="userList" class="clearfix" :stripe="true" size="mini" style="width: 60% !important;">
+  <el-container >
+    <el-table v-loading="loading" :data="userList" class="clearfix" :stripe="true" size="mini" >
       <el-table-column type="index" label="序号" width="50" align="center"></el-table-column>
       <el-table-column prop="nickname" label="缩略图" align="center" min-width="100">
       	<template slot-scope="scope" v-if="scope.row.srcs.length === 0">暂无图片</template>
@@ -12,8 +12,37 @@
       		</div>
       	</template>
       </el-table-column>
+      <el-table-column prop="title" label="文件类型" width="160" align="center">
+        <template slot-scope="scope" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+        	<svg class="icon svg-icon" aria-hidden="true" v-if="scope.row.typeFile.indexOf('img') !== -1">
+            <use xlink:href="#icon-picture"></use>
+          </svg>
+        	<svg class="icon svg-icon" aria-hidden="true" v-if="scope.row.typeFile.indexOf('psd') !== -1">
+            <use xlink:href="#icon-web-psd"></use>
+          </svg>
+        	<svg class="icon svg-icon" aria-hidden="true" v-if="scope.row.typeFile.indexOf('video') !== -1">
+            <use xlink:href="#icon-shipinbofangyingpian"></use>
+          </svg>
+          <svg class="icon svg-icon" aria-hidden="true" v-if="scope.row.typeFile.indexOf('ai') !== -1">
+            <use xlink:href="#icon-Ai"></use>
+          </svg>
+          <svg class="icon svg-icon" aria-hidden="true" v-if="scope.row.typeFile.indexOf('pdf') !== -1">
+            <use xlink:href="#icon-Pdf"></use>
+          </svg>
+          <svg class="icon svg-icon" aria-hidden="true" v-if="scope.row.typeFile.indexOf('word') !== -1">
+            <use xlink:href="#icon-word1"></use>
+          </svg>
+          <svg class="icon svg-icon" aria-hidden="true" v-if="scope.row.typeFile.indexOf('excel') !== -1">
+            <use xlink:href="#icon-excel1"></use>
+          </svg>
+          <svg class="icon svg-icon" aria-hidden="true" v-if="scope.row.typeFile.indexOf('压缩包') !== -1">
+            <use xlink:href="#icon-gongcheng-"></use>
+          </svg>
+        </template>
+      </el-table-column>
       <el-table-column prop="title" label="标题" min-width="200" align="center"></el-table-column>
       <el-table-column prop="registerTimeImg" label="发布时间" align="center" width="200"></el-table-column>
+      <el-table-column prop="nickname" label="发布人" align="center" width="160"></el-table-column>
       <el-table-column prop="endTimeImg" label="更新时间" align="center" width="200"></el-table-column>
       <el-table-column prop="retainTime" label="删除时间" align="center" width="200"></el-table-column>
       <el-table-column prop="retainTime" label="保留天数" align="center" width="100">
@@ -152,12 +181,14 @@
               _this.userList = response.data
               if (_this.userList.length !== 0) {
                 _this.userList.find((o, index) => {
-                  o.img = o.img === '[]' ? eval('(' + o.img + ')') : JSON.parse(o.img)
-                  o.psd = o.psd === '[]' ? eval('(' + o.psd + ')') : JSON.parse(o.psd)
-                  o.video = o.video === '[]' ? eval('(' + o.video + ')') : JSON.parse(o.video)
-                  o.typeFile === 'img' ? srcs[srcs.length] = o.img[0].miniImg : o.typeFile = o.typeFile
-                  o.typeFile === 'psd' ? srcs[srcs.length] = o.psd[0].Psdview : o.typeFile = o.typeFile
-                  o.typeFile === 'video' ? srcs[srcs.length] = o.video[0].Videoview : o.typeFile = o.typeFile
+                  o.typeFile.indexOf('img') !== -1 ? srcs[srcs.length] = o.img[0].miniImg : o.typeFile = o.typeFile
+                  o.typeFile.indexOf('psd') !== -1 ? srcs[srcs.length] = o.psd[0].Psdview : o.typeFile = o.typeFile
+                  o.typeFile.indexOf('video') !== -1 ? srcs[srcs.length] = o.video[0].Videoview : o.typeFile = o.typeFile
+                  o.typeFile.indexOf('ai') !== -1 ? srcs[srcs.length] = 'image/ai.jpg' : o.typeFile = o.typeFile
+                  o.typeFile.indexOf('pdf') !== -1 ? srcs[srcs.length] = 'image/pdf.jpg' : o.typeFile = o.typeFile
+                  o.typeFile.indexOf('word') !== -1 ? srcs[srcs.length] = 'image/word.jpg' : o.typeFile = o.typeFile
+                  o.typeFile.indexOf('excel') !== -1 ? srcs[srcs.length] = 'image/excel.jpg' : o.typeFile = o.typeFile
+                  o.typeFile.indexOf('压缩包') !== -1 ? srcs[srcs.length] = 'image/ysb.jpg' : o.typeFile = o.typeFile
                   o.srcs = srcs.length !== 0 ? srcs : new Array()
                   o.registerTimeImg = _this.formatDatePage(o.registerTimeImg)
                   o.endTimeImg = o.endTimeImg === '0' ? '--' : _this.formatDatePage(o.endTimeImg)
@@ -182,4 +213,5 @@
 
 <style lang="less" scoped>
 @import '~LESS/color.less';
+.icon {width: 25px;height: 25px;vertical-align: -0.15em;fill: currentColor;overflow: hidden;    margin-right: 5px;}
 </style>

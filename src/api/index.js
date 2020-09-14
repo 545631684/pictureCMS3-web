@@ -287,6 +287,12 @@ export default {
     return axios.post('a/delfile', Qs.stringify(params))
   },
   /**
+   * 删除文件2
+   */
+  delfile2 (params) {
+    return axios.post('a/delfile2', Qs.stringify(params))
+  },
+  /**
    * 获取统计页面数据
    */
   getAdminStatisticsData (params) {
@@ -317,10 +323,16 @@ export default {
     return axios.post('a/getTitleRepeat', Qs.stringify(params))
   },
   /**
-   * 获取所有文章
+   * 后台获取所有文章
    */
   getArticleAll (params) {
     return axios.post('a/getArticleAll', Qs.stringify(params))
+  },
+  /**
+   * 后台获取所有文章2
+   */
+  getArticleAll2 (params) {
+    return axios.post('a/getArticleAll2', Qs.stringify(params))
   },
   /**
    * 删除文章(回收站)

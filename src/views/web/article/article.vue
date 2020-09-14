@@ -11,15 +11,20 @@
   					<p class="nav" v-if="nav.num.length === 1"><a :href="nav.num[0].href">{{nav.num[0].name}}</a><i>/</i><a>详情页</a></p>
   					<p class="nav" v-if="nav.num.length === 2"><a :href="nav.num[0].href">{{nav.num[0].name}}</a><i>/</i><a :href="nav.num[1].href">{{nav.num[1].name}}</a><i>/</i><a>{{nav.num[2].name}}</a></p>
   				</div>
+          <div>
+
+          </div>
           <link href="//cdn.bootcss.com/github-markdown-css/2.4.1/github-markdown.css" rel="stylesheet">
   				<div class="describe">
             <p>描述：</p>
             <div class="markdown-body" v-html="article.describe"></div>
           </div>
   				<div class="content clearfix">
-  					<div v-if="article.typeFile === 'img'">
-  						<viewer :images="imgs">
-  							<ul class="img" v-if="imgs.length !== 0">
+
+  					<div class="clearfix" v-if="article.typeFile.indexOf('img') !== -1">
+              <h3 style="font-weight: 400;color: #1f2f3d;font-size: 22px;margin: 55px 0 20px;">img:</h3>
+  						<viewer :images="imgFile">
+  							<ul class="img" v-if="imgFile.length !== 0">
   								<li v-for="(item, index) in imgFile" :key="index">
   									<img :src="URLS2 + item.miniImg" alt="" />
   									<el-button class="download" type="primary" icon="el-icon-download" size="mini" @click="singleDownload(item.dataImg.url,item.dataImg.name)">下载</el-button>
@@ -27,53 +32,21 @@
   							</ul>
   						</viewer>
   					</div>
-  					<div v-if="article.typeFile === 'psd' || article.typeFile === 'ai' || article.typeFile === 'pdf' || article.typeFile === 'engineering'">
-  						<viewer :images="psds" v-if="article.typeFile === 'psd'">
-  							<ul class="psd" v-if="psds.length !== 0">
-  								<li v-for="(item, index) in psdFile" :key="index">
-  									<img :src="URLS2 + item.Psdview" alt="" />
-  									<el-button class="download" type="primary" icon="el-icon-download" size="mini" @click="singleDownload(item.dataPsd.url,item.dataPsd.name)">下载</el-button>
-  								</li>
-  							</ul>
-  						</viewer>
-              <viewer :images="imgs" v-if="article.typeFile === 'ai'">
-              	<ul class="psd" v-if="imgs.length !== 0">
-              		<li v-for="(item, index) in imgFile" :key="index">
-              			<img :src="URLS2 + item.miniImg" alt="" />
-              			<el-button class="download" type="primary" icon="el-icon-download" size="mini" @click="singleDownload(item.dataImg.url,item.dataImg.name)">下载</el-button>
-              		</li>
-              	</ul>
-              </viewer>
-              <viewer :images="imgs" v-if="article.typeFile === 'engineering'">
-              	<ul class="psd" v-if="imgs.length !== 0">
-              		<li v-for="(item, index) in imgFile" :key="index">
-              			<img :src="URLS2 + item.miniImg" alt="" />
-              			<el-button class="download" type="primary" icon="el-icon-download" size="mini" @click="singleDownload(item.dataImg.url,item.dataImg.name)">下载</el-button>
-              		</li>
-              	</ul>
-              </viewer>
-              <div v-if="article.typeFile === 'pdf'">
-                <seePdf :src="URLS2 + pdfFile[0].file.url"></seePdf>
-              </div>
-  					</div>
 
-            <div v-if="article.typeFile === 'word' || article.typeFile === 'excel'">
-              <div class="fileList" v-if="article.typeFile === 'word'">
-                <p v-for="(item, index) in wordFile" :key="index"  @click="fileShow(item.file.url)" :title="item.file.name">
-                  <img :src="URLS2 + 'image/word.jpg'" alt="" style="display: block;height: 80px;width: 80px;"/>
-                  <span class="omit">{{item.file.name}}</span>
-                </p>
-              </div>
-              <div class="fileList" v-if="article.typeFile === 'excel'">
-                <p v-for="(item, index) in excelFile" :key="index" @click="fileShow(item.file.url)" :title="item.file.name">
-                  <img :src="URLS2 + 'image/excel.jpg'" alt="" style="display: block;height: 80px;width: 80px;"/>
-                  <span class="omit">{{item.file.name}}</span>
-                </p>
-              </div>
-              <iframe class="test-1" :src="fileShowSrc" frameborder="0" height="800px" scrolling="auto" width="100%"></iframe>
+            <div class="clearfix" v-if="article.typeFile.indexOf('psd') !== -1">
+              <h3 style="font-weight: 400;color: #1f2f3d;font-size: 22px;margin: 55px 0 20px;">psd:</h3>
+              <viewer :images="psds">
+              	<ul class="img" v-if="psds.length !== 0">
+              		<li v-for="(item, index) in psdFile" :key="index">
+              			<img :src="URLS2 + item.Psdview" alt="" />
+              			<el-button class="download" type="primary" icon="el-icon-download" size="mini" @click="singleDownload(item.dataPsd.url,item.dataPsd.name)">下载</el-button>
+              		</li>
+              	</ul>
+              </viewer>
             </div>
 
-            <div v-if="article.typeFile === 'video'">
+            <div class="clearfix" v-if="article.typeFile.indexOf('video') !== -1">
+              <h3 style="font-weight: 400;color: #1f2f3d;font-size: 22px;margin: 55px 0 20px;">video:</h3>
               <div class="video">
                 <div class="body">
                   <video-player
@@ -100,20 +73,50 @@
                   </ul>
                 </div>
               </div>
+            </div>
 
-              <div class="imgall" v-if="imgFile.length !== 0">
-                <p class="imgTitle">补充图</p>
-                <viewer :images="imgFile">
-                  <dl class="img" v-if="imgFile.length !== 0">
-                    <dd v-for="(item, index) in imgFile" :key="index">
-                      <img :src="URLS2 + item.miniImg" alt="" />
-                      <el-button class="download" type="primary" icon="el-icon-download" size="mini" @click="singleDownload(item.dataImg.url,item.dataImg.title)">下载</el-button>
-                    </dd>
-                  </dl>
-                </viewer>
+
+            <div class="clearfix" v-if="article.typeFile.indexOf('pdf') !== -1">
+              <h3 style="font-weight: 400;color: #1f2f3d;font-size: 22px;margin: 55px 0 20px;">pdf:</h3>
+              <seePdf :src="URLS2 + pdfFile[0].file.url"></seePdf>
+            </div>
+
+            <div v-if="article.typeFile.indexOf('word') !== -1 || article.typeFile.indexOf('excel') !== -1">
+              <h3 style="font-weight: 400;color: #1f2f3d;font-size: 22px;margin: 55px 0 20px;">word/excel:</h3>
+              <div class="fileList" v-if="article.typeFile.indexOf('word') !== -1">
+                <p v-for="(item, index) in wordFile" :key="index"  @click="fileShow(item.file.url)" :title="item.file.name">
+                  <img :src="URLS2 + 'image/word.jpg'" alt="" style="display: block;height: 80px;width: 80px;"/>
+                  <span class="omit">{{item.file.name}}</span>
+                </p>
+              </div>
+              <div class="fileList" v-if="article.typeFile.indexOf('excel') !== -1">
+                <p v-for="(item, index) in excelFile" :key="index" @click="fileShow(item.file.url)" :title="item.file.name">
+                  <img :src="URLS2 + 'image/excel.jpg'" alt="" style="display: block;height: 80px;width: 80px;"/>
+                  <span class="omit">{{item.file.name}}</span>
+                </p>
+              </div>
+              <iframe class="test-1" :src="fileShowSrc" frameborder="0" height="800px" scrolling="auto" width="100%"></iframe>
+            </div>
+
+            <div class="clearfix" v-if="article.typeFile.indexOf('ai') !== -1">
+              <h3 style="font-weight: 400;color: #1f2f3d;font-size: 22px;margin: 55px 0 20px;">ai:</h3>
+              <div class="fileList" v-if="article.typeFile.indexOf('ai') !== -1">
+                <p v-for="(item, index) in aiFile" :key="index"   :title="item.dataAi.name">
+                  <img :src="URLS2 + 'image/ai.jpg'" alt="" style="display: block;height: 80px;width: 80px;"/>
+                  <span class="omit">{{item.dataAi.name}}</span>
+                </p>
               </div>
             </div>
 
+            <div class="clearfix" v-if="article.typeFile.indexOf('压缩包') !== -1">
+              <h3 style="font-weight: 400;color: #1f2f3d;font-size: 22px;margin: 55px 0 20px;">压缩包:</h3>
+              <div class="fileList" v-if="article.typeFile.indexOf('压缩包') !== -1">
+                <p v-for="(item, index) in engineeringFile" :key="index"   :title="item.file.name">
+                  <img :src="URLS2 + 'image/ysb.jpg'" alt="" style="display: block;height: 80px;width: 80px;"/>
+                  <span class="omit">{{item.file.name}}</span>
+                </p>
+              </div>
+            </div>
 
   				</div>
   			</div>
@@ -121,28 +124,76 @@
   				<div class="author">
   					<img :src="URLS2 + headPortraitSrc" alt="" />
   					<p>{{nickname}}</p>
-  					<p>赛奇设计师</p>
+  					<p>赛奇{{permissions.title}}</p>
   				</div>
   				<el-collapse v-model="activeNames" @change="handleChange">
-  				  <el-collapse-item title="文章信息" name="1">
-  				  	<div class="attribute">文章类型：{{article.typeFile}}</div>
-  				    <div class="attribute">所属项目：{{getProjectName(article.projectid)}}</div>
-  				    <div class="attribute">所属分类：{{getTypesName(article.typeid)}}</div>
-  				    <div class="attribute">所属类型：{{getUserMinTypeName(article.detailsid)}}</div>
-  				    <div class="attribute">文章标签</div>
-  				    <div class="keyword">
-  				    	<span v-for="(item, index) in article.keyword" :key="index" :title="item">{{item}}</span>
-  				    </div>
+  				  <el-collapse-item name="1">
+              <template slot="title">
+                <p style="padding: 0 10px;">文章信息</p>
+              </template>
+  				  	<div class="attribute2">
+                <samp style="width: 75px;">文章类型：</samp>
+                <span>
+                  <svg class="icon svg-icon" aria-hidden="true" >
+                    <use xlink:href="#icon-picture"></use>
+                  </svg>
+                  <svg class="icon svg-icon" aria-hidden="true" >
+                    <use xlink:href="#icon-web-psd"></use>
+                  </svg>
+                  <svg class="icon svg-icon" aria-hidden="true" >
+                    <use xlink:href="#icon-shipinbofangyingpian"></use>
+                  </svg>
+                  <svg class="icon svg-icon" aria-hidden="true" >
+                    <use xlink:href="#icon-Ai"></use>
+                  </svg>
+                  <svg class="icon svg-icon" aria-hidden="true" >
+                    <use xlink:href="#icon-Pdf"></use>
+                  </svg>
+                  <svg class="icon svg-icon" aria-hidden="true" >
+                    <use xlink:href="#icon-word1"></use>
+                  </svg>
+                  <svg class="icon svg-icon" aria-hidden="true" >
+                    <use xlink:href="#icon-excel1"></use>
+                  </svg>
+                  <svg class="icon svg-icon" aria-hidden="true" >
+                    <use xlink:href="#icon-gongcheng-"></use>
+                  </svg>
+                </span>
+              </div>
+              <div class="attribute2">
+                <samp style="width: 75px;">所属项目：</samp>
+                <span>{{getProjectName(article.projectid)}}</span>
+              </div>
+              <div class="attribute2">
+                <samp style="width: 75px;">所属分类：</samp>
+                <span>{{getTypesName(article.typeid)}}</span>
+              </div>
+              <div class="attribute2">
+                <samp style="width: 75px;">所属类型：</samp>
+                <span>{{getUserMinTypeName(article.detailsid)}}</span>
+              </div>
+              <div class="attribute2">
+                <div style="width: 75px;">文章标签：</div>
+                <div class="keyword">
+                	<samp v-for="(item, index) in article.keyword" :key="index" :title="item">{{item}}</samp>
+                </div>
+              </div>
   				  </el-collapse-item>
-  				  <el-collapse-item title="相关推荐" name="2">
+  				  <el-collapse-item name="2">
+              <template slot="title">
+                <p style="padding: 0 10px;">相关推荐</p>
+              </template>
   				    <div class="attribute">
   				    	<a class="omit" v-if="article.xiangguan !== null" v-for="(item, index) in article.xiangguan" :key="index" @click="seeArticle(item.mId, item.typeFile)" :title="item.title">{{item.title}}</a>
                 <p v-if="article.xiangguan === null" style="text-align: center; color: #CCCCCC;">没有相关内容</p>
   				    </div>
   				  </el-collapse-item>
-  				  <el-collapse-item title="文件下载" name="3" v-if="judgeLogin === '1'">
+  				  <el-collapse-item name="3" v-if="judgeLogin === '1'">
+              <template slot="title">
+                <p style="padding: 0 10px;">文件下载</p>
+              </template>
   				    <div class="attribute">
-  	    				<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" style="margin-left: 10px;">全选</el-checkbox>
+  	    				<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" style="margin-left: 0px;">全选</el-checkbox>
   	    				<el-button type="primary" icon="el-icon-download" size="mini" style="float: right;margin-right: 10px;" @click="download"></el-button>
   					  	<div style="margin: 15px 0;"></div>
   					  	<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
@@ -219,6 +270,8 @@ export default {
         	num: []
         },
         URLS2: this.$store.state.common.publicInfo.srcUrl,
+        userRecovery: this.$store.state.common.publicInfo.userRecovery,
+        permissions:{},
         activeNames: ['1','2'],
         checkAll: false,
         checkedCities: [],
@@ -262,7 +315,7 @@ export default {
     	// 给图片查看器赋值
     	imgFile: function(newQuestion, oldQuestion) {
     		let _this = this
-    		if (this.imgFile.length !== 0 && this.article.typeFile === "img") {
+    		if (this.imgFile.length !== 0 && this.article.typeFile.indexOf('img') !== -1) {
     			this.imgFile.find(obj => {
     				_this.imgs.push(obj.miniImg)
     				_this.cityOptions.push(obj.dataImg.name)
@@ -272,7 +325,7 @@ export default {
     	// 给图片查看器赋值
     	psdFile: function(newQuestion, oldQuestion) {
     		let _this = this
-    		if (this.psdFile.length !== 0  && this.article.typeFile === "psd") {
+    		if (this.psdFile.length !== 0  && this.article.typeFile.indexOf('psd') !== -1) {
     			this.psdFile.find(obj => {
     				_this.psds.push(obj.Psdview)
     				_this.cityOptions.push(obj.dataPsd.name)
@@ -281,87 +334,59 @@ export default {
     	},
       videoFile: function (newQuestion, oldQuestion) {
         let _this = this
-      	if (this.videoFile.length !== 0 && this.article.typeFile === "video") {
+      	if (this.videoFile.length !== 0 && this.article.typeFile.indexOf('video') !== -1) {
       		this.videoFile.find(obj => {
       			_this.videos.push(obj.Videoview)
       			_this.cityOptions.push(obj.dataVideo.name)
       		})
-          if(this.imgFile.length !== 0){
-            this.imgFile.find(obj => {
-            	_this.imgs.push(obj.miniImg)
-            	_this.cityOptions.push(obj.dataImg.name)
-            })
-          }
           this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.videoFile[0].dataVideo.url}
           this.playerOptions.poster = this.URLS2 + this.videoFile[0].Videoview
       	}
       },
       aiFile: function (newQuestion, oldQuestion) {
         let _this = this
-      	if (this.aiFile.length !== 0 && this.article.typeFile === "ai") {
+      	if (this.aiFile.length !== 0 && this.article.typeFile.indexOf('ai') !== -1) {
       		this.aiFile.find(obj => {
       			_this.ais.push(obj.dataAi)
       			_this.cityOptions.push(obj.dataAi.name)
       		})
-          if(this.imgFile.length !== 0){
-            this.imgFile.find(obj => {
-            	_this.imgs.push(obj.miniImg)
-            	_this.cityOptions.push(obj.dataImg.name)
-            })
-          }
-          this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.aiFile[0].dataAi.url}
-          this.playerOptions.poster = this.URLS2 + this.aiFile[0].dataAi
       	}
       },
       engineeringFile: function (newQuestion, oldQuestion) {
         let _this = this
-      	if (this.engineeringFile.length !== 0 && this.article.typeFile === "engineering") {
+      	if (this.engineeringFile.length !== 0 && this.article.typeFile.indexOf('压缩包') !== -1) {
       		this.engineeringFile.find(obj => {
       			_this.engineerings.push(obj.file)
       			_this.cityOptions.push(obj.file.name)
       		})
-          if(this.imgFile.length !== 0){
-            this.imgFile.find(obj => {
-            	_this.imgs.push(obj.miniImg)
-            	_this.cityOptions.push(obj.dataImg.name)
-            })
-          }
-          this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.engineeringFile[0].file.url}
-          this.playerOptions.poster = this.URLS2 + this.engineeringFile[0].file
       	}
       },
       pdfFile: function (newQuestion, oldQuestion) {
         let _this = this
-      	if (this.pdfFile.length !== 0 && this.article.typeFile === "pdf") {
+      	if (this.pdfFile.length !== 0 && this.article.typeFile.indexOf('pdf') !== -1) {
       		this.pdfFile.find(obj => {
       			_this.engineerings.push(obj.file)
       			_this.cityOptions.push(obj.file.name)
       		})
-          this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.pdfFile[0].file.url}
-          this.playerOptions.poster = this.URLS2 + this.pdfFile[0].file
       	}
       },
       wordFile: function (newQuestion, oldQuestion) {
         let _this = this
-      	if (this.wordFile.length !== 0 && this.article.typeFile === "word") {
+      	if (this.wordFile.length !== 0 && this.article.typeFile.indexOf('word') !== -1) {
       		this.wordFile.find(obj => {
       			_this.engineerings.push(obj.file)
       			_this.cityOptions.push(obj.file.name)
       		})
-          this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.wordFile[0].file.url}
-          this.playerOptions.poster = this.URLS2 + this.wordFile[0].file
           this.fileShow(this.wordFile[0].file.url)
       	}
       },
       excelFile: function (newQuestion, oldQuestion) {
         let _this = this
-      	if (this.excelFile.length !== 0 && this.article.typeFile === "excel") {
+      	if (this.excelFile.length !== 0 && this.article.typeFile.indexOf('excel') !== -1) {
       		this.excelFile.find(obj => {
       			_this.engineerings.push(obj.file)
       			_this.cityOptions.push(obj.file.name)
       		})
-          this.playerOptions.sources[0] = {type: '', src: this.URLS2 + this.excelFile[0].file.url}
-          this.playerOptions.poster = this.URLS2 + this.excelFile[0].file
           this.fileShow(this.wordFile[0].file.url)
       	}
       },
@@ -559,6 +584,9 @@ export default {
               _this.engineeringFile = response.data.engineering.length !== 0 ? response.data.engineering : [],
               _this.headPortraitSrc = response.data.user.headPortraitSrc
               _this.nickname = response.data.user.nickname
+              _this.permissions = _this.userRecovery.find(o=>{
+                return o.id === response.data.user.permissions
+              })
               console.log(typeof _this.article.describe,'：类型')
             }
           })
@@ -594,6 +622,7 @@ export default {
 
 <style lang="less" scoped>
 @import '~LESS/color.less';
+.icon {width: 25px;height: 25px;vertical-align: -0.15em;fill: currentColor;overflow: hidden;    margin-right: 5px;}
 .article{width: 1200px; margin: 0 auto; height: auto;}
 .article .l{border-radius: 10px; background: #FFFFFF; width: 910px; float: left; margin-right: 10px; padding: 10px 10px 30px;}
 .article .l .title{color: #333333;font-size: 24px;font-weight: normal;display: inline-block;}
@@ -618,11 +647,15 @@ export default {
 .article .r .author img{ width: 80px; height: 80px; margin:0 auto; display: block; border-radius: 50px; margin-bottom: 16px;}
 .article .r .author p:nth-child(2){ text-align: center; font-size: 16px;color: #333;font-weight: 600;vertical-align: middle;margin-right: 4px;}
 .article .r .author p:nth-child(3){text-align: center; font-size: 12px;color: #bbb;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;}
-.attribute{font-size: 14px;color: #666666;background-repeat: no-repeat;background-position: left;padding: 0 10px;}
+.attribute{font-size: 14px;color: #666666;background-repeat: no-repeat;background-position: left;padding: 0 10px; }
 .attribute a{cursor: pointer; display: block; padding: 5px; text-indent: 1em;}
 .attribute a:hover{color: #B10202;}
-.keyword{ padding-top: 10px;}
-.keyword span{max-width: 60px;height: 24px;font-size: 12px;color: #999;line-height: 24px;padding: 0 14px;margin: 0 5px 10px 0;background: #eee;border-radius: 4px;-webkit-border-radius: 4px;-moz-border-radius: 4px;display: inline-block;vertical-align: middle;zoom: 1;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;cursor: pointer;}
+.attribute2{font-size: 14px;color: #666666;background-repeat: no-repeat;background-position: left;padding: 0 10px; display: flex; justify-content: flex-start; align-items: center;}
+.attribute2 a{cursor: pointer; display: block; padding: 5px; text-indent: 1em;}
+.attribute2 a:hover{color: #B10202;}
+.attribute2 span{flex-wrap: wrap;    flex: 1;}
+.keyword{ padding-top: 10px; flex-wrap: wrap;}
+.keyword samp{max-width: 60px;height: 24px;font-size: 12px;color: #999;line-height: 24px;padding: 0 14px;margin: 0 5px 10px 0;background: #eee;border-radius: 4px;-webkit-border-radius: 4px;-moz-border-radius: 4px;display: inline-block;vertical-align: middle;zoom: 1;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;cursor: pointer;}
 .el-checkbox{padding: 5px 10px;}
 .el-checkbox+.el-checkbox{margin: 0;}
 .el-collapse-item .el-collapse-item__header{ text-indent: 1em !important;}

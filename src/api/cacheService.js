@@ -50,7 +50,7 @@ const KEYS_DATA = {
     // 总页数
     pageNum: 0,
     // 每页条数
-    articlePageNum: 5,
+    articlePageNum: 6,
   },
   webInfo: {
     // 注册/找回密码的获取验证码按钮成功后的读秒

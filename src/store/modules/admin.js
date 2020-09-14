@@ -434,6 +434,18 @@ const actions = {
       })
   },
   /**
+   * 删除文件2
+   */
+  delfile2 (store, params) {
+    return api.delfile2(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
    * 更新辅助数据
    */
   setAdminInfo (store, params) {
@@ -512,10 +524,22 @@ const actions = {
       })
   },
   /**
-   * 获取所有文章
+   * 后台获取所有文章
    */
   getArticleAll (store, params) {
     return api.getArticleAll(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 后台获取所有文章2
+   */
+  getArticleAll2 (store, params) {
+    return api.getArticleAll2(params)
       .then((data) => {
         return Promise.resolve(data)
       })
@@ -713,7 +737,7 @@ const actions = {
         params._this.article.find((o, index) => {
           if(o.mId === params.id){
             paramsData.content_article.start = o
-          } 
+          }
         })
         paramsData.content_article.end = 'null'
         console.log("后台查看文章")
@@ -722,7 +746,7 @@ const actions = {
         params._this.article.find((o, index) => {
           if(o.mId === params.id){
             paramsData.content_article.start = o
-          } 
+          }
         })
         paramsData.content_article.end = 'null'
         console.log("删除文章")
@@ -731,7 +755,7 @@ const actions = {
         params._this.userList.find((o, index) => {
           if(o.mId === params.id){
             paramsData.content_article.start = o
-          } 
+          }
         })
         paramsData.content_article.end = 'null'
         console.log("回收站还原文章")
@@ -740,7 +764,7 @@ const actions = {
         params._this.userList.find((o, index) => {
           if(o.mId === params.id){
             paramsData.content_article.start = o
-          } 
+          }
         })
         paramsData.content_article.end = 'null'
         console.log("回收站删除文章")
@@ -759,7 +783,7 @@ const actions = {
         params._this.userList.find((o, index) => {
           if(o.uId === params._this.row.uId){
             paramsData.content_user.start = o
-          } 
+          }
         })
         paramsData.content_user.end = {uId: params._this.row.uId, nickname: params._this.row.nickname, sex: params._this.row.sex, password: params._this.row.Password, permissions: params._this.getUserGroupId(params._this.row.permissions), webShow: params._this.row.webShow, state: params._this.row.state, judgeLogin: params._this.row.judgeLogin, shieldInfo: params._this.row.shieldInfo == "" ? null : params._this.row.shieldInfo}
         console.log("修改用户信息")
@@ -768,7 +792,7 @@ const actions = {
         params._this.userList.find((o, index) => {
           if(o.uId === params.id){
             paramsData.content_user.start = o
-          } 
+          }
         })
         paramsData.content_user.end = 'null'
         console.log("还原用户")
@@ -782,7 +806,7 @@ const actions = {
         params._this.usergroups.find((o, index) => {
           if(o.id === params.id){
             paramsData.content_auth_group.start = o
-          } 
+          }
         })
         paramsData.content_auth_group.end = {id: params.id, title: params._this.groupUpdateSingle[0].title, rules: params._this.groupUpdateSingle[0].rules, disabled: params._this.groupUpdateSingle[0].disabled ? '2' : '1'}
         console.log("修改用户组")
@@ -791,7 +815,7 @@ const actions = {
         params._this.usergroups.find((o, index) => {
           if(o.id === params.id){
             paramsData.content_auth_group.start = o
-          } 
+          }
         })
         paramsData.content_auth_group.end = 'null'
         console.log("删除用户组")
@@ -805,7 +829,7 @@ const actions = {
         params._this.PList.find((o, index) => {
           if(o.pid === params._this.row.pid){
             paramsData.content_project.start = o
-          } 
+          }
         })
         paramsData.content_project.end = {pid: params._this.row.pid, xname: params._this.row.xname, state: params._this.row.state, webShow: params._this.row.webShow}
         console.log("修改项目")
@@ -814,7 +838,7 @@ const actions = {
         params._this.PList.find((o, index) => {
           if(o.pid === params.id){
             paramsData.content_project.start = o
-          } 
+          }
         })
         paramsData.content_project.end = 'null'
         console.log("删除项目")
@@ -828,7 +852,7 @@ const actions = {
         params._this.tList.find((o, index) => {
           if(o.tid === params._this.row.tid){
             paramsData.content_type.start = o
-          } 
+          }
         })
         paramsData.content_type.end = {tid: params._this.row.tid, lname: params._this.row.lname, state: params._this.row.state, webShow: params._this.row.webShow}
         console.log("修改类型")
@@ -837,7 +861,7 @@ const actions = {
         params._this.tList.find((o, index) => {
           if(o.tid === params.id){
             paramsData.content_type.start = o
-          } 
+          }
         })
         paramsData.content_type.end = 'null'
         console.log("删除类型")
@@ -852,7 +876,7 @@ const actions = {
           if(o.did === params._this.row.did){
             paramsData.content_classification.start = o
             paramsData.content_classification.start.typeName = params._this.getTypesName(o.tbid)
-          } 
+          }
         })
         paramsData.content_classification.end = {did: params._this.row.did, tbid: params._this.getTypesID(params._this.typeName), dname: params._this.row.dname, state: params._this.row.state, webShow: params._this.row.webShow, typeName:params._this.typeName}
         console.log("修改分类")
@@ -862,7 +886,7 @@ const actions = {
           if(o.did === params.id){
             paramsData.content_classification.start = o
             paramsData.content_classification.start.typeName = params._this.getTypesName(o.tbid)
-          } 
+          }
         })
         paramsData.content_classification.end = 'null'
         console.log("删除分类")
@@ -938,7 +962,7 @@ const actions = {
         paramsData.content_type = params.shieldInfo
         console.log("添加类型屏蔽人")
         break;
-    } 
+    }
     return api.setOperationInfo(paramsData)
       .then((data) => {
         return Promise.resolve(data)

@@ -1,39 +1,101 @@
 <template>
   <el-container style="background: #f4f4f4;">
   	<el-header style="padding: 0;">
-  		<div class="tab clearfix">
-  			<p>用户：</p>
-  			<ul>
-  				<li :class="{on:num4 === '-1'}" @click="tab4('', '-1', '')">全部</li>
-  				<li v-for="(item, index) in userList" :key="index" :class="{on:index === num4}" v-on:click.stop="tab4(index, item.nickname, item.uId)" v-if="item.webShow === '1' && item.articleNum !== 0 && item.state == '0'">{{item.nickname}}</li>
-  			</ul>
-  		</div>
-  		<div class="tab clearfix">
-  			<p>项目：</p>
-  			<ul>
-  				<li :class="{on:num1 === '-1'}" @click="tab1('', '-1', '')">全部</li>
-  				<li v-for="(item, index) in projects" :key="index" :class="{on:index === num1}" v-on:click.stop="tab1(index, item.xname, item.pid)" v-if="item.state === '1' && item.webShow === '1'">{{item.xname}}</li>
-  			</ul>
-  		</div>
-  		<div class="tab clearfix">
-  			<p>类型：</p>
-  			<ul>
-  				<li :class="{on:num2 === '-1'}" @click="tab2('', '-1', '')">全部</li>
-  				<li v-for="(item, index) in types" :key="index" :class="{on:index === num2}" v-on:click.stop="tab2(index, item.lname, item.tid)" v-if="item.state === '1' && item.webShow === '1'">{{item.lname}}</li>
-  			</ul>
-  		</div>
-  		<div class="tab clearfix" style="margin-bottom: 50px;">
-  			<p>分类：</p>
-  			<ul :class="{omit:showtype}">
-  				<li :class="{on:num3 === '-1'}" @click="tab3('', '-1', '', '', '')">全部</li>
-  				<li v-for="(item, index) in minTypes2" :key="index" :class="{on:index === num3}" v-if="item.state === '1' && item.webShow === '1'" v-on:click.stop="tab3(index, item.dname, item.did, item.tbid, item.pbid)" v-html="item.dname"></li>
-  				<li class="clearfix"></li>
-          <div v-if="minTypes2 !== '[]'">
-            <a class="el-button--default is-plain" v-show="showtype" v-on:click.stop="showMinType()">点击查看全部分类</a>
-            <a class="el-button--default is-plain" v-show="!showtype" v-on:click.stop="hideMinType()">收起</a>
+      <div class="tabs">
+        <el-button v-popover:popover1 style="border: 2px dashed #DCDFE6; background: none; margin-right: 20px;">用户</el-button>
+        <el-popover
+          ref="popover1"
+          :open-delay="0"
+          :visible-arrow="true"
+          placement="bottom"
+          width="1000"
+          trigger="hover">
+          <div class="tabs_div1">
+            <div class="tabs_div1_item">
+              <p class="tabs_div1_item_title">在职</p>
+              <ul class="tabs_div1_item_ul">
+                <li class="omit" v-for="(item, index) in userList" :key="index" v-if="item.webShow === '1' && item.articleNum !== 0 && item.state == '0'" @click="handleInputConfirm('user',item.nickname)">{{item.nickname}}</li>
+              </ul>
+            </div>
           </div>
-  			</ul>
-  		</div>
+        </el-popover>
+        <el-button v-popover:popover2 style="border: 2px dashed #DCDFE6; background: none; margin-right: 20px;">项目</el-button>
+        <el-popover
+          ref="popover2"
+          :open-delay="0"
+          :visible-arrow="true"
+          placement="bottom"
+          width="800"
+          trigger="hover">
+          <div class="tabs_div2">
+            <div class="tabs_div1_item">
+              <p class="tabs_div1_item_title">运维中</p>
+              <ul class="tabs_div1_item_ul">
+                <li class="omit" v-for="(item, index) in projects" :key="index" v-if="item.state === '1' && item.webShow === '1'" @click="handleInputConfirm('projects',item.xname)">{{item.xname}}</li>
+              </ul>
+            </div>
+          </div>
+        </el-popover>
+        <el-button v-popover:popover3 style="border: 2px dashed #DCDFE6; background: none;margin-right: 20px;">类型</el-button>
+        <el-popover
+          ref="popover3"
+          :open-delay="0"
+          :visible-arrow="true"
+          placement="bottom"
+          width="400"
+          trigger="hover">
+          <div class="tabs_div3">
+            <div class="tabs_div1_item">
+              <ul class="tabs_div1_item_ul">
+                <li class="omit" v-for="(item, index) in types" :key="index" v-if="item.state === '1' && item.webShow === '1'" @click="handleInputConfirm('types',item.lname)">{{item.lname}}</li>
+              </ul>
+            </div>
+          </div>
+        </el-popover>
+        <el-button v-popover:popover4 style="border: 2px dashed #DCDFE6; background: none;margin-right: 20px;">分类</el-button>
+        <el-popover
+          ref="popover4"
+          :open-delay="0"
+          :visible-arrow="true"
+          placement="bottom"
+          width="800"
+          trigger="hover">
+          <div class="tabs_div3">
+            <div class="tabs_div1_item">
+              <ul class="tabs_div1_item_ul">
+                <li class="omit" v-for="(item, index) in minTypes2" :key="index" v-html="item.dname" :title="item.dname" v-if="item.state === '1' && item.webShow === '1'" @click="handleInputConfirm('minTypes',item.dname)"></li>
+              </ul>
+            </div>
+          </div>
+        </el-popover>
+        <el-button v-popover:popover5 style="border: 2px dashed #DCDFE6; background: none;margin-right: 20px;">文件类型</el-button>
+        <el-popover
+          ref="popover5"
+          :open-delay="0"
+          :visible-arrow="true"
+          placement="bottom"
+          width="400"
+          trigger="hover">
+          <div class="tabs_div3">
+            <div class="tabs_div1_item">
+              <ul class="tabs_div1_item_ul">
+                <li class="omit" title="img" @click="handleInputConfirm('fileType','img')">img</li>
+                <li class="omit" title="psd" @click="handleInputConfirm('fileType','psd')">psd</li>
+                <li class="omit" title="video" @click="handleInputConfirm('fileType','video')">video</li>
+                <li class="omit" title="ai" @click="handleInputConfirm('fileType','ai')">ai</li>
+                <li class="omit" title="压缩包" @click="handleInputConfirm('fileType','压缩包')">压缩包</li>
+                <li class="omit" title="pdf" @click="handleInputConfirm('fileType','pdf')">pdf</li>
+                <li class="omit" title="word" @click="handleInputConfirm('fileType','word')">word</li>
+                <li class="omit" title="excel" @click="handleInputConfirm('fileType','excel')">excel</li>
+              </ul>
+            </div>
+          </div>
+        </el-popover>
+      </div>
+      <div style="padding-bottom: 30px;">
+        <b style="font-size: 18px;">筛选条件:</b>
+        <span style="margin: 0 10px;" v-for="tag in dynamicTags" :key="tag.name" class="el-tag el-tag--plain" v-if="tag.name !== ''">  {{tag.name}}  <i class="el-tag__close el-icon-close" @click="handleClose(tag.name)"></i></span>
+      </div>
   		<dl class="articleList clearfix" v-loading="loading">
   			<dt v-if="article.length === 0 && loading === 'false'">没有查到相关数据</dt>
   			<dd v-for="(item, index) in article" :key="index" v-if="article.length !== 0">
@@ -144,13 +206,19 @@ export default {
           name: '',
           index: '-1'
         },
+        fileType: {
+          id: '',
+          name: '',
+          index: ''
+        },
         showtype: true,
         currentPage1: 1,
         dataList: 8,
         pageNum: this.$store.state.admin.adminInfo.pageNum,
         userInfo: this.$store.state.admin.adminInfo,
         articleAll: parseInt(this.$store.state.admin.adminInfo.articleAll),
-        sessionData: false
+        sessionData: false,
+        dynamicTags: [],
       }
     },
     watch: {
@@ -187,6 +255,7 @@ export default {
         console.log(4)
         this.adminGetArticleAll({
           keyword: _this.keyword,
+          type: this.fileType.name !== '' ? this.fileType.name : null,
           page: 1,
           articlePageNum: _this.dataList,
           pid: _this.xname.id !== '' ? _this.xname.id : null,
@@ -202,14 +271,6 @@ export default {
         'webUserList',
         'getWebArticleAll',
       ]),
-      // 分类全部显示关闭
-      showMinType () {
-          this.showtype = false
-        },
-        // 分类全部显示开启
-        hideMinType () {
-          this.showtype = true
-        },
       handleSizeChange(val) {
         let _this = this, adminInfo =  this.$store.state.admin.adminInfo
         adminInfo.articlePageNum = val
@@ -218,6 +279,7 @@ export default {
         cachedAdminInfo.save(adminInfo)
         this.adminGetArticleAll({
           keyword: _this.keyword,
+          type: this.fileType.name !== '' ? this.fileType.name : null,
           page: 1,
           articlePageNum: _this.dataList,
           pid: _this.xname.id !== '' ? _this.xname.id : null,
@@ -232,6 +294,7 @@ export default {
         let _this = this
         this.adminGetArticleAll({
           keyword: _this.keyword,
+          type: this.fileType.name !== '' ? this.fileType.name : null,
           page: val,
           articlePageNum: _this.dataList,
           pid: _this.xname.id !== '' ? _this.xname.id : null,
@@ -241,64 +304,82 @@ export default {
           userId: _this.userInfo.uId
           })
       },
-      // 项目按钮
-      tab1(index, name, pid) {
-        if(name !== '-1') {
-          this.num1 = index
-          this.xname.id = pid
-          this.xname.name = name
-          this.xname.index = index
-        } else {
-          this.num1 = name
-          this.xname.id = this.xname.name = this.xname.index = ''
-        }
-        this.setdata(0)
-      },
-      // 类型按钮
-      tab2(index, name, tid) {
-        if(name !== '-1') {
-          this.num2 = index
-          this.lname.id = tid
-          this.lname.name = name
-          this.lname.index = index
-        } else {
-          this.num2 = name
-          this.lname.id = this.lname.name = this.lname.index = ''
-        }
-        this.setdata(0)
-      },
-      // 分类按钮
-      tab3(index, name, did, tbid, pbid) {
-        if(name !== '-1') {
-          this.num3 = index
-          this.dnames.pbid = pbid
-          this.dnames.tbid = tbid
-          this.dnames.did = did
-          this.dnames.name = name
-          this.dnames.index = index
-        } else {
-          this.num3 = name
-          this.dnames.pbid = this.dnames.tbid = this.dnames.did = this.dnames.name = this.dnames.index = ''
-        }
-        this.setdata(0)
-      },
-      // 用户按钮
-      tab4(index, name, uid) {
-        if(name !== '-1') {
-          this.num4 = index
-          this.user.id = uid
-          this.user.name = name
-          this.user.index = index
-        } else {
-          this.num4 = name
-          this.user.id = this.user.name = this.user.index = ''
-        }
-        this.setdata(0)
-      },
       resetTab() {
         this.num1 = '-1'
         this.num2 = '-1'
         this.xname.id = this.xname.name = this.xname.index = this.lname.id = this.lname.name = this.lname.index = ''
+      },
+      // 添加
+      handleInputConfirm(type, inputValue) {
+        if (inputValue) {
+          if(type === 'user'){
+            let user = this.userList.find(o=>{ return o.nickname === inputValue })
+            this.user.id = user.uId
+            this.user.name = user.nickname
+          }
+          if(type === 'projects'){
+            let projects = this.projects.find(o=>{ return o.xname === inputValue })
+            this.xname.id = projects.pid
+            this.xname.name = projects.xname
+          }
+          if(type === 'types'){
+            let types = this.types.find(o=>{ return o.lname === inputValue })
+            this.lname.id = types.tid
+            this.lname.name = types.lname
+          }
+          if(type === 'minTypes'){
+            let minTypes = this.minTypes.find(o=>{ return o.dname === inputValue })
+            this.dnames.tbid = minTypes.tbid
+            this.dnames.did = minTypes.did
+            this.dnames.name = minTypes.dname
+          }
+          if(type === 'fileType'){
+            this.fileType.id = inputValue
+            this.fileType.name = inputValue
+          }
+
+          this.dynamicTags.splice(0, this.dynamicTags.length);
+          this.user.name !== '' ? this.dynamicTags.push(this.user) : console.log()
+          this.xname.name !== '' ? this.dynamicTags.push(this.xname) : console.log()
+          this.lname.name !== '' ? this.dynamicTags.push(this.lname) : console.log()
+          this.dnames.name !== '' ? this.dynamicTags.push(this.dnames) : console.log()
+          this.fileType.name !== '' ? this.dynamicTags.push(this.fileType) : console.log()
+
+          this.setdata()
+        }
+      },
+      // 筛选条件标签删除操作
+      handleClose(tagName) {
+        // this.dynamicTags.splice(this.dynamicTags.indexOf(tagName), 1);
+        if(tagName === this.user.name){
+          this.user.id = ''
+          this.user.name = ''
+        }
+        if(tagName === this.xname.name){
+          this.xname.id = ''
+          this.xname.name = ''
+        }
+        if(tagName === this.lname.name){
+          this.lname.id = ''
+          this.lname.name = ''
+        }
+        if(tagName === this.dnames.name){
+          this.dnames.tbid = ''
+          this.dnames.did = ''
+          this.dnames.name = ''
+        }
+        if(tagName === this.fileType.name){
+          this.fileType.id = ''
+          this.fileType.name = ''
+        }
+        this.dynamicTags.splice(0, this.dynamicTags.length);
+        this.user.name !== '' ? this.dynamicTags.push(this.user) : console.log()
+        this.xname.name !== '' ? this.dynamicTags.push(this.xname) : console.log()
+        this.lname.name !== '' ? this.dynamicTags.push(this.lname) : console.log()
+        this.dnames.name !== '' ? this.dynamicTags.push(this.dnames) : console.log()
+        this.fileType.name !== '' ? this.dynamicTags.push(this.fileType) : console.log()
+
+        this.setdata()
       },
       /**
        * 选择类型动态修改，点击不同的项目、类型、分类显示相应的类型和分类
@@ -342,6 +423,7 @@ export default {
         }
         this.adminGetArticleAll({
           keyword: _this.keyword,
+          type: this.fileType.name !== '' ? this.fileType.name : null,
           page: 1,
           articlePageNum: _this.dataList,
           pid: _this.xname.id !== '' ? _this.xname.id : null,
@@ -434,14 +516,14 @@ export default {
                //  obj.word = obj.word === '[]' ? eval('(' + obj.word + ')') : JSON.parse(obj.word)
                //  obj.excel = obj.excel === '[]' ? eval('(' + obj.excel + ')') : JSON.parse(obj.excel)
                //  obj.engineering = obj.engineering === '[]' ? eval('(' + obj.engineering + ')') : JSON.parse(obj.engineering)
-              	obj.typeFile === 'img' ? srcs[srcs.length] = obj.img[0].miniImg : obj.typeFile = obj.typeFile
-              	obj.typeFile === 'psd' ? srcs[srcs.length] = obj.psd[0].Psdview : obj.typeFile = obj.typeFile
-              	obj.typeFile === 'video' ? srcs[srcs.length] = obj.video[0].Videoview : obj.typeFile = obj.typeFile
-                obj.typeFile === 'ai' ? srcs[srcs.length] = obj.img[0].miniImg : obj.typeFile = obj.typeFile
-                obj.typeFile === 'pdf' ? srcs[srcs.length] = 'image/pdf.jpg' : obj.typeFile = obj.typeFile
-                obj.typeFile === 'word' ? srcs[srcs.length] = 'image/word.jpg' : obj.typeFile = obj.typeFile
-                obj.typeFile === 'excel' ? srcs[srcs.length] = 'image/excel.jpg' : obj.typeFile = obj.typeFile
-                obj.typeFile === 'engineering' ? srcs[srcs.length] = obj.img[0].miniImg : obj.typeFile = obj.typeFile
+                obj.typeFile.indexOf('img') !== -1 ? srcs[srcs.length] = obj.img[0].miniImg : obj.typeFile = obj.typeFile
+                obj.typeFile.indexOf('psd') !== -1 ? srcs[srcs.length] = obj.psd[0].Psdview : obj.typeFile = obj.typeFile
+                obj.typeFile.indexOf('video') !== -1 ? srcs[srcs.length] = obj.video[0].Videoview : obj.typeFile = obj.typeFile
+                obj.typeFile.indexOf('ai') !== -1 ? srcs[srcs.length] = 'image/ai.jpg' : obj.typeFile = obj.typeFile
+                obj.typeFile.indexOf('pdf') !== -1 ? srcs[srcs.length] = 'image/pdf.jpg' : obj.typeFile = obj.typeFile
+                obj.typeFile.indexOf('word') !== -1 ? srcs[srcs.length] = 'image/word.jpg' : obj.typeFile = obj.typeFile
+                obj.typeFile.indexOf('excel') !== -1 ? srcs[srcs.length] = 'image/excel.jpg' : obj.typeFile = obj.typeFile
+                obj.typeFile.indexOf('压缩包') !== -1 ? srcs[srcs.length] = 'image/ysb.jpg' : obj.typeFile = obj.typeFile
               	obj.srcs = srcs.length !== 0 ? srcs : new Array()
               	srcs = []
               })
@@ -541,6 +623,7 @@ export default {
       let _this = this
       this.adminGetArticleAll({
         keyword: _this.keyword,
+        type: this.fileType.name !== '' ? this.fileType.name : null,
         page: 1,
         articlePageNum: _this.dataList,
         pid: _this.xname.id !== '' ? _this.xname.id : null,
@@ -598,7 +681,7 @@ export default {
 table{width:100%!important}
 .el-pagination span:not([class*=suffix]){float:right!important}
 .cell{padding:0!important}
-.articleList{width: 1200px; height: auto; margin: 80px auto;}
+.articleList{width: 1200px; height: auto; margin: 0 auto 80px;}
 .articleList dt{ width: 100%; height: 361px; font-size: 20px; text-align: center; line-height: 361px;}
 .articleList dd{ width: 22%; height: 335px; float: left; overflow: hidden;margin: 1%;border: 1px solid #e5e5e5;border-radius: 5px;box-shadow:none; cursor: pointer; background: #FFFFFF;}
 .articleList dd:hover p:nth-child(2){color:#f00000 ;}
@@ -610,4 +693,40 @@ table{width:100%!important}
 .articleList dd p:nth-child(3) span{float: left; display: block; width: 50%; text-indent: 10px;}
 .articleList dd p:nth-child(3) samp{float: left; display: block;width: 32%; text-align: center; color: #999999;line-height: .5;}
 .icon {width: 20px;height: 20px;vertical-align: -0.15em;fill: currentColor;overflow: hidden; padding-top: 10px;}
+.tabs{display: flex; justify-content: flex-end; align-items: center; padding: 0 0 30px;}
+.tabs_div1{padding-top: 20px;}
+.tabs_div1 /deep/ .tabs_div1_item{display: flex; justify-content: flex-start; align-items: flex-start;position: relative;}
+.tabs_div1 /deep/ .tabs_div1_item_title{padding: 0px 20px; width: 100px;}
+.tabs_div1 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 0; height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
+.tabs_div1 /deep/ .tabs_div1_item_ul{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap;flex: 1;}
+.tabs_div1 /deep/ .tabs_div1_item_ul li{width: 10%; text-align: left; height: 40px;    transition: all .2s; cursor: pointer;}
+
+.tabs_div1 /deep/ .tabs_div1_item2{display: flex; justify-content: flex-start; align-items: flex-start;position: relative;}
+.tabs_div1 /deep/ .tabs_div1_item_title2{padding: 0px 20px; width: 100px;}
+.tabs_div1 /deep/ .tabs_div1_item_title2::after{position: absolute;left: 0; top: 0; height: 20px;content: " ";display: block;width: 4px; background: #FF4C29;border-radius: 2px;}
+.tabs_div1 /deep/ .tabs_div1_item_ul2{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap;flex: 1;}
+.tabs_div1 /deep/ .tabs_div1_item_ul2 li{width: 10%; text-align: left;height: 40px;    transition: all .2s;cursor: pointer;}
+.tabs_div1 /deep/ .tabs_div1_item_ul2 li:hover, .tabs_div1 /deep/ .tabs_div1_item_ul li:hover {color: #2CAEFF;}
+
+.tabs_div2{padding-top: 20px;}
+.tabs_div2 /deep/ .tabs_div1_item{display: flex; justify-content: flex-start; align-items: flex-start;position: relative;}
+.tabs_div2 /deep/ .tabs_div1_item_title{padding: 0px 20px; width: 100px;}
+.tabs_div2 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 0; height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
+.tabs_div2 /deep/ .tabs_div1_item_ul{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; flex: 1;}
+.tabs_div2 /deep/ .tabs_div1_item_ul li{width: 20%; text-align: left; height: 40px;    transition: all .2s;cursor: pointer;}
+
+.tabs_div2 /deep/ .tabs_div1_item2{display: flex; justify-content: flex-start; align-items: flex-start;position: relative;}
+.tabs_div2 /deep/ .tabs_div1_item_title2{padding: 0px 20px; width: 100px;}
+.tabs_div2 /deep/ .tabs_div1_item_title2::after{position: absolute;left: 0; top: 0; height: 20px;content: " ";display: block;width: 4px; background: #FF4C29;border-radius: 2px;}
+.tabs_div2 /deep/ .tabs_div1_item_ul2{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; flex: 1;}
+.tabs_div2 /deep/ .tabs_div1_item_ul2 li{width: 20%; text-align: left;height: 40px;    transition: all .2s;cursor: pointer;}
+.tabs_div2 /deep/ .tabs_div1_item_ul2 li:hover, .tabs_div2 /deep/ .tabs_div1_item_ul li:hover {color: #2CAEFF;}
+
+.tabs_div3{padding-top: 20px;}
+.tabs_div3 /deep/ .tabs_div1_item{position: relative;}
+.tabs_div3 /deep/ .tabs_div1_item_title{padding: 0px 20px; width: 100px;}
+.tabs_div3 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 0; height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
+.tabs_div3 /deep/ .tabs_div1_item_ul{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap;flex: 1;}
+.tabs_div3 /deep/ .tabs_div1_item_ul li{width: 20%; text-align: left; height: 40px;    transition: all .2s;cursor: pointer;}
+.tabs_div3 /deep/ .tabs_div1_item_ul li:hover {color: #2CAEFF;}
 </style>
