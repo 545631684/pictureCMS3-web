@@ -134,28 +134,28 @@
   				  	<div class="attribute2">
                 <samp style="width: 75px;">文章类型：</samp>
                 <span>
-                  <svg class="icon svg-icon" aria-hidden="true" >
+                  <svg class="icon svg-icon" aria-hidden="true" v-if="article.typeFile.indexOf('img') !== -1">
                     <use xlink:href="#icon-picture"></use>
                   </svg>
-                  <svg class="icon svg-icon" aria-hidden="true" >
+                  <svg class="icon svg-icon" aria-hidden="true" v-if="article.typeFile.indexOf('psd') !== -1">
                     <use xlink:href="#icon-web-psd"></use>
                   </svg>
-                  <svg class="icon svg-icon" aria-hidden="true" >
+                  <svg class="icon svg-icon" aria-hidden="true" v-if="article.typeFile.indexOf('video') !== -1">
                     <use xlink:href="#icon-shipinbofangyingpian"></use>
                   </svg>
-                  <svg class="icon svg-icon" aria-hidden="true" >
+                  <svg class="icon svg-icon" aria-hidden="true" v-if="article.typeFile.indexOf('ai') !== -1">
                     <use xlink:href="#icon-Ai"></use>
                   </svg>
-                  <svg class="icon svg-icon" aria-hidden="true" >
+                  <svg class="icon svg-icon" aria-hidden="true" v-if="article.typeFile.indexOf('pdf') !== -1">
                     <use xlink:href="#icon-Pdf"></use>
                   </svg>
-                  <svg class="icon svg-icon" aria-hidden="true" >
+                  <svg class="icon svg-icon" aria-hidden="true" v-if="article.typeFile.indexOf('word') !== -1">
                     <use xlink:href="#icon-word1"></use>
                   </svg>
-                  <svg class="icon svg-icon" aria-hidden="true" >
+                  <svg class="icon svg-icon" aria-hidden="true" v-if="article.typeFile.indexOf('excel') !== -1">
                     <use xlink:href="#icon-excel1"></use>
                   </svg>
-                  <svg class="icon svg-icon" aria-hidden="true" >
+                  <svg class="icon svg-icon" aria-hidden="true" v-if="article.typeFile.indexOf('压缩包') !== -1">
                     <use xlink:href="#icon-gongcheng-"></use>
                   </svg>
                 </span>
@@ -418,7 +418,7 @@ export default {
       // 下载按钮
       download () {
         let _this = this
-        if (this.article.typeFile === 'img') {
+        if (this.article.typeFile.indexOf('img') !== -1) {
           this.checkedCities.find(strings => {
             this.imgFile.find(obj => {
               if (obj.dataImg.name === strings) {
@@ -427,7 +427,8 @@ export default {
               }
             })
           })
-        } else if (this.article.typeFile === 'psd') {
+        }
+        if (this.article.typeFile.indexOf('psd') !== -1) {
           this.checkedCities.find(strings => {
             this.psdFile.find(obj => {
               if (obj.dataPsd.name === strings) {
@@ -436,7 +437,8 @@ export default {
               }
             })
           })
-        } else if (this.article.typeFile === 'video') {
+        } 
+        if (this.article.typeFile.indexOf('video') !== -1) {
           this.checkedCities.find(strings => {
           	_this.videoFile.find(obj => {
           		if (obj.dataVideo.name === strings) {
@@ -445,19 +447,8 @@ export default {
           		}
           	})
           })
-          // 判断图片是否为空数组字符串"[]",在不为字符串并且长度大于0
-          if (this.imgFile.length !== 0 && this.imgFile.length > 0) {
-          	this.checkedCities.find(strings => {
-          		_this.imgFile.find(obj => {
-          			if (obj.dataImg.name === strings) {
-          				_this.zipfiles.push(obj.dataImg.url)
-          				_this.downloadName.push(obj.dataImg.name)
-          			}
-          			return obj
-          		})
-          	})
-          }
-        } else if(this.article.typeFile === 'ai'){
+        } 
+        if(this.article.typeFile.indexOf('ai') !== -1){
           this.checkedCities.find(strings => {
           	_this.aiFile.find(obj => {
           		if (obj.dataAi.name === strings) {
@@ -466,19 +457,8 @@ export default {
           		}
           	})
           })
-          // 判断图片是否为空数组字符串"[]",在不为字符串并且长度大于0
-          if (this.imgFile.length !== 0 && this.imgFile.length > 0) {
-          	this.checkedCities.find(strings => {
-          		_this.imgFile.find(obj => {
-          			if (obj.dataImg.name === strings) {
-          				_this.zipfiles.push(obj.dataImg.url)
-          				_this.downloadName.push(obj.dataImg.name)
-          			}
-          			return obj
-          		})
-          	})
-          }
-        } else if(this.article.typeFile === 'engineering'){
+        } 
+        if(this.article.typeFile.indexOf('压缩包') !== -1){
           this.checkedCities.find(strings => {
           	_this.engineeringFile.find(obj => {
           		if (obj.file.name === strings) {
@@ -487,21 +467,30 @@ export default {
           		}
           	})
           })
-          // 判断图片是否为空数组字符串"[]",在不为字符串并且长度大于0
-          if (this.imgFile.length !== 0 && this.imgFile.length > 0) {
-          	this.checkedCities.find(strings => {
-          		_this.imgFile.find(obj => {
-          			if (obj.dataImg.name === strings) {
-          				_this.zipfiles.push(obj.dataImg.url)
-          				_this.downloadName.push(obj.dataImg.name)
-          			}
-          			return obj
-          		})
-          	})
-          }
-        } else if (this.article.typeFile === 'pdf') {
+        } 
+        if (this.article.typeFile.indexOf('pdf') !== -1) {
           this.checkedCities.find(strings => {
             this.pdfFile.find(obj => {
+              if (obj.file.name === strings) {
+                this.zipfiles.push(obj.file.url)
+                this.downloadName.push(obj.file.name)
+              }
+            })
+          })
+        }
+        if (this.article.typeFile.indexOf('word') !== -1) {
+          this.checkedCities.find(strings => {
+            this.wordFile.find(obj => {
+              if (obj.file.name === strings) {
+                this.zipfiles.push(obj.file.url)
+                this.downloadName.push(obj.file.name)
+              }
+            })
+          })
+        }
+        if (this.article.typeFile.indexOf('excel') !== -1) {
+          this.checkedCities.find(strings => {
+            this.excelFile.find(obj => {
               if (obj.file.name === strings) {
                 this.zipfiles.push(obj.file.url)
                 this.downloadName.push(obj.file.name)

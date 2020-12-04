@@ -86,4 +86,9 @@ export default [
       }
     ]
   },
+  {
+    path: '/backstage/*',
+    name: '404',
+    component: backstage
+  }
 ]

@@ -506,7 +506,16 @@
           })
         } else {
           this.loading = true
-          this.articleUpdate({mId:this.article.mId, uId:this.article.uId, pid:this.$store.getters.getUserProjectsId(this.projectImg).pid, tid:this.$store.getters.getUserTypesId(this.typeImg).tid, did:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(), describe:this.article.describe.replace(/\s+/g," "), img:this.article.img, psd:this.article.psd, video:this.article.video, ai:this.article.ai, pdf:this.article.pdf, word:this.article.word, excel:this.article.excel, engineering:this.article.engineering, typeFile:this.article.typeFile})
+          let typeName = []
+          this.article.img.length !== 0 ? typeName.push('img') : console.log()
+          this.article.psd.length !== 0 ? typeName.push('psd') : console.log()
+          this.article.video.length !== 0 ? typeName.push('video') : console.log()
+          this.article.ai.length !== 0 ? typeName.push('ai') : console.log()
+          this.article.pdf.length !== 0 ? typeName.push('pdf') : console.log()
+          this.article.word.length !== 0 ? typeName.push('word') : console.log()
+          this.article.excel.length !== 0 ? typeName.push('excel') : console.log()
+          this.article.engineering.length !== 0 ? typeName.push('压缩包') : console.log()
+          this.articleUpdate({mId:this.article.mId, uId:this.article.uId, pid:this.$store.getters.getUserProjectsId(this.projectImg).pid, tid:this.$store.getters.getUserTypesId(this.typeImg).tid, did:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(), describe:this.article.describe.replace(/\s+/g," "), img:this.article.img, psd:this.article.psd, video:this.article.video, ai:this.article.ai, pdf:this.article.pdf, word:this.article.word, excel:this.article.excel, engineering:this.article.engineering, typeFile:typeName.toString()})
             .then((response) => {
               if(response.code === 200) {
                 console.log(this.$store.state.admin.adminInfo,'修改后用户信息')

@@ -1,6 +1,6 @@
 <template>
   <el-aside :style="{width: isCollapse ? '64px' : '210px'}">
-		<el-menu router :default-active="isdefaultActive" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" background-color="#252a2f" text-color="#fff" active-text-color="#ffd04b" style="height:100%; border:none;">
+		<el-menu :default-active="isdefaultActive" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" background-color="#252a2f" text-color="#fff" active-text-color="#ffd04b" style="height:100%; border:none;">
       <template v-for="(item, index) in userGroups.rules">
         <el-menu-item :index="item.index" :key="index" @click="urlpage(item.urlKeyword,$event)" v-if="item.checkedCities === '[]' && item.checkAll === 'true'">
           <i :class="item.icon"></i>
@@ -37,12 +37,12 @@
 
 <script>
   import {
-    SET_WEB_INFO, 
-    SET_ADMIN_INFO, 
-    SET_TOKEN_INFO, 
-    SET_PUBLIC_INFO 
+    SET_WEB_INFO,
+    SET_ADMIN_INFO,
+    SET_TOKEN_INFO,
+    SET_PUBLIC_INFO
   } from 'STORE/mutation-types'
-  
+
   import {
     saveAccessToken,
     getAccessToken,
@@ -144,10 +144,12 @@
 			},
 			// 通过给定关键字跳转相应页面， $event在点击事件里加入函数写event可以调用当前元素的所有值
 			urlpage(type, event) {
+        console.log(type,event,'路由')
 				switch(type) {
 					case "home":
 						this.$router.push("/backstage/home");
 						this.localStorageSet(event.index)
+        debugger
 						break;
           case "uploadFile":
 						this.$router.push("/backstage/articleAdd");
@@ -238,7 +240,7 @@
 	.tishi{display:inline-block;float:inherit;background-color:red;border-radius:10px;padding:2px 5px;height:15px;line-height:15px;color:#ffff!important;font-size:14px;font-weight:700;font-style:inherit;margin:-5px 0 0 5px}
   .collapse-wrap{position:absolute; width: 24px; height: 24px; background-color: #262a30; right: 20px; bottom: 15px; padding: 5px; z-index: 1050; cursor: pointer; line-height: 0;}
   .collapse-wrap .collapse-line{position:relative; display: inline-block; vertical-align: top; width: 100%; height: 2px; margin-top: 4px; background-color: #fff; transition: all .3s;}
-  .collapse-wrap .collapse-line a:first-child{margin-top:0;}   
+  .collapse-wrap .collapse-line a:first-child{margin-top:0;}
   .el-menu-item{cursor: pointer;}
   .el-menu-item .el-submenu__title{font-size: 14px !important;}
   .el-menu-item .el-submenu__title a.is-active{background-color: rgb(30, 34, 38) !important;}

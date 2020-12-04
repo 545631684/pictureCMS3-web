@@ -24,6 +24,11 @@ export default [
     name: 'login',
     component: login
   },
+  {
+    path: '/web/*',
+    name: '404',
+    component: index
+  }
   // {
   //   path: '/enrollUser',
   //   name: 'enrollUser',

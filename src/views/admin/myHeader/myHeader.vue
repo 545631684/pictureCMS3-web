@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <h1 class="header-title"><img src="~IMAGES/logo.png" alt=""/>赛奇医健</h1>
+    <h1 class="header-title" @click="urlpage('index')"><img src="~IMAGES/logo.png" alt=""/>赛奇医健</h1>
     <div class="header-right">
       <el-dropdown @command="urlpage($event)">
         <span class="el-dropdown-link" style="color: #FFFFFF;">
