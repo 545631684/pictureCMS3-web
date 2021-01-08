@@ -2,11 +2,11 @@
   <div>
     <p class="imgName">PDF文件：</p>
     <div class="imgs" style="width: 40%;">
-    	<el-upload multiple style="" :limit="1" ref="videoFile" accept=".pdf" class="upload-demo" :action="action + '?id=8'" :on-remove="handleRemove3" :on-change="obtpdfImgSrc" :on-exceed="limitNum">
+    	<el-upload multiple style="" :limit="20" ref="videoFile" accept=".pdf" class="upload-demo" :action="action + '?id=8'" :on-remove="handleRemove3" :on-change="obtpdfImgSrc" :on-exceed="limitNum">
     		<el-button size="small" type="primary">点击上传PDF文件</el-button>
     		<div slot="tip" class="el-upload__tip">只能上传.pdf格式文件，文件大小不要超过1GB</div>
     	</el-upload>
-    	<el-alert title="提示" description="※上传第一个文件时会自动获取文件名称并填写到标题。※最多上传1个PDF文件，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
+    	<el-alert title="提示" description="※上传第一个文件时会自动获取文件名称并填写到标题。※最多上传20个PDF文件，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
     </div>
   </div>
 </template>
@@ -48,8 +48,8 @@
       ]),
       // 上传文件数超出限制提示
       limitNum (file, fileList) {
-      	if (fileList.length > 1) {
-      		this.$alert('最多上传1个PDF文件，你已超出限制！', '警告', {
+      	if (fileList.length > 20) {
+      		this.$alert('最多上传20个PDF文件，你已超出限制！', '警告', {
       			confirmButtonText: '确定'
       		})
       	}

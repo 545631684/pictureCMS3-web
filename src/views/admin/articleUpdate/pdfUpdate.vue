@@ -2,11 +2,15 @@
   <div>
     <p class="imgName">PDF文件：</p>
     <div class="imgs shangchuan" style="width: 40%;">
-    	<el-upload :multiple="true" :file-list="fileList" :limit="1" ref="pdfFile" accept=".pdf" class="upload-demo" :action="action + '?id=8'" :on-remove="handleRemovePdf" :on-change="obtainImgSrc" :on-exceed="limitNum">
-    		<el-button size="small" type="primary">点击上传PDF文件</el-button>
-    		<div slot="tip" class="el-upload__tip">只能上传.pdf格式文件，文件大小不要超过1GB</div>
+      <el-upload multiple style="" :limit="20" ref="newpdfFile" accept=".pdf" class="upload-demo newfiles" :action="action + '?id=8'" :on-remove="handleRemovePdf" :on-change="obtainImgSrc" :on-exceed="limitNum">
+      	<el-button size="small" type="primary">点击上传PDF文件</el-button>
+      	<div slot="tip" class="el-upload__tip">只能上传.pdf格式文件，文件大小不要超过1GB</div>
+      </el-upload>
+    	<el-upload :multiple="true" :file-list="fileList" :limit="20" ref="pdfFile" accept=".pdf" class="upload-demo" :action="action + '?id=8'" :on-remove="handleRemovePdf" :on-change="obtainImgSrc" :on-exceed="limitNum">
+    		<!-- <el-button size="small" type="primary">点击上传PDF文件</el-button>
+    		<div slot="tip" class="el-upload__tip">只能上传.pdf格式文件，文件大小不要超过1GB</div> -->
     	</el-upload>
-    	<el-alert title="提示" description="📣最多上传1个PDF文件，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
+    	<el-alert title="提示" description="📣最多上传20个PDF文件，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
     </div>
   </div>
 </template>
@@ -23,6 +27,7 @@
     data() {
       return {
         pdf: [],
+        fileALL: [],
         action: this.$store.state.common.publicInfo.srcUrl + '/u/upfile',
         // action: '/a' + '/u/upfile',
         uploadFiles: [],
@@ -32,11 +37,11 @@
       }
     },
     watch: {
-      pdf: function(newQuestion, oldQuestion) {
+      fileALL: function(newQuestion, oldQuestion) {
         // 关闭前 给父组件传递值
-        this.$emit('pdfData', this.pdf)
-        if(this.pdf.length === 0){
-          this.$refs.pdfFile.clearFiles()
+        this.$emit('pdfData', this.fileALL)
+        if(this.fileALL.length === 0){
+          this.$refs.newpdfFile.clearFiles()
           this.uploadFiles.splice(0, this.uploadFiles.length)
           this.fileList.splice(0, this.fileList.length)
         }
@@ -50,7 +55,7 @@
           			url: obj.file.url
           		}
           })
-          _this.pdf = this.articlePdf
+          _this.fileALL = this.articlePdf
           _this.fileList = num
         }
       },
@@ -64,8 +69,8 @@
       ]),
       // 上传文件数超出限制提示
       limitNum (file, fileList) {
-      	if (fileList.length > 1) {
-      		this.$alert('最多上传1个PDF文件，你已超出限制！', '警告', {
+      	if (this.fileALL.length > 20) {
+      		this.$alert('最多上传20个PDF文件，你已超出限制！', '警告', {
       			confirmButtonText: '确定'
       		})
       	}
@@ -83,6 +88,12 @@
       					file: {size: file.size, name: file.name, url: file.response.data.file, type: file.raw.type, File: file.raw, title: file.name},
       				}
       			)
+            this.$set(
+            	this.fileALL,
+            	this.fileALL.length, {
+            		file: {size: file.size, name: file.name, url: file.response.data.file, type: file.raw.type, File: file.raw, title: file.name},
+            	}
+            )
       			// 防止刷新等其他情况的统一上传文件存放地
             this.$emit('uploadFile', [file.response.data.file])
       		}
@@ -96,19 +107,28 @@
         if (file.response !== undefined) fileUrl = file.response.data.file
       	this.pdf.find((obj, index) => {
       		if (obj !== undefined) {
-      			if (obj.file.url === fileUrl) {
+      			if (obj.file.url.indexOf(fileUrl) !== -1) {
       				// 删除文章Pdf的
       				_this.pdf.splice(index,1)
-      				// 统一删除变量里添加删除的文件路径
-              _this.$emit('deleteFileType', [obj.file.url])
       			}
       		}
       	})
 
         this.fileList.find((obj, index) => {
         	if (obj !== undefined) {
-        		if (obj.url === fileUrl) {
+        		if (obj.url.indexOf(fileUrl) !== -1) {
         			_this.fileList.splice(index,1)
+        		}
+        	}
+        })
+
+        this.fileALL.find((obj, index) => {
+        	if (obj !== undefined) {
+        		if (obj.file.url.indexOf(fileUrl) !== -1) {
+        			// 删除文章Pdf的
+        			_this.fileALL.splice(index,1)
+        			// 统一删除变量里添加删除的文件路径
+              _this.$emit('deleteFileType', [obj.file.url])
         		}
         	}
         })
@@ -142,4 +162,5 @@
 .el-tag+.el-tag{margin-left:10px}
 .button-new-tag{margin-left:10px;height:32px;line-height:30px;padding-top:0;padding-bottom:0}
 .input-new-tag{width:90px;margin-left:10px;vertical-align:bottom}
+.newfiles /deep/ .el-upload-list{display:none}
 </style>

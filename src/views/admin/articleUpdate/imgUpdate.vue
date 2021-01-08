@@ -1,12 +1,15 @@
 <template>
   <div>
-    <p class="imgName">图片：<br /><span style="display: block;width: 67px;float: right; text-align: center;font-size: 12px;">{{img.length}}/130</span></p>
+    <p class="imgName">图片：<br /><span style="display: block;width: 67px;float: right; text-align: center;font-size: 12px;">{{fileALL.length}}/130</span></p>
     <div class="imgs shangchuan2">
     	<div class="clearfix"></div>
-    	<el-upload class="clearfix" :file-list="fileList" :limit="130" :multiple="true" ref="fliesImg" accept=".jpg,.png,.gif" :action="action + '?id=1'" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemoveImg" :on-change="obtainImgSrc" :on-exceed="limitNum" >
-    		<div class="" style="font-size: 12px;line-height: 20px;padding: 55px 0 0;">上传图片<br />（.jpg/.png/.gif）</div>
+    	<el-upload class="clearfix files" :file-list="fileList" :limit="130" :multiple="true" ref="fliesImg" accept=".jpg,.png,.gif" :action="action + '?id=1'" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-change="obtainImgSrc" :on-exceed="limitNum" >
+    		<!-- <div class="" style="font-size: 12px;line-height: 20px;padding: 55px 0 0;">上传图片<br />（.jpg/.png/.gif）</div> -->
     	</el-upload>
-    	<el-alert title="提示" description="📣修改上传文件仅支持单文件上传,请注意!📣一次最多上传130张图片，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
+      <el-upload class="newfiles" :limit="130" ref="newfliesImg" :multiple="true" accept=".jpg,.png,.gif" :action="action + '?id=1'" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :on-change="obtainImgSrc" :on-exceed="limitNum">
+        <div class="" style="font-size: 12px;line-height: 20px;padding: 55px 0 0;">上传图片<br />（.jpg/.png/.gif）</div>
+      </el-upload>
+    	<el-alert title="提示" description="📣一次最多上传130张图片，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
     	<el-dialog :visible.sync="dialogVisible">
     		<img width="100%" :src="dialogImageUrl" alt="">
     	</el-dialog>
@@ -29,6 +32,7 @@
         dialogVisible: false,
         img: [],
         fileList: [],
+        fileALL:[],
         action: this.$store.state.common.publicInfo.srcUrl + '/u/upfile',
         // action: '/a' + '/u/upfile',
         uploadFiles: [],
@@ -38,11 +42,11 @@
       }
     },
     watch: {
-      img: function(newQuestion, oldQuestion) {
+      fileALL: function(newQuestion, oldQuestion) {
         // 关闭前 给父组件传递值
-        this.$emit('imgData', this.img);
-        if(this.img.length === 0){
-          this.$refs.fliesImg.clearFiles()
+        this.$emit('imgData', this.fileALL);
+        if(this.fileALL.length === 0){
+          this.$refs.newfliesImg.clearFiles()
           this.uploadFiles.splice(0, this.uploadFiles.length)
           this.fileList.splice(0, this.fileList.length)
         }
@@ -56,7 +60,7 @@
           			url: _this.URLS2 + obj.dataImg.url
           		}
           })
-          _this.img = this.articleImg
+          _this.fileALL = this.articleImg
           _this.fileList = num
         }
       },
@@ -70,7 +74,7 @@
       ]),
       // 上传文件数超出限制提示
       limitNum (file, fileList) {
-        if (fileList.length > 130) {
+        if (this.fileALL.length > 130) {
           this.$alert('最大上传130张图片，你已超出限制！', '警告', {
             confirmButtonText: '确定'
           })
@@ -85,9 +89,12 @@
       			// 防止重复文件名上传
       			this.img.length !== 0 ? this.img.find(obj => {obj.dataImg.url === file.response.data.dataImg ? srcBoolean = false : srcBoolean = true}) : srcBoolean = true
       			if(srcBoolean) {
-              console.log(file.name)
       				// 文章的img赋值
       				this.img.push({
+      					dataImg: { size: file.size.toString(), name: file.name, url: file.response.data.dataImg, type: file.raw.type, File: file.raw, title: file.name},
+      					miniImg: file.response.data.miniImg
+      				})
+              this.fileALL.push({
       					dataImg: { size: file.size.toString(), name: file.name, url: file.response.data.dataImg, type: file.raw.type, File: file.raw, title: file.name},
       					miniImg: file.response.data.miniImg
       				})
@@ -98,26 +105,33 @@
       	}
       },
       // 删除上传的文件img
-      handleRemoveImg(file, fileList) {
+      handleRemove(file, fileList) {
       	let fileUrl = '', _this = this
       	// img需要展示 则必须把域名部分删除 http://192.168.0.130:81/
         if (file.url !== undefined) fileUrl = file.url.substring(this.$store.state.common.publicInfo.srcUrl.length)
         if (file.response !== undefined) fileUrl = file.response.data.dataImg
       	this.img.find((obj, index) => {
       		if (obj !== undefined) {
-      			if (obj.dataImg.url === fileUrl) {
+      			if (obj.dataImg.url.indexOf(fileUrl) !== -1) {
       				_this.img.splice(index,1)
-              _this.$emit('deleteFileType', [obj.dataImg.url, obj.miniImg]);
       			}
       		}
       	})
       	this.fileList.find((obj, index) => {
       		if (obj !== undefined) {
-      			if (obj.url === _this.URLS2 + fileUrl) {
+      			if (obj.url.indexOf(fileUrl) !== -1) {
       				_this.fileList.splice(index,1)
       			}
       		}
       	})
+        this.fileALL.find((obj, index) => {
+        	if (obj !== undefined) {
+        		if (obj.dataImg.url.indexOf(fileUrl) !== -1) {
+        			_this.fileALL.splice(index,1)
+              _this.$emit('deleteFileType', [obj.dataImg.url, obj.miniImg]);
+        		}
+        	}
+        })
       },
       // 查看上传的图片
       handlePictureCardPreview(file) {
@@ -167,4 +181,6 @@
 .input-new-tag{width:90px;margin-left:10px;vertical-align:bottom}
 
 .fileType /deep/ .el-checkbox{margin-bottom: 5px;}
+.files /deep/ .el-upload--picture-card{display:none}
+.newfiles /deep/ .el-upload-list{display:none}
 </style>

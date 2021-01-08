@@ -704,10 +704,70 @@ const actions = {
       })
   },
   /**
-   * 条件查询用户浏览记录
+   * 统计-用户浏览
    */
   getUserBrowseWebInfo (store, params) {
     return api.getUserBrowseWebInfo(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 上传文件
+   */
+  upfiles (store, params) {
+    return api.upfiles(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 统计-文件类型
+   */
+  getArticleSubsection (store, params) {
+    return api.getArticleSubsection(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 统计-用户发布
+   */
+  getArticleUserSubsection (store, params) {
+    return api.getArticleUserSubsection(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 统计-用户下载
+   */
+  getArticleUserDownload (store, params) {
+    return api.getArticleUserDownload(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 统计-项目文章占比
+   */
+  getArticleProject (store, params) {
+    return api.getArticleProject(params)
       .then((data) => {
         return Promise.resolve(data)
       })

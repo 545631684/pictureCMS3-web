@@ -23,6 +23,8 @@ import VideoPlayer from 'vue-video-player'
 
 // 统计图标
 import echarts from 'echarts'
+// echarts图表主题色
+import walden from './assets/js/walden'
 
 // echarts图表统计插件
 Vue.prototype.$echarts = echarts
@@ -38,8 +40,8 @@ Viewer.setDefaults({
 Vue.use(Viewer)
 
 // 视频播放组件
-require('video.js/dist/video-js.css') 
-require('vue-video-player/src/custom-theme.css') 
+require('video.js/dist/video-js.css')
+require('vue-video-player/src/custom-theme.css')
 Vue.use(VideoPlayer)
 
 /* eslint-disable no-new */

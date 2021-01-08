@@ -202,7 +202,8 @@
           article2: {},
         	xname: '',
         	did: '',
-        	dname: ''
+        	dname: '',
+          popup:{}
         },
       }
     },
@@ -316,26 +317,29 @@
       ]),
       // 全局通知
       open1() {
-        const h = this.$createElement;
-        this.$notify({
-          title: '提示',
-          message: h('p', { style: 'color: teal;text-align: justify'}, '修改中每个类型的文件上传仅支持单文件逐个上传！'),
-          duration: 10000,
-          offset: 50,
-          showClose:false,
-          type: 'warning'
-        });
+        // const h = this.$createElement;
+        // this.$notify({
+        //   title: '提示',
+        //   message: h('p', { style: 'color: teal;text-align: justify'}, ''),
+        //   duration: 0,
+        //   showClose:false,
+        //   type: 'warning',
+        //   position: 'bottom-right'
+        // });
       },
       // 全局通知
       open2() {
         const h = this.$createElement;
-        this.$notify({
+        this.popup = this.$notify({
           title: '提示',
-          message: h('p', { style: 'color: teal;text-align: justify'}, '在修改中关闭文件类型、删除文件、重新上传文件操作，只要不点击《提交修改》都可以刷新还原，请放心修改！'),
-          duration: 10000,
-          offset: 150,
+          dangerouslyUseHTMLString: true,
+          // message: h('p', { style: 'color: teal;text-align: justify'}, '1.在修改中关闭文件类型、删除文件、重新上传文件操作，<b>只要不点击《提交修改》都可以刷新还原，请放心修改！</b>2.修改中每个类型的文件<b>上传时不会显示进度条</b>，上传时请耐心等待，上传成功的文件会直接显示！'),
+          message: '<p style="color: teal;text-align: justify">1.在修改中关闭文件类型、删除文件、重新上传文件操作，<b style="color:#d81e06;">只要不点击《提交修改》都可以刷新还原，请放心修改！</b>2.修改中每个类型的文件<b style="color:#d81e06;">上传时不会显示进度条</b>，上传时请耐心等待，上传成功的文件会直接显示！</p>',
+          duration: 0,
+          customClass:'popupClass',
           showClose:false,
-          type: 'warning'
+          type: 'warning',
+          position: 'bottom-right'
         });
       },
       // 删除类型文件
@@ -592,7 +596,7 @@
       },
       // 描述富文本框组件返回值
       catchData (data) {
-        this.describe = data
+        this.describe = this.article.describe = data
       },
       // img组件返回值
       imgData (data) {
@@ -699,6 +703,7 @@
     },
     beforeDestroy() {
       let _this = this
+      this.popup.close()
     	// 注销页面时删除上传的文件
     	if(this.uploadFiles.length !== 0 && this.upState == false) {
         this.delfile2({filesrc: this.uploadFiles.toString()})

@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "10804433",
+      "name": "最新",
+      "font_class": "zuixin",
+      "unicode": "e758",
+      "unicode_decimal": 59224
+    },
+    {
+      "icon_id": "11428232",
+      "name": "排行榜-01",
+      "font_class": "paihangbang-",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
       "icon_id": "1013751",
       "name": "Excel文件",
       "font_class": "excelwenjian",

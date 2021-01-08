@@ -87,7 +87,10 @@ export default {
         // 	})
         // } else {
         // }
-        	this.$emit('getKeyword', this.searchKeyword.replace(/\s+/g,""));
+        
+        // 提出空格提交
+        // this.$emit('getKeyword', this.searchKeyword.replace(/\s+/g,""));
+        this.$emit('getKeyword', this.searchKeyword);
       },
       // 关键词点击搜索
       searchLabel (terms) {

@@ -78,7 +78,13 @@
 
             <div class="clearfix" v-if="article.typeFile.indexOf('pdf') !== -1">
               <h3 style="font-weight: 400;color: #1f2f3d;font-size: 22px;margin: 55px 0 20px;">pdf:</h3>
-              <seePdf :src="URLS2 + pdfFile[0].file.url"></seePdf>
+              <div class="fileList">
+                <p v-for="(item, index) in pdfFile" :key="index"  @click="pdfShow(item.file.url)" :title="item.file.name">
+                  <img :src="URLS2 + 'image/pdf.jpg'" alt="" style="display: block;height: 80px;width: 80px;"/>
+                  <span class="omit">{{item.file.name}}</span>
+                </p>
+              </div>
+              <seePdf :src="pdfShowSrc"></seePdf>
             </div>
 
             <div v-if="article.typeFile.indexOf('word') !== -1 || article.typeFile.indexOf('excel') !== -1">
@@ -179,16 +185,7 @@
                 </div>
               </div>
   				  </el-collapse-item>
-  				  <el-collapse-item name="2">
-              <template slot="title">
-                <p style="padding: 0 10px;">相关推荐</p>
-              </template>
-  				    <div class="attribute">
-  				    	<a class="omit" v-if="article.xiangguan !== null" v-for="(item, index) in article.xiangguan" :key="index" @click="seeArticle(item.mId, item.typeFile)" :title="item.title">{{item.title}}</a>
-                <p v-if="article.xiangguan === null" style="text-align: center; color: #CCCCCC;">没有相关内容</p>
-  				    </div>
-  				  </el-collapse-item>
-  				  <el-collapse-item name="3" v-if="judgeLogin === '1'">
+  				  <el-collapse-item name="2" v-if="judgeLogin === '1'">
               <template slot="title">
                 <p style="padding: 0 10px;">文件下载</p>
               </template>
@@ -207,6 +204,15 @@
   						    <input type="text" id="froid" name="froid" />
   						    <input type="text" id="inid" name="inid" :value="article.uId" />
   						</form>
+  				    </div>
+  				  </el-collapse-item>
+  				  <el-collapse-item name="3">
+              <template slot="title">
+                <p style="padding: 0 10px;">相关推荐</p>
+              </template>
+  				    <div class="attribute">
+  				    	<a class="omit" v-if="article.xiangguan !== null" v-for="(item, index) in article.xiangguan" :key="index" @click="seeArticle(item.mId, item.typeFile)" :title="item.title">{{item.title}}</a>
+                <p v-if="article.xiangguan === null" style="text-align: center; color: #CCCCCC;">没有相关内容</p>
   				    </div>
   				  </el-collapse-item>
   				</el-collapse>
@@ -236,6 +242,7 @@ export default {
     data() {
       return {
         fileShowSrc:'',
+        pdfShowSrc:'',
         mid: '',
         uId: '',
         title: '',
@@ -400,6 +407,11 @@ export default {
         // window.open('http://192.168.0.130:8012/' + 'onlinePreview?url='+encodeURIComponent(this.URLS2 + src));
         this.fileShowSrc = 'http://192.168.0.130:8012/' + 'onlinePreview?url='+encodeURIComponent(this.URLS2 + src)
       },
+      // pdf文件预览
+      pdfShow(src){
+        this.pdfShowSrc = this.URLS2 + src
+
+      },
       // 视频切换
       videoSwitch (obj) {
       	this.playerOptions.sources[0] = {type: '', src: this.URLS2 + obj.dataVideo.url}
@@ -437,7 +449,7 @@ export default {
               }
             })
           })
-        } 
+        }
         if (this.article.typeFile.indexOf('video') !== -1) {
           this.checkedCities.find(strings => {
           	_this.videoFile.find(obj => {
@@ -447,7 +459,7 @@ export default {
           		}
           	})
           })
-        } 
+        }
         if(this.article.typeFile.indexOf('ai') !== -1){
           this.checkedCities.find(strings => {
           	_this.aiFile.find(obj => {
@@ -457,7 +469,7 @@ export default {
           		}
           	})
           })
-        } 
+        }
         if(this.article.typeFile.indexOf('压缩包') !== -1){
           this.checkedCities.find(strings => {
           	_this.engineeringFile.find(obj => {
@@ -467,7 +479,7 @@ export default {
           		}
           	})
           })
-        } 
+        }
         if (this.article.typeFile.indexOf('pdf') !== -1) {
           this.checkedCities.find(strings => {
             this.pdfFile.find(obj => {

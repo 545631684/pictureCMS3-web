@@ -437,7 +437,7 @@ export default {
     return axios.post('a/setUserBrowseArticle', Qs.stringify(params))
   },
   /**
-   * 条件查询用户浏览记录
+   * 统计-用户浏览
    */
   getUserBrowseWebInfo (params) {
     return axios.post('a/getUserBrowseWebInfo', Qs.stringify(params))
@@ -447,6 +447,36 @@ export default {
    */
   userState (params) {
     return axios.post('a/userState', Qs.stringify(params))
+  },
+  /**
+   * 上传文件
+   */
+  upfiles (params) {
+    return axios.post('u/upfile', Qs.stringify(params))
+  },
+  /**
+   * 统计-文件类型
+   */
+  getArticleSubsection (params) {
+    return axios.post('a/getArticleSubsection', Qs.stringify(params))
+  },
+  /**
+   * 统计-用户发布
+   */
+  getArticleUserSubsection (params) {
+    return axios.post('a/getArticleUserSubsection', Qs.stringify(params))
+  },
+  /**
+   * 统计-用户下载
+   */
+  getArticleUserDownload (params) {
+    return axios.post('a/getArticleUserDownload', Qs.stringify(params))
+  },
+  /**
+   * 统计-项目文章占比
+   */
+  getArticleProject (params) {
+    return axios.post('a/getArticleProject', Qs.stringify(params))
   },
 
 }

@@ -2,9 +2,13 @@
   <div>
     <p class="imgName">PSD：</p>
     <div class="imgs shangchuan" style="width: 40%;">
+      <el-upload style="margin-top: 0px;" ref="newpsdFile" multiple :limit="20" accept=".psd,.psb,.ai" class="upload-demo newfiles" :action="action + '?id=4'" :on-remove="handleRemovePsd" :on-change="obtainImgSrc" :on-exceed="limitNum">
+      	<el-button size="small" type="primary">点击上传psd文件</el-button>
+      	<div slot="tip" class="el-upload__tip">只能上传psd文件，文件大小不要超过1GB</div>
+      </el-upload>
     	<el-upload  :file-list="fileList" class="upload-demo2" ref="psdFile" :limit="20" :multiple="true" accept=".psd,.psb" :action="action + '?id=4'" :on-remove="handleRemovePsd" :on-change="obtainImgSrc" :on-exceed="limitNum">
-    		<el-button size="small" type="primary">点击上传</el-button>
-    		<div slot="tip" class="el-upload__tip">只能上传psd文件，文件大小不要超过1GB</div>
+    		<!-- <el-button size="small" type="primary">点击上传</el-button>
+    		<div slot="tip" class="el-upload__tip">只能上传psd文件，文件大小不要超过1GB</div> -->
     	</el-upload>
     	<el-alert title="提示" description="📣一次最多上传20个psd文件，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
     </div>
@@ -23,6 +27,7 @@
     data() {
       return {
         psd: [],
+        fileALL: [],
         action: this.$store.state.common.publicInfo.srcUrl + '/u/upfile',
         // action: '/a' + '/u/upfile',
         uploadFiles: [],
@@ -32,11 +37,11 @@
       }
     },
     watch: {
-      psd: function(newQuestion, oldQuestion) {
+      fileALL: function(newQuestion, oldQuestion) {
         // 关闭前 给父组件传递值
-        this.$emit('psdData', this.psd);
-        if(this.psd.length === 0){
-          this.$refs.psdFile.clearFiles()
+        this.$emit('psdData', this.fileALL);
+        if(this.fileALL.length === 0){
+          this.$refs.newpsdFile.clearFiles()
           this.uploadFiles.splice(0, this.uploadFiles.length)
           this.fileList.splice(0, this.fileList.length)
         }
@@ -50,7 +55,7 @@
           			url: _this.URLS2 + obj.Psdview
           		}
           })
-          _this.psd = this.articlePsd
+          _this.fileALL = this.articlePsd
           _this.fileList = num
         }
       },
@@ -64,7 +69,7 @@
       ]),
       // 上传文件数超出限制提示
       limitNum (file, fileList) {
-      	if (fileList.length > 20) {
+      	if (this.fileALL.length > 20) {
       		this.$alert('最大上传20个psd文件，你已超出限制！', '警告', {
       			confirmButtonText: '确定'
       		})
@@ -90,6 +95,20 @@
       					Psdview: file.response.data.Psdview
       				}
       			)
+            this.$set(
+            	this.fileALL,
+            	this.fileALL.length, {
+            		dataPsd: {
+            			size: file.size.toString(),
+            			name: file.name,
+            			url: file.response.data.dataPsd,
+            			type: 'image/x-photoshop',
+            			File: file.raw,
+            			title: file.name
+            		},
+            		Psdview: file.response.data.Psdview
+            	}
+            )
       			// 防止刷新等其他情况的统一上传文件存放地
             this.$emit('uploadFile', [file.response.data.dataPsd, file.response.data.Psdview]);
       		}
@@ -103,17 +122,23 @@
       	if (file.response !== undefined) fileUrl = file.response.data.Psdview
       	this.psd.find((obj, index) => {
       		if (obj !== undefined) {
-      			if (obj.Psdview === fileUrl) {
+      			if (obj.Psdview.indexOf(fileUrl) !== -1) {
       				_this.psd.splice(index,1)
-              _this.$emit('deleteFileType', [obj.dataPsd.url, obj.Psdview])
       			}
-
       		}
       	})
         this.fileList.find((obj, index) => {
         	if (obj !== undefined) {
-        		if (obj.url === _this.URLS2 + fileUrl) {
+        		if (obj.url.indexOf(_this.URLS2 + fileUrl) !== -1) {
         			_this.fileList.splice(index,1)
+        		}
+        	}
+        })
+        this.fileALL.find((obj, index) => {
+        	if (obj !== undefined) {
+        		if (obj.Psdview.indexOf(fileUrl) !== -1) {
+        			_this.fileALL.splice(index,1)
+              _this.$emit('deleteFileType', [obj.dataPsd.url, obj.Psdview])
         		}
         	}
         })
@@ -147,4 +172,5 @@
 .el-tag+.el-tag{margin-left:10px}
 .button-new-tag{margin-left:10px;height:32px;line-height:30px;padding-top:0;padding-bottom:0}
 .input-new-tag{width:90px;margin-left:10px;vertical-align:bottom}
+.newfiles /deep/ .el-upload-list{display:none}
 </style>

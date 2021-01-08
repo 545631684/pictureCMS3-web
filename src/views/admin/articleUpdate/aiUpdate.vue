@@ -2,9 +2,13 @@
   <div>
     <p class="imgName">AI：</p>
     <div class="imgs shangchuan" style="width: 40%;">
+      <el-upload multiple style="" :limit="20" ref="newaiFile" accept=".ai" class="upload-demo newfiles" :action="action + '?id=7'" :on-remove="handleRemoveAi" :on-change="obtainImgSrc" :on-exceed="limitNum">
+      	<el-button size="small" type="primary">点击上传.ai文件</el-button>
+      	<div slot="tip" class="el-upload__tip">只能上传.ai格式文件，文件大小不要超过1GB</div>
+      </el-upload>
     	<el-upload :multiple="true" :file-list="fileList" :limit="20" ref="aiFile" accept=".ai" class="upload-demo" :action="action + '?id=7'" :on-remove="handleRemoveAi" :on-change="obtainImgSrc" :on-exceed="limitNum">
-    		<el-button size="small" type="primary">点击上传.ai文件</el-button>
-    		<div slot="tip" class="el-upload__tip">只能上传.ai格式文件，文件大小不要超过1GB</div>
+    		<!-- <el-button size="small" type="primary">点击上传.ai文件</el-button>
+    		<div slot="tip" class="el-upload__tip">只能上传.ai格式文件，文件大小不要超过1GB</div> -->
     	</el-upload>
     	<el-alert title="提示" description="📣一次最多上传20个.ai文件，超出部分会自动剔除" type="info" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
     </div>
@@ -23,6 +27,7 @@
     data() {
       return {
         ai: [],
+        fileALL: [],
         action: this.$store.state.common.publicInfo.srcUrl + '/u/upfile',
         // action: '/a' + '/u/upfile',
         uploadFiles: [],
@@ -30,11 +35,11 @@
       }
     },
     watch: {
-      ai: function(newQuestion, oldQuestion) {
+      fileALL: function(newQuestion, oldQuestion) {
         // 关闭前 给父组件传递值
-        this.$emit('aiData', this.ai)
-        if(this.ai.length === 0){
-          this.$refs.aiFile.clearFiles()
+        this.$emit('aiData', this.fileALL)
+        if(this.fileALL.length === 0){
+          this.$refs.newaiFile.clearFiles()
           this.uploadFiles.splice(0, this.uploadFiles.length)
           this.fileList.splice(0, this.fileList.length)
         }
@@ -48,7 +53,7 @@
           			url: obj.dataAi.url
           		}
           })
-          _this.ai = this.articleAi
+          _this.fileALL = this.articleAi
           _this.fileList = num
         }
       },
@@ -62,7 +67,7 @@
       ]),
       // 上传文件数超出限制提示
       limitNum (file, fileList) {
-      	if (fileList.length > 20) {
+      	if (this.fileALL.length > 20) {
       		this.$alert('最多上传20个.ai文件，你已超出限制！', '警告', {
       			confirmButtonText: '确定'
       		})
@@ -81,6 +86,12 @@
       					dataAi: {size: file.size, name: file.name, url: file.response.data.dataAi, type: file.raw.type, File: file.raw, title: file.name},
       				}
       			)
+            this.$set(
+      				this.fileALL,
+      				this.fileALL.length, {
+      					dataAi: {size: file.size, name: file.name, url: file.response.data.dataAi, type: file.raw.type, File: file.raw, title: file.name},
+      				}
+      			)
       			// 防止刷新等其他情况的统一上传文件存放地
             this.$emit('uploadFile', [file.response.data.dataAi])
       		}
@@ -93,21 +104,30 @@
       	let _this = this, fileUrl = ''
         if (file.response === undefined) fileUrl = file.url
         if (file.response !== undefined) fileUrl = file.response.data.dataAi
-      	this.video.find((obj, index) => {
+      	this.ai.find((obj, index) => {
       		if (obj !== undefined) {
-      			if (obj.dataAi.url === fileUrl) {
+      			if (obj.dataAi.url.indexOf(fileUrl) !== -1) {
       				// 删除文章video的
-      				_this.video.splice(index,1)
-      				// 统一删除变量里添加删除的文件路径
-              _this.$emit('deleteFileType', [obj.dataAi.url])
+      				_this.ai.splice(index,1)
       			}
       		}
       	})
 
         this.fileList.find((obj, index) => {
         	if (obj !== undefined) {
-        		if (obj.url === fileUrl) {
+        		if (obj.url.indexOf(fileUrl) !== -1) {
         			_this.fileList.splice(index,1)
+        		}
+        	}
+        })
+
+        this.fileALL.find((obj, index) => {
+        	if (obj !== undefined) {
+        		if (obj.dataAi.url.indexOf(fileUrl) !== -1) {
+        			// 删除文章video的
+        			_this.fileALL.splice(index,1)
+        			// 统一删除变量里添加删除的文件路径
+              _this.$emit('deleteFileType', [obj.dataAi.url])
         		}
         	}
         })
@@ -141,4 +161,5 @@
 .el-tag+.el-tag{margin-left:10px}
 .button-new-tag{margin-left:10px;height:32px;line-height:30px;padding-top:0;padding-bottom:0}
 .input-new-tag{width:90px;margin-left:10px;vertical-align:bottom}
+.newfiles /deep/ .el-upload-list{display:none}
 </style>
