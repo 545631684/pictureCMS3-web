@@ -72,15 +72,15 @@ const actions = {
   setPublicInfo (store, params) {
     return api.getPublicInfo(params)
       .then((data) => {
-        let publicInfo = {
-          projects: data.data.projects,
-          types: data.data.types,
-          details: data.data.details,
-          groupLabel: data.data.groupLabel,
-          label: data.data.label,
-          userRecovery: store.state.publicInfo.userRecovery,
-          srcUrl: data.data.srcUrl
-        }
+        console.log(data)
+        let publicInfo = { projects: [], types: [], details: [], groupLabel: [], label: [], privacyType: [], userRecovery: store.state.publicInfo.userRecovery, srcUrl: '' }
+        data.data.projects.length !== 0 ? publicInfo.projects = data.data.projects : publicInfo.projects = store.state.publicInfo.projects
+        data.data.types.length !== 0 ? publicInfo.types = data.data.types : publicInfo.types = store.state.publicInfo.types
+        data.data.details.length !== 0 ? publicInfo.details = data.data.details : publicInfo.details = store.state.publicInfo.details
+        data.data.groupLabel.length !== 0 ? publicInfo.groupLabel = data.data.groupLabel : publicInfo.groupLabel = store.state.publicInfo.groupLabel
+        data.data.label.length !== 0 ? publicInfo.label = data.data.label : publicInfo.label = store.state.publicInfo.label
+        data.data.privacyType.length !== 0 ? publicInfo.privacyType = data.data.privacyType : publicInfo.privacyType = store.state.publicInfo.privacyType
+        data.data.srcUrl.length !== 0 ? publicInfo.srcUrl = data.data.srcUrl : publicInfo.srcUrl = store.state.publicInfo.srcUrl
         cachedPublicInfo.save(publicInfo)
         store.commit(SET_PUBLIC_INFO, publicInfo)
         return Promise.resolve(data)

@@ -59,7 +59,7 @@
               style="margin-left: 20px;"
               placeholder="请选择">
               <el-option
-                v-for="item in users"
+                v-for="item in userALL"
                 :key="item.uId"
                 :label="item.nickname"
                 :value="item.uId">
@@ -137,13 +137,6 @@
   import { mapActions, mapGetters, mapMutations } from 'vuex'
   export default {
     inject: ['reload'],
-    props: {
-      myTypes: Array,
-      myTypesSou: Array,
-      myLoading: Boolean,
-      users: Array,
-      myProject: Array,
-    },
     name: 'backstage',
     components: {},
     data() {
@@ -152,6 +145,7 @@
         state1: '',
         state2: '',
         loadingP: true,
+        userALL: [],
         PList: [],
         PListSou: [],
         tListSou: [],
@@ -187,9 +181,6 @@
             }
           })
         }
-      },
-      myLoading: function(newQuestion, oldQuestion){
-        this.loadingP = this.myLoading
       }
     },
     methods: {
@@ -272,7 +263,7 @@
                 _this.setOperationInfo({_this:_this, type:16})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:types'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -323,7 +314,7 @@
                 _this.setOperationInfo({_this:_this, type:15})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:types'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -379,7 +370,7 @@
                 _this.setOperationInfo({_this:_this, type:17, id:tid})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:types'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -415,11 +406,35 @@
       this.restaurants = this.loadAll();
     },
     created() {
-      this.tList = this.myTypes
-      this.tListSou = this.myTypesSou
-      this.loadingP = this.myLoading
-      this.userALL = this.users
-      this.PList = this.myProject
+      let _this = this
+      this.getPublicInfo({types:'leixin:projects,types,user'})
+        .then(function (response) {
+          if (response.code === 200 && response.data !== '') {
+            if (response.data.projects !== "[]" && response.data.projects.length !== 0) {
+              response.data.projects.find((o, index)=>{
+               _this.$set(_this.PList, _this.PList.length, o)
+              })
+            }
+            if (response.data.types !== "[]" && response.data.types.length !== 0) {
+              response.data.types.find((o, index)=>{
+               _this.$set(_this.tList, _this.tList.length, o)
+              })
+              _this.tList.find((obj, index) => {
+                _this.tListSou.push({
+                  "value": obj.lname,
+                  "address": obj.tid
+                })
+              })
+            }
+            response.data.users.find((o, index)=>{
+             _this.$set(_this.userALL, _this.userALL.length, o)
+            })
+            _this.loadingP = false
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   }
 </script>

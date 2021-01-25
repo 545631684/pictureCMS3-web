@@ -46,7 +46,7 @@
             :visible-arrow="true"
             placement="right"
             width="400"
-            trigger="click">
+            trigger="hover">
             <div class="fileType">
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
               <div style="margin: 15px 0;"></div>

@@ -139,8 +139,7 @@
         mixTypeModify: false,
         mixTypeModifyUp: false,
         mixTypeAdd: false,
-        loadingList: false,
-        loadingP: false,
+        loadingList: true,
         typeName: '',
         dname: '',
         currentPage1: 1,
@@ -175,9 +174,6 @@
     			this.name = ''
     		}
     	},
-      myLoading: function(newQuestion, oldQuestion){
-        this.loadingList = this.myLoading
-      }
     },
     methods: {
       ...mapActions([
@@ -190,13 +186,13 @@
       ]),
       // 搜索操作
       search () {
-      	this.loadingP = true
+      	this.loadingList = true
       	let temp = []
       	let temp2 = []
       	let _this = this
       	this.minType2 = []
       	this.minType3 = []
-      	
+
       	if (this.state2.length !== 0 && this.Tvalue.length !== 0) {
       		this.minType.find((obj, index) => {
       			obj.tbid === _this.Tvalue ? temp.push(obj) : obj = obj
@@ -239,7 +235,7 @@
       		})
       		this.handleCurrentChange(1)
       	}
-      	this.loadingP = false
+      	this.loadingList = false
       },
       // 分页信息变更时打印信息
       handleSizeChange(val) {
@@ -281,7 +277,7 @@
                 _this.setOperationInfo({_this:_this, type:19})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:details'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -341,7 +337,7 @@
                 _this.setOperationInfo({_this:_this, type:18})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:details'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -369,7 +365,7 @@
                 _this.setOperationInfo({_this:_this, type:20, id: did})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:details'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -420,12 +416,39 @@
     mounted() {
     	this.restaurants = this.loadAll();
     },
-    created() { 
-      this.tList = this.myTypes
-      this.tListSou = this.myTypesSou
-      this.minType = this.myDetails
-      this.minTypeSou = this.myDetailsSou
-      this.loadingP = this.myLoading
+    created() {
+      let _this = this
+      this.getPublicInfo({types:'leixin:types,details'})
+        .then(function (response) {
+          if (response.code === 200 && response.data !== '') {
+            if (response.data.types !== "[]" && response.data.types.length !== 0) {
+              response.data.types.find((o, index)=>{
+               _this.$set(_this.tList, _this.tList.length, o)
+              })
+              _this.tList.find((obj, index) => {
+                _this.tListSou.push({
+                  "value": obj.lname,
+                  "address": obj.tid
+                })
+              })
+            }
+            if (response.data.details !== "[]" && response.data.details.length !== 0) {
+              response.data.details.find((o, index)=>{
+               _this.$set(_this.minType, _this.minType.length, o)
+              })
+              _this.minType.find((obj, index) => {
+                _this.minTypeSou.push({
+                  "value": obj.dname,
+                  "address": obj.did
+                })
+              })
+            }
+            _this.loadingList = false
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   }
 </script>

@@ -112,7 +112,7 @@
         	<el-card>
         		<div style="height: 100px;display: flex; justify-content: space-between; align-items: center;">
         	    <svg class="icon2 svg-icon" aria-hidden="true" title='engineering'>
-        	      <use xlink:href="#icon-gongcheng-"></use>
+        	      <use xlink:href="#icon-yasuobao"></use>
         	    </svg>
         			<div class="icoInfo">
         				<p>{{fileType.zip.articleNum}}篇/{{fileType.zip.fileNum}}文件</p>
@@ -222,6 +222,8 @@
             <modularArticleUserDownload v-if="surfaceTitle1[3].effect === 'dark'" :effect="surfaceTitle1[3].effect"></modularArticleUserDownload>
             <!-- 项目文章占比 -->
             <modularArticleProject v-if="surfaceTitle1[4].effect === 'dark'" :effect="surfaceTitle1[4].effect"></modularArticleProject>
+            <!-- 标签文章 -->
+            <modularArticleLabel v-if="surfaceTitle1[5].effect === 'dark'" :effect="surfaceTitle1[5].effect"></modularArticleLabel>
   				</el-card>
   			</el-col>
   		</el-row>
@@ -237,6 +239,7 @@
   import modularArticleUserSubsection from 'VIEWS/admin/statistics/modularArticleUserSubsection'
   import modularArticleUserDownload from 'VIEWS/admin/statistics/modularArticleUserDownload'
   import modularArticleProject from 'VIEWS/admin/statistics/modularArticleProject'
+  import modularArticleLabel from 'VIEWS/admin/statistics/modularArticleLabel'
   export default {
     inject: ['reload'],
     name: 'backstage',
@@ -246,6 +249,7 @@
       modularArticleUserSubsection,
       modularArticleUserDownload,
       modularArticleProject,
+      modularArticleLabel,
     },
     data() {
     	return {
@@ -257,13 +261,55 @@
           { type: '', label: '用户发布', effect:'plain', id:'articleUserSubsection' },
           { type: '', label: '用户下载', effect:'plain', id:'articleUserDownload' },
           { type: '', label: '项目文章占比', effect:'plain', id:'articleProject' },
+          { type: '', label: '标签文章', effect:'plain', id:'articleLabel' },
         ],
         tb4TimeValue: [],
     		activeDownloadAll: 0,
     		userAll: 0,
     		activeAll: 0,
     		runningDays: 0,
-        fileType:{},
+        fileType:{
+            "img": {
+                "fileNum": 0,
+                "articleNum": 0,
+                "ratio": 0
+            },
+            "psd": {
+                "fileNum": 0,
+                "articleNum": 0,
+                "ratio": 0
+            },
+            "video": {
+                "fileNum": 0,
+                "articleNum": 0,
+                "ratio": 0
+            },
+            "ai": {
+                "fileNum": 0,
+                "articleNum": 0,
+                "ratio": 0
+            },
+            "pdf": {
+                "fileNum": 0,
+                "articleNum": 0,
+                "ratio": 0
+            },
+            "zip": {
+                "fileNum": 0,
+                "articleNum": 0,
+                "ratio": 0
+            },
+            "word": {
+                "fileNum": 0,
+                "articleNum": 0,
+                "ratio": 0
+            },
+            "excel": {
+                "fileNum": 0,
+                "articleNum": 0,
+                "ratio": 0
+            }
+        },
     		colors: [
           {color: '#f56c6c', percentage: 20},
           {color: '#e6a23c', percentage: 40},

@@ -112,11 +112,6 @@
   import { mapActions, mapGetters, mapMutations } from 'vuex'
   export default {
     inject: ['reload'],
-    props: {
-      myGroupLabel: Array,
-      myLabel: Array,
-      myLoading: Boolean
-    },
     name: 'backstage',
     components: {},
     data() {
@@ -157,10 +152,7 @@
     				}
     			})
     		}
-    	},
-      myLoading: function(newQuestion, oldQuestion){
-        this.loadingP = this.myLoading
-      }
+    	}
     },
     methods: {
       ...mapActions([
@@ -271,7 +263,7 @@
                 _this.setOperationInfo({_this:_this, type:25})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:label'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -334,7 +326,7 @@
                 _this.setOperationInfo({_this:_this, type:24})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:label'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -360,7 +352,7 @@
                 _this.setOperationInfo({_this:_this, type:26, id:lid})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:label'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -411,9 +403,26 @@
     	this.restaurants = this.loadAll();
     },
     created() {
-      this.groupLabel = this.myGroupLabel
-      this.label = this.myLabel
-      this.loadingP = this.myLoading
+      let _this = this
+      this.getPublicInfo({types:'leixin:groupLabel,label'})
+        .then(function (response) {
+          if (response.code === 200 && response.data !== '') {
+            if (response.data.groupLabel !== "[]" && response.data.groupLabel.length !== 0) {
+              response.data.groupLabel.find((o, index)=>{
+               _this.$set(_this.groupLabel, _this.groupLabel.length, o)
+              })
+            }
+            if (response.data.label !== "[]" && response.data.label.length !== 0) {
+              response.data.label.find((o, index)=>{
+               _this.$set(_this.label, _this.label.length, o)
+              })
+            }
+            _this.loadingP = false
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   }
 </script>

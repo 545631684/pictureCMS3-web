@@ -776,6 +776,54 @@ const actions = {
       })
   },
   /**
+   * 统计-标签文章
+   */
+  getArticleLabel (store, params) {
+    return api.getArticleLabel(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 添加隐私分类
+   */
+  servicePrivacyTypeAdd (store, params) {
+    return api.servicePrivacyTypeAdd(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 编辑隐私分类
+   */
+  privacyTypeSave (store, params) {
+    return api.privacyTypeSave(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 删除隐私分类
+   */
+  privacyTypeDel (store, params) {
+    return api.privacyTypeDel(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
    * 用户操作记录
    */
   setOperationInfo (store, params) {
@@ -790,8 +838,9 @@ const actions = {
       content_classification:{},
       content_group_label:{},
       content_label:{},
-      content_article_type:{}
-    }
+      content_article_type:{},
+      content_privacy_type:{}
+    }, data = {}, data2 = {}
     switch(params.type) {
       case 1:
         params._this.article.find((o, index) => {
@@ -1021,6 +1070,129 @@ const actions = {
         paramsData.content_user = params.uId
         paramsData.content_type = params.shieldInfo
         console.log("添加类型屏蔽人")
+        break;
+      case 34:
+        data = {privacyTypeName:{},userName:{name:'',list:[]},userGroupName:{name:'',list:[]}}
+        params._this.minType.find(o=>{
+          o.did === params._this.minTypesId ? data.privacyTypeName = {name:o.dname,id:o.did} : o = o
+        })
+        if(params._this.authGroups.length !== 0){
+          params._this.authGroups.find(o=>{
+            params._this.authGroupId.find(e=>{
+              if(o.id === e){
+                data.userGroupName.list.push({name:o.title, id:o.id})
+                data.userGroupName.name += o.title + ','
+              }
+            })
+          })
+        }
+        if(params._this.userALL.length !== 0){
+          params._this.userALL.find(o=>{
+            params._this.usersId.find(e=>{
+              if(o.uId === e){
+                data.userName.list.push({name:o.nickname, id:o.uId})
+                data.userName.name += o.nickname + ','
+              }
+            })
+          })
+        }
+        paramsData.content_privacy_type.start = data
+        paramsData.content_privacy_type.end = 'null'
+        console.log("添加隐私分类")
+        break;
+      case 35:
+        data = {privacyTypeName:{},userName:{name:'',list:[]},userGroupName:{name:'',list:[]}}
+        params._this.minType.find(o=>{
+          if(o.did === params._this.row.tid){
+            data.privacyTypeName = {name:o.dname,id:o.did}
+            params._this.privacyTypes.find(p=>{
+              if(p.id === params._this.row.id){
+                if(p.users.length !== 0){
+                  p.users.split(',').find(u=>{
+                    params._this.userALL.find(us=>{
+                      if(u === us.uId){
+                        data.userName.list.push({name:us.nickname, id:us.uId})
+                        data.userName.name += us.nickname + ','
+                      }
+                    })
+                  })
+                }
+                if(p.authGroup.length !== 0){
+                  p.authGroup.split(',').find(g=>{
+                    params._this.authGroups.find(gs=>{
+                      if(g === gs.id){
+                        data.userGroupName.list.push({name:gs.title, id:gs.id})
+                        data.userGroupName.name += gs.title + ','
+                      }
+                    })
+                  })
+                }
+              }
+            })
+          }
+        })
+        paramsData.content_privacy_type.start = data
+
+        data2 = {privacyTypeName:{},userName:{name:'',list:[]},userGroupName:{name:'',list:[]}}
+        params._this.minType.find(o=>{
+          o.did === params._this.row.tid ? data2.privacyTypeName = {name:o.dname,id:o.did} : o = o
+        })
+        if(params._this.authGroups.length !== 0){
+          params._this.authGroups.find(o=>{
+            params._this.row.authGroup.find(e=>{
+              if(o.id === e){
+                data2.userGroupName.list.push({name:o.title, id:o.id})
+                data2.userGroupName.name += o.title + ','
+              }
+            })
+          })
+        }
+        if(params._this.userALL.length !== 0){
+          params._this.userALL.find(o=>{
+            params._this.row.users.find(e=>{
+              if(o.uId === e){
+                data2.userName.list.push({name:o.nickname, id:o.uId})
+                data2.userName.name += o.nickname + ','
+              }
+            })
+          })
+        }
+        paramsData.content_privacy_type.end = data2
+        console.log("修改隐私分类")
+        break;
+      case 36:
+        data = {privacyTypeName:{},userName:{name:'',list:[]},userGroupName:{name:'',list:[]}}
+        params._this.privacyTypes.find(o=>{
+          if(o.id === params.id){
+            params._this.minType.find(t=>{
+              o.tid === t.did ? data.privacyTypeName = {name:t.dname,id:t.did} : t = t
+            })
+            if(o.authGroup.split(',').length !== 0){
+              params._this.authGroups.find(a=>{
+                o.authGroup.split(',').find(as=>{
+                  if(a.id === as){
+                    data.userGroupName.list.push({name:a.title, id:a.id})
+                    data.userGroupName.name += a.title + ','
+                  }
+                })
+              })
+            }
+            if(o.users.split(',').length !== 0){
+              params._this.userALL.find(u=>{
+                o.users.split(',').find(us=>{
+                  if(u.uId === us){
+                    data.userName.list.push({name:u.nickname, id:u.uId})
+                    data.userName.name += u.nickname + ','
+                  }
+                })
+              })
+            }
+          }
+        })
+
+        paramsData.content_privacy_type.start = data
+        paramsData.content_privacy_type.end = 'null'
+        console.log("删除隐私分类")
         break;
     }
     return api.setOperationInfo(paramsData)

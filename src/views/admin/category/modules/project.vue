@@ -45,7 +45,7 @@
             style="margin-left: 20px;"
             placeholder="请选择">
             <el-option
-              v-for="item in users"
+              v-for="item in userALL"
               :key="item.uId"
               :label="item.nickname"
               :value="item.uId">
@@ -123,13 +123,6 @@
   import { cachedPublicInfo } from 'API/cacheService'
   export default {
     inject: ['reload'],
-    props: {
-      myProject: Array,
-      myProjectSou: Array,
-      myLoading: Boolean,
-      users: Array,
-      myTypes: Array
-    },
     name: 'backstage',
     components: {},
     data() {
@@ -171,9 +164,6 @@
     			})
     		}
     	},
-      myLoading: function(newQuestion, oldQuestion){
-        this.loadingP = this.myLoading
-      }
     },
     methods: {
       ...mapActions([
@@ -247,7 +237,7 @@
                 _this.setOperationInfo({_this:_this, type:13})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:projects'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -326,7 +316,7 @@
                 _this.setOperationInfo({_this:_this, type:12})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:projects'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -352,7 +342,7 @@
                 _this.setOperationInfo({_this:_this, type:14, id:pid})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:projects'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -388,11 +378,35 @@
     	this.restaurants = this.loadAll();
     },
     created() {
-      this.PList = this.myProject
-      this.PListSou = this.myProjectSou
-      this.loadingP = this.myLoading
-      this.userALL = this.users
-      this.tList = this.myTypes
+      let _this = this
+      this.getPublicInfo({types:'leixin:projects,types,user'})
+        .then(function (response) {
+          if (response.code === 200 && response.data !== '') {
+            if (response.data.projects !== "[]" && response.data.projects.length !== 0) {
+              response.data.projects.find((o, index)=>{
+               _this.$set(_this.PList, _this.PList.length, o)
+              })
+              _this.PList.find((obj, index) => {
+              	_this.PListSou.push({
+              		"value": obj.xname,
+              		"address": obj.pid
+              	})
+              })
+            }
+            if (response.data.types !== "[]" && response.data.types.length !== 0) {
+              response.data.types.find((o, index)=>{
+               _this.$set(_this.tList, _this.tList.length, o)
+              })
+            }
+            response.data.users.find((o, index)=>{
+             _this.$set(_this.userALL, _this.userALL.length, o)
+            })
+            _this.loadingP = false
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   }
 </script>

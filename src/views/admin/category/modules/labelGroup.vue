@@ -24,12 +24,12 @@
   		<el-table v-loading="loadingP" :data="groupLabel3" class="clearfix" :stripe="true" size="mini" style=" min-height: 474px;">
   			<el-table-column prop="gid" label="id" width="50" align="center"></el-table-column>
   			<el-table-column prop="name" label="标签组名称" min-width="150" align="center"></el-table-column>
-  			<el-table-column prop="lid" label="绑定分类" min-width="300" align="center">
+  			<!-- <el-table-column prop="lid" label="绑定分类" min-width="300" align="center">
   				<template slot-scope="scope">
             <el-tag v-if="scope.row.lid === null" type="info">暂无数据</el-tag>
   					<span v-if="scope.row.lid !== null" v-html="scope.row.lid === null ? '暂无数据' : scope.row.lid"></span>
   				</template>
-  			</el-table-column>
+  			</el-table-column> -->
         <el-table-column prop="labelList" label="标签数" width="100" align="center"></el-table-column>
   			<el-table-column prop="state" label="标签组状态" width="100" align="center">
   				<template slot-scope="scope">
@@ -88,10 +88,6 @@
   import { mapActions, mapGetters, mapMutations } from 'vuex'
   export default {
     inject: ['reload'],
-    props: {
-      myGroupLabel: Array,
-      myLoading: Boolean
-    },
     name: 'backstage',
     components: {},
     data() {
@@ -132,10 +128,7 @@
     				}
     			})
     		}
-    	},
-      myLoading: function(newQuestion, oldQuestion){
-        this.loadingP = this.myLoading
-      }
+    	}
     },
     methods: {
       ...mapActions([
@@ -217,7 +210,7 @@
                 _this.setOperationInfo({_this:_this, type:22})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:groupLabel'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -243,7 +236,7 @@
                 _this.setOperationInfo({_this:_this, type:23, id:gid})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:groupLabel'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -301,7 +294,7 @@
                 _this.setOperationInfo({_this:_this, type:21, name: _this.name.replace(/\s*/g,"")})
                 _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
-                _this.setPublicInfo()
+                _this.setPublicInfo({types:'leixin:groupLabel'})
                 // 更新页面调用app.vue的更新方法
                 _this.reload()
               }
@@ -342,8 +335,26 @@
     	this.restaurants = this.loadAll();
     },
     created() {
-      this.groupLabel = this.myGroupLabel
-      this.loadingP = this.myLoading
+      let _this = this
+      this.getPublicInfo({types:'leixin:groupLabel'})
+        .then(function (response) {
+          if (response.code === 200 && response.data !== '') {
+            if (response.data.groupLabel !== "[]" && response.data.groupLabel.length !== 0) {
+              response.data.groupLabel.find((o, index)=>{
+               _this.$set(_this.groupLabel, _this.groupLabel.length, o)
+              })
+            }
+            // if (response.data.label !== "[]" && response.data.label.length !== 0) {
+            //   response.data.label.find((o, index)=>{
+            //    _this.$set(_this.label.data, _this.label.data.length, o)
+            //   })
+            // }
+            _this.loadingP = false
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   }
 </script>

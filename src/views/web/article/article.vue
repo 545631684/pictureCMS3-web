@@ -591,7 +591,9 @@ export default {
               console.log(typeof _this.article.describe,'：类型')
             }
           })
-          .catch(function (error) {})
+          .catch(function (error) {
+            _this.$alert(error.msg, {confirmButtonText: '确定'})
+          })
         // 面包屑导航参数
         this.nav.id = this.$route.params.id
         this.nav.name = this.$route.params.name

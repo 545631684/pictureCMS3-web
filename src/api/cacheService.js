@@ -69,6 +69,8 @@ const KEYS_DATA = {
     groupLabel: {},
     // 标签
     label: {},
+    // 隐私分类
+    privacyType: {},
     // 权限组
     userRecovery: {},
     // img访问域名

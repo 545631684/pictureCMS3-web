@@ -124,8 +124,9 @@
           <template slot-scope="scope" v-if="scope.row.srcs.length === 0">暂无图片</template>
           <template slot-scope="scope" v-if="scope.row.srcs.length !== 0" style="padding:0;">
           	<div style="width: 100px;height: auto; max-height:100px;overflow: hidden; background: #CCCCCC;">
-          		<viewer :images="viewer(scope.row.srcs[0])">
-              <img :src="URLS2 + scope.row.srcs[0]" alt="" style="display: block;height: auto;width: 100%; height: auto;"/>
+              <i class="iconfont icon-pingbi" v-if="!scope.row.see" style="width: 50px;display: block;margin: 28px auto;font-size: 50px; color: #F56C6C;"></i>
+              <viewer :images="viewer(scope.row.srcs[0])" v-if="scope.row.see">
+                <img :src="URLS2 + scope.row.srcs[0]" alt="2" style="display: block;height: auto;width: 100%; height: auto;"/>
               </viewer>
           	</div>
           </template>
@@ -177,8 +178,10 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="220">
           <template slot-scope="scope">
-            <el-button size="mini" circle icon="el-icon-view" title="查看" v-on:click.stop="seeArticle(scope.row.mId, scope.row.typeFile)"></el-button>
-            <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" v-on:click.stop="modifyArticle(scope.row.mId, scope.row.typeFile, scope.row.uId)" ></el-button>
+            <el-button size="mini" circle icon="el-icon-view" title="查看" v-on:click.stop="seeArticle(scope.row.mId, scope.row.typeFile)" v-if="scope.row.see"></el-button>
+            <el-button size="mini" circle icon="el-icon-view" title="查看" disabled v-on:click.stop="seeArticle(scope.row.mId, scope.row.typeFile)" v-else="!scope.row.see"></el-button>
+            <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" v-on:click.stop="modifyArticle(scope.row.mId, scope.row.typeFile, scope.row.uId)" v-if="scope.row.see"></el-button>
+            <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" disabled v-on:click.stop="modifyArticle(scope.row.mId, scope.row.typeFile, scope.row.uId)" v-else="!scope.row.see"></el-button>
             <el-button size="mini" type="danger" circle icon="el-icon-delete" title="删除" v-on:click.stop="deleteArticle(scope.row.mId, scope.row.uId)" v-if="userInfo.permissions === '2' || scope.row.uId === userInfo.uId"></el-button>
             <el-button size="mini" type="danger" circle icon="el-icon-delete" title="删除" disabled v-on:click.stop="deleteArticle(scope.row.mId, scope.row.uId)" v-if="userInfo.permissions !== '2' && scope.row.uId !== userInfo.uId"></el-button>
           </template>
@@ -528,7 +531,9 @@
       },
       // 获取用户昵称
       getUserName(id){
-        return this.userList.find(o=>{ return o.uId === id }).nickname
+        let user = this.userList.find(o=>{ return o.uId === id }), name = ''
+        user !== undefined ? name = user.nickname : name = ''
+        return name
       },
       // 获取当前分类的上级项目名称
       getProjectName(pid) {
@@ -635,6 +640,8 @@
               	obj.typeFile.indexOf('excel') !== -1 ? srcs[srcs.length] = 'image/excel.jpg' : obj.typeFile = obj.typeFile
               	obj.typeFile.indexOf('压缩包') !== -1 ? srcs[srcs.length] = 'image/ysb.jpg' : obj.typeFile = obj.typeFile
               	obj.srcs = srcs.length !== 0 ? srcs : new Array()
+                // obj.see = true
+                obj.see = _this.authorityDetection(obj.mId)
               	srcs = []
               })
               _this.articleAll = parseInt(response.data.articleNum)
@@ -657,6 +664,40 @@
           .catch(function (error) {
             // _this.$alert(error.msg, {confirmButtonText: '确定'})
           })
+      },
+      // 检查文章权限
+      authorityDetection(mId){
+        let privacyTypes = [], panduan = true, _this = this, article = this.article.find(o=>{return o.mId === mId})
+        if(this.$store.state.common.publicInfo.privacyTypes.length === 0){
+          panduan = true
+        } else {
+          this.$store.state.common.publicInfo.privacyTypes.find(obj=>{
+            if(obj.state === "1"){
+              privacyTypes.push({
+                "id":obj.id,
+                "tid":obj.tid,
+                "users":obj.users !== null ? obj.users.split(',') : [],
+                "authGroup":obj.authGroup !== null ? obj.authGroup.split(',') : [],
+                "state":obj.state,
+                "articlelist":obj.articlelist
+              })
+            }
+          })
+          if(privacyTypes.length === 0 || article.uId === _this.userInfo.uId || _this.userInfo.permissions === "2"){
+            panduan = true
+          } else {
+            privacyTypes.find(p=>{
+              if(p.tid === article.detailsid){
+                if(p.state === "2" || (p.state === "1" && p.users.length === 0 && p.authGroup.length === 0 ) || (p.state === "1" && p.users.includes(_this.userInfo.uId) || p.authGroup.includes(_this.userInfo.permissions))){
+                  panduan = false
+                } else {
+                  panduan = false
+                }
+              }
+            })
+          }
+        }
+        return panduan
       }
     },
     created() {
@@ -693,7 +734,7 @@
         })
 
       // 屏蔽项目设置
-      if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+      if(this.userInfo.shieldInfo !== "{}" && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
         this.userInfo.shieldInfo.find((o,index)=>{
           _this.projects.find((e,indexe)=>{
             e.pid == o.pid && o.state !== '0' ? e.state = '0' : e = e

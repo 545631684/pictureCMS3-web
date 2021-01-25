@@ -99,43 +99,80 @@
   		<dl class="articleList clearfix" v-loading="loading">
   			<dt v-if="article.length === 0 && loading === 'false'">没有查到相关数据</dt>
   			<dd v-for="(item, index) in article" :key="index" v-if="article.length !== 0">
-  				<router-link target="_blank" :title="'🔺《'+item.title + '》 💂发布人：' + getUserInfo(item.uId).nickname + '🕛发布时间：' + formatDate(item.registerTimeImg)" tag="a" :to="'/web/article/' + item.mId + '/Index/0/0/'">
-  				<p>
-  					<img :src="URLS2 + item.srcs[0]" alt="" />
-  				</p>
-  				<p class="omit2" :title="item.title">{{item.title}}</p>
-  				<p>
-  					<img :src="URLS2 + getUserInfo(item.uId,item.mId).headPortraitSrc" alt="" />
-  					<span :title="getUserInfo(item.uId).nickname">{{getUserInfo(item.uId).nickname}}</span>
-  					<samp :title="formatDate(item.registerTimeImg)">
-  						{{formatDate(item.registerTimeImg)}}
-  						<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('img', item.mId)">
-                <use xlink:href="#icon-picture"></use>
-              </svg>
-  						<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('psd', item.mId)">
-                <use xlink:href="#icon-web-psd"></use>
-              </svg>
-  						<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('video', item.mId)">
-                <use xlink:href="#icon-shipinbofangyingpian"></use>
-              </svg>
-              <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('ai', item.mId)">
-                <use xlink:href="#icon-Ai"></use>
-              </svg>
-              <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('pdf', item.mId)">
-                <use xlink:href="#icon-Pdf"></use>
-              </svg>
-              <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('word', item.mId)">
-                <use xlink:href="#icon-word1"></use>
-              </svg>
-              <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('excel', item.mId)">
-                <use xlink:href="#icon-excel1"></use>
-              </svg>
-              <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('engineering', item.mId)">
-                <use xlink:href="#icon-gongcheng-"></use>
-              </svg>
-  					</samp>
-  				</p>
+  				<router-link target="_blank" :title="'🔺《'+item.title + '》 💂发布人：' + getUserInfo(item.uId).nickname + '🕛发布时间：' + formatDate(item.registerTimeImg)" tag="a" :to="'/web/article/' + item.mId + '/Index/0/0/'" v-if="item.see">
+            <p>
+              <img :src="URLS2 + item.srcs[0]" alt=""/>
+            </p>
+            <p class="omit2" :title="item.title">{{item.title}}</p>
+            <p>
+              <img :src="URLS2 + getUserInfo(item.uId,item.mId).headPortraitSrc"  alt="" />
+              <span :title="getUserInfo(item.uId).nickname">{{getUserInfo(item.uId).nickname}}</span>
+              <samp :title="formatDate(item.registerTimeImg)">
+                {{formatDate(item.registerTimeImg)}}
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('img', item.mId)">
+                  <use xlink:href="#icon-picture"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('psd', item.mId)">
+                  <use xlink:href="#icon-web-psd"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('video', item.mId)">
+                  <use xlink:href="#icon-shipinbofangyingpian"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('ai', item.mId)">
+                  <use xlink:href="#icon-Ai"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('pdf', item.mId)">
+                  <use xlink:href="#icon-Pdf"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('word', item.mId)">
+                  <use xlink:href="#icon-word1"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('excel', item.mId)">
+                  <use xlink:href="#icon-excel1"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('engineering', item.mId)">
+                  <use xlink:href="#icon-gongcheng-"></use>
+                </svg>
+              </samp>
+            </p>
   				</router-link>
+          <a target="_blank" :title="'🔺《'+item.title + '》 💂发布人：' + getUserInfo(item.uId).nickname + '🕛发布时间：' + formatDate(item.registerTimeImg)" v-if="!item.see">
+            <p>
+              <i class="iconfont icon-pingbi"  style="width: 200px;height: 215px;display: block;margin: auto;font-size: 200px; color: #F56C6C;"></i>
+            </p>
+            <p class="omit2" :title="item.title">{{item.title}}</p>
+            <p>
+              <img :src="URLS2 + getUserInfo(item.uId,item.mId).headPortraitSrc"  alt="" />
+              <span :title="getUserInfo(item.uId).nickname">{{getUserInfo(item.uId).nickname}}</span>
+              <samp :title="formatDate(item.registerTimeImg)">
+                {{formatDate(item.registerTimeImg)}}
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('img', item.mId)">
+                  <use xlink:href="#icon-picture"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('psd', item.mId)">
+                  <use xlink:href="#icon-web-psd"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('video', item.mId)">
+                  <use xlink:href="#icon-shipinbofangyingpian"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('ai', item.mId)">
+                  <use xlink:href="#icon-Ai"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('pdf', item.mId)">
+                  <use xlink:href="#icon-Pdf"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('word', item.mId)">
+                  <use xlink:href="#icon-word1"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('excel', item.mId)">
+                  <use xlink:href="#icon-excel1"></use>
+                </svg>
+                <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('engineering', item.mId)">
+                  <use xlink:href="#icon-gongcheng-"></use>
+                </svg>
+              </samp>
+            </p>
+          </a>
   			</dd>
   		</dl>
   		<div class="block" style="width: 470px;margin: 0 0 0 20%;">
@@ -252,7 +289,6 @@ export default {
       },
       keyword:function (newQuestion, oldQuestion) {
         let _this = this
-        console.log(4)
         this.adminGetArticleAll({
           keyword: _this.keyword,
           type: this.fileType.name !== '' ? this.fileType.name : null,
@@ -445,8 +481,7 @@ export default {
         let user = this.userList.find((user, index) => {
           return user.uId === id
         })
-        // console.log(user,"用户id:"+id+",文章id:"+mId)
-        return user
+        return user !== undefined ? user : {}
       },
       // 把导航值赋值给isdefaultActive并本地储存
       localStorageSet() {
@@ -525,6 +560,8 @@ export default {
                 obj.typeFile.indexOf('excel') !== -1 ? srcs[srcs.length] = 'image/excel.jpg' : obj.typeFile = obj.typeFile
                 obj.typeFile.indexOf('压缩包') !== -1 ? srcs[srcs.length] = 'image/ysb.jpg' : obj.typeFile = obj.typeFile
               	obj.srcs = srcs.length !== 0 ? srcs : new Array()
+                // obj.see = true
+                obj.see = _this.authorityDetection(obj.mId)
               	srcs = []
               })
               _this.articleAll = parseInt(response.data.articleNum)
@@ -547,6 +584,40 @@ export default {
           .catch(function (error) {
             // _this.$alert(error.msg, {confirmButtonText: '确定'})
           })
+      },
+      // 检查文章权限
+      authorityDetection(mId){
+        let privacyTypes = [], panduan = true, _this = this, article = this.article.find(o=>{return o.mId === mId})
+        if(this.$store.state.common.publicInfo.privacyTypes.length === 0){
+          panduan = true
+        } else {
+          this.$store.state.common.publicInfo.privacyTypes.find(obj=>{
+            if(obj.state === "1"){
+              privacyTypes.push({
+                "id":obj.id,
+                "tid":obj.tid,
+                "users":obj.users !== null ? obj.users.split(',') : [],
+                "authGroup":obj.authGroup !== null ? obj.authGroup.split(',') : [],
+                "state":obj.state,
+                "articlelist":obj.articlelist
+              })
+            }
+          })
+          if(privacyTypes.length === 0 || article.uId === _this.userInfo.uId || _this.userInfo.permissions === "2"){
+            panduan = true
+          } else {
+            privacyTypes.find(p=>{
+              if(p.tid === article.detailsid){
+                if(p.state === "2" || (p.state === "1" && p.users.length === 0 && p.authGroup.length === 0 ) || (p.state === "1" && p.users.includes(_this.userInfo.uId) || p.authGroup.includes(_this.userInfo.permissions))){
+                  panduan = false
+                } else {
+                  panduan = false
+                }
+              }
+            })
+          }
+        }
+        return panduan
       },
       // 判断文章的img、psd、video是否有数据并返回true/false
       returnArticleType (type,mid) {
@@ -652,7 +723,7 @@ export default {
           // _this.$alert(error.msg, {confirmButtonText: '确定'})
         })
       // 屏蔽项目设置
-      if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+      if(this.userInfo.shieldInfo !== null && JSON.stringify(this.userInfo.shieldInfo) == "{}" && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
         this.userInfo.shieldInfo.find((o,index)=>{
           _this.projects.find((e,indexe)=>{
             e.pid == o.pid && o.state !== '0' ? e.state = '0' : e = e

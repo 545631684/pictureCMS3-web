@@ -164,7 +164,7 @@ export default {
    * 获取辅助参数
    */
   getPublicInfo (params) {
-    return axios.get('a/getPublicInfo', Qs.stringify(params))
+    return axios.post('a/getPublicInfo', Qs.stringify(params))
   },
   /**
    * 添加类型
@@ -477,6 +477,30 @@ export default {
    */
   getArticleProject (params) {
     return axios.post('a/getArticleProject', Qs.stringify(params))
+  },
+  /**
+   * 统计-标签文章
+   */
+  getArticleLabel (params) {
+    return axios.post('a/getArticleLabel', Qs.stringify(params))
+  },
+  /**
+   * 添加隐私分类
+   */
+  servicePrivacyTypeAdd (params) {
+    return axios.post('a/servicePrivacyTypeAdd', Qs.stringify(params))
+  },
+  /**
+   * 编辑隐私分类
+   */
+  privacyTypeSave (params) {
+    return axios.post('a/privacyTypeSave', Qs.stringify(params))
+  },
+  /**
+   * 删除隐私分类
+   */
+  privacyTypeDel (params) {
+    return axios.post('a/privacyTypeDel', Qs.stringify(params))
   },
 
 }
