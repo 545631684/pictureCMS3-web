@@ -38,28 +38,19 @@
     <el-footer style="display: flex; justify-content: flex-end;min-height: 50px;height: auto !important; padding-bottom: 15px;">
       <div class="title">
         <samp>上传文件类型设置：</samp>
-        <div>
-          <el-button v-popover:popover1 icon="el-icon-folder-add" type="primary">添加文件类型</el-button>
-          <el-popover
-            ref="popover1"
-            :open-delay="0"
-            :visible-arrow="true"
-            placement="right"
-            width="400"
-            trigger="hover">
-            <div class="fileType">
-              <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-              <div style="margin: 15px 0;"></div>
-              <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-                <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-              </el-checkbox-group>
-              <el-alert
-                title="已添加的上传文件类型如果有文件上传取消后则上传文件也一并删除,请谨慎操作"
-                type="warning"
-                show-icon>
-              </el-alert>
-            </div>
-          </el-popover>
+        <div style="width: 700px; float: left; border: 2px solid #DCDFE6; border-radius: 10px; padding: 10px;padding-bottom: 10px; margin-bottom: 50px;">
+          <div class="fileType">
+            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+            <div style="margin: 15px 0;"></div>
+            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+              <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+            </el-checkbox-group>
+            <el-alert
+              title="已添加的上传文件类型如果有文件上传取消后则上传文件也一并删除,请谨慎操作"
+              type="warning"
+              show-icon>
+            </el-alert>
+          </div>
         </div>
       </div>
     </el-footer>
