@@ -128,7 +128,10 @@
           shortcuts: [{
             text: '本月',
             onClick(picker) {
-              picker.$emit('pick', [new Date(), new Date()]);
+              var now = new Date();
+              var nowMonth = now.getMonth(); //当前月
+              var nowYear = now.getFullYear(); //当前年
+              picker.$emit('pick', [new Date(nowYear, nowMonth, 1), new Date()]);
             }
           }, {
             text: '最近3个月',
@@ -250,6 +253,7 @@
           })
           _this.loading = false
         } else {
+          _this.timeValue === null ? _this.timeValue = ['',''] : console.log()
           this.getArticleLabel({pid:_this.projectValue, uid:_this.userValue, key: _this.keyValue, lid:_this.labelValue, gid:_this.groupLabelValue, beginTime:_this.timeValue[0], endTime:_this.timeValue[1], state: state})
             .then((response) => {
               if (response.code === 200) {

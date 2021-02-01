@@ -318,7 +318,7 @@
               }
             })
             .catch(function (error) {
-              _this.$alert(error.msg, {confirmButtonText: '确定'})
+              // _this.$alert(error.msg, {confirmButtonText: '确定'})
               // 更新页面调用app.vue的更新方法
               _this.reload()
             })
@@ -331,8 +331,8 @@
         } else if(id === '2') {
           // 深拷贝处理
           this.row = JSON.stringify(row), this.row = JSON.parse(this.row)
-          this.row.users = this.row.users === '' ? [] : this.row.users.split(',')
-          this.row.authGroup = this.row.authGroup === '' ? [] : this.row.authGroup.split(',')
+          this.row.users = this.row.users === null ? [] : this.row.users.split(',')
+          this.row.authGroup = this.row.authGroup === null ? [] : this.row.authGroup.split(',')
           this.privacyTypeUp = true, this.title = '设置隐私分类：'
         }
       },
@@ -500,7 +500,7 @@
           }
         })
         .catch(function (error) {
-          console.log(error)
+          // console.log(error)
         })
     }
   }
