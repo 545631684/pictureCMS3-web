@@ -63,6 +63,8 @@
       				Psdview: file.response.data.Psdview
       			})
       			this.uploadFiles.push(file.response.data.dataPsd, file.response.data.Psdview)
+						// 返回父组件文件名称作为标题使用
+						_this.$emit('setTitle', file.name)
       		}
       	}
       },

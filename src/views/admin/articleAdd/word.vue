@@ -61,6 +61,8 @@
       				file: {size: file.size, name: file.name, url: file.response.data.file, type: file.raw.type, File: file.raw, title: file.name},
       			})
       			this.uploadFiles.push(file.response.data.file)
+						// 返回父组件文件名称作为标题使用
+						_this.$emit('setTitle', file.name)
       		}
       	}
       },

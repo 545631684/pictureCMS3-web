@@ -63,6 +63,8 @@
       				Videoview: file.response.data.Videoview
       			})
       			this.uploadFiles.push(file.response.data.dataVideo, file.response.data.Videoview)
+						// 返回父组件文件名称作为标题使用
+						_this.$emit('setTitle', file.name)
       		}
       	}
       },

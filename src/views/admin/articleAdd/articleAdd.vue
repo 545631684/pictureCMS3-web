@@ -55,28 +55,28 @@
       </div>
     </el-footer>
   	<el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;" v-show="checkedCities.indexOf('img') !== -1">
-  		<mkImg @imgData="imgData" @deleteFileType="deleteFileType"></mkImg>
+  		<mkImg @imgData="imgData" @deleteFileType="deleteFileType" @setTitle="setTitle"></mkImg>
   	</el-footer>
     <el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;" v-show="checkedCities.indexOf('psd') !== -1">
-    	<mkPsd @psdData="psdData" @deleteFileType="deleteFileType"></mkPsd>
+    	<mkPsd @psdData="psdData" @deleteFileType="deleteFileType" @setTitle="setTitle"></mkPsd>
     </el-footer>
     <el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;" v-show="checkedCities.indexOf('video') !== -1">
-    	<mkVideo @videoData="videoData" @deleteFileType="deleteFileType"></mkVideo>
+    	<mkVideo @videoData="videoData" @deleteFileType="deleteFileType" @setTitle="setTitle"></mkVideo>
     </el-footer>
     <el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;" v-show="checkedCities.indexOf('pdf') !== -1">
-    	<mkPdf @pdfData="pdfData" @deleteFileType="deleteFileType"></mkPdf>
+    	<mkPdf @pdfData="pdfData" @deleteFileType="deleteFileType" @setTitle="setTitle"></mkPdf>
     </el-footer>
     <el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;" v-show="checkedCities.indexOf('压缩包') !== -1">
-    	<mkEngineering @engineeringData="engineeringData" @deleteFileType="deleteFileType"></mkEngineering>
+    	<mkEngineering @engineeringData="engineeringData" @deleteFileType="deleteFileType" @setTitle="setTitle"></mkEngineering>
     </el-footer>
     <el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;" v-show="checkedCities.indexOf('word') !== -1">
-    	<mkWord @wordData="wordData" @deleteFileType="deleteFileType"></mkWord>
+    	<mkWord @wordData="wordData" @deleteFileType="deleteFileType" @setTitle="setTitle"></mkWord>
     </el-footer>
     <el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;" v-show="checkedCities.indexOf('excel') !== -1">
-    	<mkExcel @excelData="excelData" @deleteFileType="deleteFileType"></mkExcel>
+    	<mkExcel @excelData="excelData" @deleteFileType="deleteFileType" @setTitle="setTitle"></mkExcel>
     </el-footer>
     <el-footer style="min-height: 200px;height: auto !important; padding-bottom: 50px;" v-show="checkedCities.indexOf('ai') !== -1">
-    	<mkAi @aiData="aiData" @deleteFileType="deleteFileType"></mkAi>
+    	<mkAi @aiData="aiData" @deleteFileType="deleteFileType" @setTitle="setTitle"></mkAi>
     </el-footer>
   	<el-row class="buttonImg">
   		<el-button type="primary" v-on:click.stop="submitImg" :loading="loading" :disabled="uploadFilesJudge.expect === uploadFilesJudge.actual ? false : true">提交上传</el-button>
@@ -524,6 +524,10 @@
       catchData (data) {
         this.describe = data
       },
+			// 接收标题返回值
+			setTitle (data){
+				this.title.length === 0 ? this.title = data.split('.')[0] : this.title = this.title
+			},
       // img组件返回值
       imgData (data) {
         let _this = this

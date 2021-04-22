@@ -77,6 +77,8 @@
                 miniImg: file.response.data.miniImg
               })
               this.uploadFiles.push(file.response.data.dataImg, file.response.data.miniImg)
+							// 返回父组件文件名称作为标题使用
+							_this.$emit('setTitle', file.name)
             }
           }
         }
