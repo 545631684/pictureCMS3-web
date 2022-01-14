@@ -173,7 +173,7 @@
   						    					<p class="omit">{{item.title}}</p>
   						    					<p>
   						    						<samp><svg class="icon" aria-hidden="true"><use xlink:href="#icon-shijian"></use></svg>{{formatDate(item.registerTimeImg)}}</samp>
-  						    						<samp><svg v-if="item.sex === '0'" class="icon" aria-hidden="true"><use xlink:href="#icon-icon-test"></use></svg><svg v-if="item.sex === '1'" class="icon" aria-hidden="true"><use xlink:href="#icon-icon-test1"></use></svg>{{item.nickname}}</samp>
+  						    						<samp><svg v-if="item.sex === '0'" class="icon" aria-hidden="true"><use xlink:href="#icon-icon-test"></use></svg><svg v-if="item.sex === 1" class="icon" aria-hidden="true"><use xlink:href="#icon-icon-test1"></use></svg>{{item.nickname}}</samp>
   						    						<samp><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chakan"></use></svg>{{item.click}}</samp>
   						    						<samp>
   						    							<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('img', item.mId)">

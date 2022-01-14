@@ -22,7 +22,7 @@
     data() {
       return {
         video: [],
-        action: this.$store.state.common.publicInfo.srcUrl + '/u/upfile',
+        action: this.$store.state.common.publicInfo.srcUrl + 'u/upfile',
         // action: '/a' + '/u/upfile',
         uploadFiles: [],
         dynamicTags: [],

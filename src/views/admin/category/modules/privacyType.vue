@@ -90,19 +90,19 @@
           </el-table-column>
   				<el-table-column prop="users" label="可查看用户" min-width="100" align="center">
             <template slot-scope="scope">
-              {{scope.row.users === null ? '' : getUserName(scope.row.users)}}
+              {{getUserName(scope.row.users)}}
             </template>
           </el-table-column>
   				<el-table-column prop="authGroup" label="可查看用户组" min-width="100" align="center">
             <template slot-scope="scope">
-              {{scope.row.authGroup === null ? '' : getAuthGroupsName(scope.row.authGroup)}}
+              {{getAuthGroupsName(scope.row.authGroup)}}
             </template>
           </el-table-column>
           <el-table-column prop="articlelist" label="文章" width="100" align="center"></el-table-column>
   				<el-table-column prop="state" label="状态" width="100" align="center">
   					<template slot-scope="scope">
-              <el-tag v-if="scope.row.state === '1'" type="success">已生效</el-tag>
-              <el-tag v-if="scope.row.state === '2'" type="danger">未生效</el-tag>
+              <el-tag v-if="scope.row.state === 1" type="success">已生效</el-tag>
+              <el-tag v-if="scope.row.state === 2" type="danger">未生效</el-tag>
   					</template>
   				</el-table-column>
   				<el-table-column label="操作" align="center" width="200">
@@ -203,7 +203,12 @@
         title: '',
         name: '',
         state:'1',
-        row: {},
+        row: {
+					tid:null,
+					users:[],
+					authGroup:[],
+					state:'1'
+				},
         handleUpdateLoading: false,
         privacyTypeAdd: false,
         privacyTypeUp: false,
@@ -309,8 +314,8 @@
           this.privacyTypeSave({id: this.row.id, tid: this.row.tid, uid: this.row.users.toString(), qroupid: this.row.authGroup.toString(), state: this.row.state})
             .then(function (response) {
               if (response.code === 200) {
+								_this.$message({ message: response.msg, type: 'success' })
                 _this.setOperationInfo({_this:_this, type:35})
-                _this.$message({message: response.msg, type: 'success'})
                 // 更新vuex、本地存储
                 _this.setPublicInfo({types:'leixin:privacyType'})
                 // 更新页面调用app.vue的更新方法
@@ -330,10 +335,10 @@
           this.privacyTypeAdd = true, this.title = '添加隐私分类：'
         } else if(id === '2') {
           // 深拷贝处理
-          this.row = JSON.stringify(row), this.row = JSON.parse(this.row)
-          this.row.users = this.row.users === null ? [] : this.row.users.split(',')
-          this.row.authGroup = this.row.authGroup === null ? [] : this.row.authGroup.split(',')
-          this.privacyTypeUp = true, this.title = '设置隐私分类：'
+          this.row = JSON.parse(JSON.stringify(row))
+					this.row.state = this.row.state.toString()
+          this.privacyTypeUp = true
+					this.title = '设置隐私分类：'
         }
       },
       // 关闭添加/修改
@@ -343,7 +348,7 @@
         } else if(id === '2') {
           this.privacyTypeUp = false
         }
-        this.row = {}, this.authGroupId = [], this.minTypesId = '', this.usersId = []
+        this.row = {tid:null, users:[], authGroup:[], state:'1'}, this.authGroupId = [], this.minTypesId = '', this.usersId = []
       },
       // 添加隐私分类
       addPrivacyType() {
@@ -360,8 +365,8 @@
           this.servicePrivacyTypeAdd({tid: this.minTypesId, uid: this.usersId.toString(), qroupid: this.authGroupId.toString(), state: this.state})
             .then(function (response) {
               if (response.code === 200) {
-                _this.setOperationInfo({_this:_this, type:34})
                 _this.$message({message: response.msg, type: 'success'})
+                _this.setOperationInfo({_this:_this, type:34})
                 // 更新vuex、本地存储
                 _this.setPublicInfo({types:'leixin:privacyType'})
                 // 更新页面调用app.vue的更新方法
@@ -377,7 +382,7 @@
       },
       // 查询分类名称
       getMinTypesName(id){
-        let name = ''
+        let name = '-'
         this.minType.find(o=>{
           o.did === id ? name = o.dname : o = o
         })
@@ -387,14 +392,14 @@
       getUserName(id){
         let name = [], ids = []
         if(id === null){
-          return ''
+          return '-'
         } else {
-          ids = id.split(',')
+          ids = id
         }
         if(ids.length !== 0){
           ids.find(i=>{
             this.userALL.find(o=>{
-              o.uId === i ? name.push(o.nickname) : o = o
+              o.uId === parseInt(i) ? name.push(o.nickname) : o = o
             })
           })
         }
@@ -402,11 +407,11 @@
       },
       // 查询用户组名称
       getAuthGroupsName(id){
-        let name = [], ids = id.split(',')
+        let name = [], ids = id
         if(ids.length !== 0){
           ids.find(i=>{
             this.authGroups.find(o=>{
-              o.id === i ? name.push(o.title) : o = o
+              o.id === parseInt(i) ? name.push(o.title) : o = o
             })
           })
         }
@@ -423,8 +428,8 @@
           _this.privacyTypeDel({id: id})
             .then(function (response) {
               if (response.code === 200) {
-                _this.setOperationInfo({_this:_this, type:36, id:id})
                 _this.$message({message: response.msg, type: 'success'})
+                _this.setOperationInfo({_this:_this, type:36, id:id})
                 // 更新vuex、本地存储
                 _this.setPublicInfo({types:'leixin:privacyType'})
                 // 更新页面调用app.vue的更新方法
@@ -432,7 +437,7 @@
               }
             })
             .catch(function (error) {
-              _this.$alert(error.msg, {confirmButtonText: '确定'})
+              // _this.$alert(error.msg, {confirmButtonText: '确定'})
               // 更新页面调用app.vue的更新方法
               _this.reload()
             })

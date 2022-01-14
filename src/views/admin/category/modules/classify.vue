@@ -44,14 +44,14 @@
         <el-table-column prop="articlelist" label="文章" width="100" align="center"></el-table-column>
   			<el-table-column prop="state" label="分类状态" width="100" align="center">
   				<template slot-scope="scope">
-  					<el-tag v-if="scope.row.state === '1'" type="success">正常使用</el-tag>
-  					<el-tag v-if="scope.row.state === '2'" type="danger">已禁用</el-tag>
+  					<el-tag v-if="scope.row.state === 1" type="success">正常使用</el-tag>
+  					<el-tag v-if="scope.row.state === 2" type="danger">已禁用</el-tag>
   				</template>
   			</el-table-column>
   			<el-table-column prop="state" label="前台显示" width="100" align="center">
   				<template slot-scope="scope">
-  					<svg v-if="scope.row.webShow === '1'" class="icon" aria-hidden="true"><use xlink:href="#icon-dui"></use></svg>
-  					<svg v-if="scope.row.webShow === '0'" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
+  					<svg v-if="scope.row.webShow === 1" class="icon" aria-hidden="true"><use xlink:href="#icon-dui"></use></svg>
+  					<svg v-if="scope.row.webShow === 0" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
   				</template>
   			</el-table-column>
   			<el-table-column label="操作" align="center" width="200">
@@ -90,7 +90,7 @@
   			                <el-button type="primary" @click="handleUpdate()" :loading="handleUpdateLoading">确 定</el-button>
   			              </span>
   					</el-dialog>
-            <el-button size="mini" type="danger" icon="el-icon-delete" circle title="删除" @click="classifyDel(scope.$index, scope.row.did)" :disabled="scope.row.articlelist === '0' ? false : true"></el-button>
+            <el-button size="mini" type="danger" icon="el-icon-delete" circle title="删除" @click="classifyDel(scope.$index, scope.row.did)" :disabled="scope.row.articlelist === 0 ? false : true"></el-button>
   				</template>
   			</el-table-column>
   		</el-table>
@@ -293,21 +293,17 @@
       },
       // 新增/修改类型、名称弹出显示函数，并动态修改部分显示文字
       firing(row, id) {
-      	// 深拷贝处理
-      	this.row = JSON.stringify(row)
-      	this.row = JSON.parse(this.row)
       	if(id === '1') {
       		this.mixTypeAdd = true
       		this.title = '输入添加的分类名称：'
       	} else if(id === '2') {
+					// 深拷贝处理
+					this.row = this.row = JSON.parse(JSON.stringify(row))
+					this.row.state = this.row.state.toString()
+					this.row.webShow = this.row.webShow.toString()
       		this.mixTypeModify = true
       		this.title = '编辑分类名称（' + row.dname + '）'
       		this.typeName = this.getTypesName(this.row.tbid)
-      	} else if(id === '3') {
-      		this.typeName = this.getTypesName(this.row.tbid)
-      		this.name = this.row.dname
-      		this.title = '修改分类名称（' + row.dname + '）的类型：'
-      		this.mixTypeModifyUp = true
       	}
       	// 刷新页面时重置当前分页数
       	this.currentPage1 = 1

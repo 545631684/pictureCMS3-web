@@ -82,14 +82,14 @@
           <el-table-column prop="articlelist" label="文章" width="100" align="center"></el-table-column>
   				<el-table-column prop="state" label="状态" width="100" align="center">
   					<template slot-scope="scope">
-              <el-tag v-if="scope.row.state === '1'" type="success">正常使用</el-tag>
-              <el-tag v-if="scope.row.state === '2'" type="danger">已禁用</el-tag>
+              <el-tag v-if="scope.row.state === 1" type="success">正常使用</el-tag>
+              <el-tag v-if="scope.row.state === 2" type="danger">已禁用</el-tag>
   					</template>
   				</el-table-column>
   				<el-table-column prop="webShow" label="前台显示" width="100" align="center">
   					<template slot-scope="scope">
-  						<svg v-if="scope.row.webShow === '1'" class="icon" aria-hidden="true"><use xlink:href="#icon-dui"></use></svg>
-  						<svg v-if="scope.row.webShow === '0'" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
+  						<svg v-if="scope.row.webShow === 1" class="icon" aria-hidden="true"><use xlink:href="#icon-dui"></use></svg>
+  						<svg v-if="scope.row.webShow === 0" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
   					</template>
   				</el-table-column>
   				<el-table-column label="操作" align="center" width="200">
@@ -121,7 +121,7 @@
   				                <el-button type="primary" @click="handleUpdate(scope.$index, scope.row)" :loading="handleUpdateLoading">确 定</el-button>
   			              	</span>
   						</el-dialog>
-              <el-button size="mini" type="danger" icon="el-icon-delete" circle title="删除" @click="delType(scope.$index, scope.row.tid)" :disabled="scope.row.articlelist === '0' ? false : true"></el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete" circle title="删除" @click="delType(scope.$index, scope.row.tid)" :disabled="scope.row.articlelist === 0 ? false : true"></el-button>
   					</template>
   				</el-table-column>
   			</el-table>
@@ -277,9 +277,9 @@
       },
       // 功能弹出框的标题重构
       firing(row, id) {
-        // 深拷贝处理
-        this.row = JSON.stringify(row), this.row = JSON.parse(this.row)
         if(id === '2') {
+					// 深拷贝处理
+					this.row = this.row = JSON.parse(JSON.stringify(row))
           this.centerDialogVisibleT = true, this.title = '编辑类型名称（' + row.lname + '）'
         } else if(id === '4') {
           this.centerDialogVisibleAdd = true, this.title = '输入添加的类型名称：'
@@ -446,6 +446,6 @@
 .titleType{height:60px;line-height:60px;text-align:left}
 .titleType b{display:block;float:left;width:50%;height:60px;line-height:60px;font-size:20px}
 .demo-input-suffix{margin-bottom:15px}
-.demo-input-suffix .el-input{margin-left:15px; background: url(http://admin.jijingol.com/text/36.jpg) c no-repeat;}
+.demo-input-suffix .el-input{margin-left:15px; }
 .upPwd2{display: flex; justify-content: center; align-items: center;margin: 20px auto 10px;}
 </style>

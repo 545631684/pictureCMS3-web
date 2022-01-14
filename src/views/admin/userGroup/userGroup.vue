@@ -33,8 +33,8 @@
         </el-table-column>
         <el-table-column prop="state" label="状态" width="100" align="center">
           <template slot-scope="slotProps">
-            <el-tag v-if="slotProps.row.state === '1'" type="success">正常使用</el-tag>
-            <el-tag v-if="slotProps.row.state === '2'" type="danger">已禁用</el-tag>
+            <el-tag v-if="slotProps.row.state === 1" type="success">正常使用</el-tag>
+            <el-tag v-if="slotProps.row.state === 2" type="danger">已禁用</el-tag>
           </template>
         </el-table-column>
   			<el-table-column label="操作" align="center" width="200">
@@ -210,7 +210,10 @@
       		// 关闭loading
           this.setLoading(true)
       		// 有二级权限的checkedCities字段内容改字符串‘[]’
-      		this.groupUpdateSingle[0].rules.find(obj => {obj.checkedCities.length === 0 ? obj.checkedCities = '[]' : obj.checkedCities})
+      		this.groupUpdateSingle[0].rules.find(obj => {
+						if(obj.checkedCities === undefined) obj.checkedCities = '[]'
+						if(obj.checkedCities.length === 0) obj.checkedCities = '[]'
+					})
       		// 修改权限组接口
       		this.authGroupedit({id: id, title: this.groupUpdateSingle[0].title, rules: this.groupUpdateSingle[0].rules, disabled: this.groupUpdateSingle[0].disabled ? '2' : '1'})
             .then(function (response) {
@@ -242,8 +245,10 @@
           this.setLoading(true)
       		// 有二级权限的checkedCities字段内容改字符串‘[]’
       		this.groups.find(obj => {
-      			obj.checkedCities.length === 0 ? obj.checkedCities = '[]' : obj.checkedCities
-      			obj.cityOptions.length === 0 ? obj.cityOptions = '[]' : obj.cityOptions
+						if(obj.checkedCities === undefined) obj.checkedCities = '[]'
+						if(obj.checkedCities.length === 0) obj.checkedCities = '[]'
+						if(obj.cityOptions === undefined) obj.cityOptions = '[]'
+						if(obj.cityOptions.length === 0) obj.cityOptions = '[]'
       		})
       		// 添加用户组
           this.authGroupadd({title: this.groupNameAdd, rules: this.groups, disabled: !this.groupForbid ? '1' : '2'})

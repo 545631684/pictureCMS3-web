@@ -8,13 +8,13 @@
           :open-delay="0"
           :visible-arrow="true"
           placement="bottom"
-          width="1000"
+          width="800"
           trigger="hover">
           <div class="tabs_div1">
             <div class="tabs_div1_item">
               <p class="tabs_div1_item_title">在职</p>
               <ul class="tabs_div1_item_ul">
-                <li class="omit" v-for="(item, index) in userList" :key="index" v-if="item.webShow === '1' && item.articleNum !== 0 && item.state == '0'" @click="handleInputConfirm('user',item.nickname)">{{item.nickname}}</li>
+                <li class="omit" v-for="(item, index) in userList" :key="index" v-if="item.webShow === 1 && item.articleNum !== 0 && item.state == 0" @click="handleInputConfirm('user',item.nickname)">{{item.nickname}}</li>
               </ul>
             </div>
           </div>
@@ -31,7 +31,7 @@
             <div class="tabs_div1_item">
               <p class="tabs_div1_item_title">运维中</p>
               <ul class="tabs_div1_item_ul">
-                <li class="omit" v-for="(item, index) in projects" :key="index" v-if="item.state === '1' && item.webShow === '1'" @click="handleInputConfirm('projects',item.xname)">{{item.xname}}</li>
+                <li class="omit" v-for="(item, index) in projects" :key="index" v-if="item.state === 1 && item.webShow === 1" @click="handleInputConfirm('projects',item.xname)">{{item.xname}}</li>
               </ul>
             </div>
           </div>
@@ -47,7 +47,7 @@
           <div class="tabs_div3">
             <div class="tabs_div1_item">
               <ul class="tabs_div1_item_ul">
-                <li class="omit" v-for="(item, index) in types" :key="index" v-if="item.state === '1' && item.webShow === '1'" @click="handleInputConfirm('types',item.lname)">{{item.lname}}</li>
+                <li class="omit" v-for="(item, index) in types" :key="index" v-if="item.state === 1 && item.webShow === 1" @click="handleInputConfirm('types',item.lname)">{{item.lname}}</li>
               </ul>
             </div>
           </div>
@@ -63,7 +63,7 @@
           <div class="tabs_div3">
             <div class="tabs_div1_item">
               <ul class="tabs_div1_item_ul">
-                <li class="omit" v-for="(item, index) in minTypes2" :key="index" v-html="item.dname" :title="item.dname" v-if="item.state === '1' && item.webShow === '1'" @click="handleInputConfirm('minTypes',item.dname)"></li>
+                <li class="omit" v-for="(item, index) in minTypes2" :key="index" v-html="item.dname" :title="item.dname" v-if="item.state === 1 && item.webShow === 1" @click="handleInputConfirm('minTypes',item.dname)"></li>
               </ul>
             </div>
           </div>
@@ -91,6 +91,33 @@
             </div>
           </div>
         </el-popover>
+				<el-button v-popover:popover6 style="border: 2px dashed #DCDFE6; background: none;margin-right: 20px;">时间</el-button>
+				<el-popover
+				  ref="popover6"
+				  :open-delay="0"
+				  :visible-arrow="true"
+				  placement="bottom-end"
+				  width="400"
+				  trigger="hover">
+				  <div class="tabs_div4">
+				    <div class="tabs_div1_item">
+							<el-tabs tab-position="left" style="height: 200px;">
+								<el-tab-pane :label="itemY.name" v-for="(itemY, indexY) in timeData" :key="indexY" v-if="itemY.type == 'yy'">
+									<ul class="tabs_div1_item_ul">
+									  <li class="" v-for="(item, index) in timeData" :key="index" v-html="item.name" :title="item.name" v-if="item.type == 'mm' && item.value == 'all'" @click="handleInputConfirm('time',item.id,itemY.id)"></li>
+									</ul>
+									<ul class="tabs_div1_item_ul">
+									  <li class="" v-for="(item, index) in timeData" :key="index" v-html="item.name" :title="item.name" v-if="item.type == 'mm' && item.value != 'all'" @click="handleInputConfirm('time',item.id,itemY.id)"></li>
+									</ul>
+									<ul class="tabs_div1_item_ul">
+									  <li class="" v-for="(item, index) in timeData" :key="index" v-html="item.name" :title="item.name" v-if="item.type == 'quarter'" @click="handleInputConfirm('time',item.id,itemY.id)"></li>
+									</ul>
+								</el-tab-pane>
+							</el-tabs>
+							
+				    </div>
+				  </div>
+				</el-popover>
       </div>
       <div style="padding-bottom: 30px;">
         <b style="font-size: 18px;">筛选条件:</b>
@@ -105,7 +132,7 @@
             </p>
             <p class="omit2" :title="item.title">{{item.title}}</p>
             <p>
-              <img :src="URLS2 + getUserInfo(item.uId,item.mId).headPortraitSrc"  alt="" />
+              <img :src="URLS2 + getUserInfo(item.uId,item.mId).headPortraitSrc" @error.once="moveErrorImg" alt="" />
               <span :title="getUserInfo(item.uId).nickname">{{getUserInfo(item.uId).nickname}}</span>
               <samp :title="formatDate(item.registerTimeImg)">
                 {{formatDate(item.registerTimeImg)}}
@@ -142,7 +169,7 @@
             </p>
             <p class="omit2" :title="item.title">{{item.title}}</p>
             <p>
-              <img :src="URLS2 + getUserInfo(item.uId,item.mId).headPortraitSrc"  alt="" />
+              <img :src="URLS2 + getUserInfo(item.uId,item.mId).headPortraitSrc" @error.once="moveErrorImg" alt="" />
               <span :title="getUserInfo(item.uId).nickname">{{getUserInfo(item.uId).nickname}}</span>
               <samp :title="formatDate(item.registerTimeImg)">
                 {{formatDate(item.registerTimeImg)}}
@@ -248,6 +275,13 @@ export default {
           name: '',
           index: ''
         },
+				fileTime: {
+				  idY: '',
+				  idM: '',
+				  name: '',
+				  index: ''
+				},
+				timeData:[],
         showtype: true,
         currentPage1: 1,
         dataList: 8,
@@ -272,13 +306,13 @@ export default {
       },
       'xname.name':function (newQuestion, oldQuestion) {
         let _this = this, num = []
-      	if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+      	if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== 2){
           this.userInfo.shieldInfo.find((o,index)=>{
-            if(o.xname == _this.xname.name && o.state == '0'){
+            if(o.xname == _this.xname.name && o.state == 1){
               o.type.find((e,indexe)=>{
-                if(e.state == '1'){
+                if(e.state == 1){
                   _this.types.find((x,indexx)=>{
-                    e.tid == x.tid ? x.state = '0' : x = x
+                    e.tid == x.tid ? x.state = 1 : x = x
                     _this.$set(_this.types,indexx,x)
                   })
                 }
@@ -307,6 +341,12 @@ export default {
         'webUserList',
         'getWebArticleAll',
       ]),
+			 //处理破图
+			moveErrorImg(event) {
+				event.currentTarget.src = this.URLS2 + "/image/sq17.png"
+				event.currentTarget.style.width = "auto";
+				return true;
+			},
       handleSizeChange(val) {
         let _this = this, adminInfo =  this.$store.state.admin.adminInfo
         adminInfo.articlePageNum = val
@@ -346,7 +386,7 @@ export default {
         this.xname.id = this.xname.name = this.xname.index = this.lname.id = this.lname.name = this.lname.index = ''
       },
       // 添加
-      handleInputConfirm(type, inputValue) {
+      handleInputConfirm(type, inputValue, inputValue2 = '') {
         if (inputValue) {
           if(type === 'user'){
             let user = this.userList.find(o=>{ return o.nickname === inputValue })
@@ -373,6 +413,24 @@ export default {
             this.fileType.id = inputValue
             this.fileType.name = inputValue
           }
+					if(type === 'time'){
+						let yy = {}, mm = {}, _this = this
+						this.timeData.forEach(o=>{
+							if(o.id == inputValue){
+								mm = o
+								_this.fileTime.idM = o.id
+								console.log(JSON.stringify(o))
+							}
+							if(o.id == inputValue2){
+								yy = o
+								_this.fileTime.idY = o.id
+								console.log(JSON.stringify(o))
+							}
+						})
+						if(JSON.stringify(yy) != '{}' && JSON.stringify(mm) != '{}'){
+							 mm.value == 'all' ? this.fileTime.name = yy.name : this.fileTime.name = yy.name + mm.name
+						}
+          }
 
           this.dynamicTags.splice(0, this.dynamicTags.length);
           this.user.name !== '' ? this.dynamicTags.push(this.user) : console.log()
@@ -380,6 +438,7 @@ export default {
           this.lname.name !== '' ? this.dynamicTags.push(this.lname) : console.log()
           this.dnames.name !== '' ? this.dynamicTags.push(this.dnames) : console.log()
           this.fileType.name !== '' ? this.dynamicTags.push(this.fileType) : console.log()
+          this.fileTime.name !== '' ? this.dynamicTags.push(this.fileTime) : console.log()
 
           this.setdata()
         }
@@ -429,7 +488,7 @@ export default {
           this.minTypes2 = this.minTypes
         } else if(this.xname.id === '' && this.lname.id !== '' && this.dnames.did === '') {
           this.minTypes.find((obj, index) => {
-            if(_this.lname.id === obj.tbid  && obj.state === '1') {
+            if(_this.lname.id === obj.tbid  && obj.state === 1) {
               _this.minTypes2.push(obj)
             }
           })
@@ -438,13 +497,13 @@ export default {
           this.minTypes2 = this.minTypes
         } else if(this.xname.id !== '' && this.lname.id !== '' && this.dnames.did === '') {
           this.minTypes.find((obj, index) => {
-            if(_this.lname.id === obj.tbid  && obj.state === '1') {
+            if(_this.lname.id === obj.tbid  && obj.state === 1) {
               _this.minTypes2.push(obj)
             }
           })
         } else if(this.xname.id === '' && this.lname.id !== '' && this.dnames.did !== '') {
           this.minTypes.find((obj, index) => {
-            if(_this.lname.id === obj.tbid  && obj.state === '1') {
+            if(_this.lname.id === obj.tbid  && obj.state === 1) {
               _this.minTypes2.push(obj)
             }
           })
@@ -452,7 +511,7 @@ export default {
           this.minTypes2 = this.minTypes
         } else if(this.xname.id !== '' && this.lname.id !== '' && this.dnames.did !== '') {
           this.minTypes.find((obj, index) => {
-            if(_this.lname.id === obj.tbid  && obj.state === '1') {
+            if(_this.lname.id === obj.tbid  && obj.state === 1) {
               _this.minTypes2.push(obj)
             }
           })
@@ -518,7 +577,7 @@ export default {
         this.minTypes2 = []
         // 重置分类内容
         this.minTypes.find((obj, index) => {
-          if(_this.lname.id === obj.tbid  && obj.state === '1') {
+          if(_this.lname.id === obj.tbid  && obj.state === 1) {
             _this.minTypes2.push(obj)
           }
         })
@@ -592,7 +651,7 @@ export default {
           panduan = true
         } else {
           this.$store.state.common.publicInfo.privacyTypes.find(obj=>{
-            if(obj.state === "1"){
+            if(obj.state === 1){
               privacyTypes.push({
                 "id":obj.id,
                 "tid":obj.tid,
@@ -603,13 +662,13 @@ export default {
               })
             }
           })
-          if(privacyTypes.length === 0 || article.uId === _this.userInfo.uId || _this.userInfo.permissions === "2"){
+          if(privacyTypes.length === 0 || article.uId === _this.userInfo.uId || _this.userInfo.permissions === 2){
             panduan = true
           } else {
             privacyTypes.find(p=>{
               if(p.tid === article.detailsid){
-                if(p.state === "2" || (p.state === "1" && p.users.length === 0 && p.authGroup.length === 0 ) || (p.state === "1" && p.users.includes(_this.userInfo.uId) || p.authGroup.includes(_this.userInfo.permissions))){
-                  panduan = false
+                if(p.state === 2 || (p.state === 1 && p.users.length === 0 && p.authGroup.length === 0 ) || (p.state === 1 && p.users.includes(_this.userInfo.uId) || p.authGroup.includes(_this.userInfo.permissions))){
+                  panduan = true
                 } else {
                   panduan = false
                 }
@@ -692,17 +751,21 @@ export default {
     },
     created() {
       let _this = this
-      this.adminGetArticleAll({
-        keyword: _this.keyword,
-        type: this.fileType.name !== '' ? this.fileType.name : null,
-        page: 1,
-        articlePageNum: _this.dataList,
-        pid: _this.xname.id !== '' ? _this.xname.id : null,
-        tid: _this.lname.id !== '' ? _this.lname.id : null,
-        did: _this.dnames.did !== '' ? _this.dnames.did : null,
-        uid: _this.user.id !== '' ? _this.user.id : null,
-        userId: _this.userInfo.uId
-        })
+			// 检索时间生成，自2018年6月开始
+			let timeData = [], thisYear = new Date()
+			for (let i = 2018; i <= parseInt(thisYear.getFullYear()); i++) {
+				this.timeData.push({id:this.timeData.length, name:i + '年', value:i.toString(),type:'yy'})
+			}
+			for (let i = 0; i < 11; i++) {
+				this.timeData.push({id:this.timeData.length, name:(i+1) + '月', value:i.toString(),type:'mm'})
+			}
+			this.timeData.push({id:this.timeData.length, name:'全年', value:'all',type:'mm'})
+			this.timeData.push({id:this.timeData.length, name:'1-3月', value:'1',type:'quarter'})
+			this.timeData.push({id:this.timeData.length, name:'4-6月', value:'2',type:'quarter'})
+			this.timeData.push({id:this.timeData.length, name:'7-9月', value:'3',type:'quarter'})
+			this.timeData.push({id:this.timeData.length, name:'10-12月', value:'4',type:'quarter'})
+			
+			
       this.webUserList()
         .then((response) => {
           if(response.code === 200) {
@@ -717,13 +780,25 @@ export default {
             } else {
               _this.userList = []
             }
+						_this.adminGetArticleAll({
+						  keyword: _this.keyword,
+						  type: _this.fileType.name !== '' ? _this.fileType.name : null,
+						  page: 1,
+						  articlePageNum: _this.dataList,
+						  pid: _this.xname.id !== '' ? _this.xname.id : null,
+						  tid: _this.lname.id !== '' ? _this.lname.id : null,
+						  did: _this.dnames.did !== '' ? _this.dnames.did : null,
+						  uid: _this.user.id !== '' ? _this.user.id : null,
+						  userId: _this.userInfo.uId
+						  })
           }
         })
         .catch(function (error) {
           // _this.$alert(error.msg, {confirmButtonText: '确定'})
         })
+			
       // 屏蔽项目设置
-      if(this.userInfo.shieldInfo !== null && JSON.stringify(this.userInfo.shieldInfo) == "{}" && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+      if(this.userInfo.shieldInfo !== null && JSON.stringify(this.userInfo.shieldInfo) == "{}" && this.projects.length !== 0 && this.userInfo.permissions !== 2){
         this.userInfo.shieldInfo.find((o,index)=>{
           _this.projects.find((e,indexe)=>{
             e.pid == o.pid && o.state !== '0' ? e.state = '0' : e = e
@@ -765,39 +840,47 @@ table{width:100%!important}
 .articleList dd p:nth-child(3) samp{float: left; display: block;width: 32%; text-align: center; color: #999999;line-height: .5;}
 .icon {width: 20px;height: 20px;vertical-align: -0.15em;fill: currentColor;overflow: hidden; padding-top: 10px;}
 .tabs{display: flex; justify-content: flex-end; align-items: center; padding: 0 0 30px;}
-.tabs_div1{padding-top: 20px;}
+.tabs_div1{padding: 20px 0;}
 .tabs_div1 /deep/ .tabs_div1_item{display: flex; justify-content: flex-start; align-items: flex-start;position: relative;}
-.tabs_div1 /deep/ .tabs_div1_item_title{padding: 0px 20px; width: 100px;}
-.tabs_div1 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 0; height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
+.tabs_div1 /deep/ .tabs_div1_item_title{padding: 0px 20px; width: 100px; margin-top: 10px;}
+.tabs_div1 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 10px; height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
 .tabs_div1 /deep/ .tabs_div1_item_ul{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap;flex: 1;}
-.tabs_div1 /deep/ .tabs_div1_item_ul li{width: 10%; text-align: left; height: 40px;    transition: all .2s; cursor: pointer;}
+.tabs_div1 /deep/ .tabs_div1_item_ul li{width: 10%; text-align: left; height: 40px;  line-height: 40px;  transition: all .2s; cursor: pointer;}
 
 .tabs_div1 /deep/ .tabs_div1_item2{display: flex; justify-content: flex-start; align-items: flex-start;position: relative;}
-.tabs_div1 /deep/ .tabs_div1_item_title2{padding: 0px 20px; width: 100px;}
-.tabs_div1 /deep/ .tabs_div1_item_title2::after{position: absolute;left: 0; top: 0; height: 20px;content: " ";display: block;width: 4px; background: #FF4C29;border-radius: 2px;}
+.tabs_div1 /deep/ .tabs_div1_item_title2{padding: 0px 20px; width: 100px;margin-top: 10px;}
+.tabs_div1 /deep/ .tabs_div1_item_title2::after{position: absolute;left: 0; top: 10px; height: 20px;line-height: 20px; content: " ";display: block;width: 4px; background: #FF4C29;border-radius: 2px;}
 .tabs_div1 /deep/ .tabs_div1_item_ul2{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap;flex: 1;}
-.tabs_div1 /deep/ .tabs_div1_item_ul2 li{width: 10%; text-align: left;height: 40px;    transition: all .2s;cursor: pointer;}
+.tabs_div1 /deep/ .tabs_div1_item_ul2 li{width: 10%; text-align: left;height: 40px;  line-height: 40px;  transition: all .2s;cursor: pointer;}
 .tabs_div1 /deep/ .tabs_div1_item_ul2 li:hover, .tabs_div1 /deep/ .tabs_div1_item_ul li:hover {color: #2CAEFF;}
 
-.tabs_div2{padding-top: 20px;}
+.tabs_div2{padding: 20px 0;}
 .tabs_div2 /deep/ .tabs_div1_item{display: flex; justify-content: flex-start; align-items: flex-start;position: relative;}
-.tabs_div2 /deep/ .tabs_div1_item_title{padding: 0px 20px; width: 100px;}
-.tabs_div2 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 0; height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
+.tabs_div2 /deep/ .tabs_div1_item_title{padding: 0px 20px; width: 100px;margin-top: 10px;}
+.tabs_div2 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 10px; height: 20px;line-height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
 .tabs_div2 /deep/ .tabs_div1_item_ul{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; flex: 1;}
-.tabs_div2 /deep/ .tabs_div1_item_ul li{width: 20%; text-align: left; height: 40px;    transition: all .2s;cursor: pointer;}
+.tabs_div2 /deep/ .tabs_div1_item_ul li{width: 20%; text-align: left; height: 40px;  line-height: 40px;  transition: all .2s;cursor: pointer;}
 
 .tabs_div2 /deep/ .tabs_div1_item2{display: flex; justify-content: flex-start; align-items: flex-start;position: relative;}
-.tabs_div2 /deep/ .tabs_div1_item_title2{padding: 0px 20px; width: 100px;}
-.tabs_div2 /deep/ .tabs_div1_item_title2::after{position: absolute;left: 0; top: 0; height: 20px;content: " ";display: block;width: 4px; background: #FF4C29;border-radius: 2px;}
+.tabs_div2 /deep/ .tabs_div1_item_title2{padding: 0px 20px; width: 100px;margin-top: 10px;}
+.tabs_div2 /deep/ .tabs_div1_item_title2::after{position: absolute;left: 0; top: 10px; height: 20px;line-height: 20px;content: " ";display: block;width: 4px; background: #FF4C29;border-radius: 2px;}
 .tabs_div2 /deep/ .tabs_div1_item_ul2{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; flex: 1;}
 .tabs_div2 /deep/ .tabs_div1_item_ul2 li{width: 20%; text-align: left;height: 40px;    transition: all .2s;cursor: pointer;}
 .tabs_div2 /deep/ .tabs_div1_item_ul2 li:hover, .tabs_div2 /deep/ .tabs_div1_item_ul li:hover {color: #2CAEFF;}
 
-.tabs_div3{padding-top: 20px;}
+.tabs_div3{padding: 20px 0;}
 .tabs_div3 /deep/ .tabs_div1_item{position: relative;}
 .tabs_div3 /deep/ .tabs_div1_item_title{padding: 0px 20px; width: 100px;}
-.tabs_div3 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 0; height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
+.tabs_div3 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 0; height: 20px;line-height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
 .tabs_div3 /deep/ .tabs_div1_item_ul{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap;flex: 1;}
-.tabs_div3 /deep/ .tabs_div1_item_ul li{width: 20%; text-align: left; height: 40px;    transition: all .2s;cursor: pointer;}
+.tabs_div3 /deep/ .tabs_div1_item_ul li{width: 20%; text-align: left; height: 40px;  line-height: 40px;  transition: all .2s;cursor: pointer;}
 .tabs_div3 /deep/ .tabs_div1_item_ul li:hover {color: #2CAEFF;}
+
+.tabs_div4{padding: 20px 0;}
+.tabs_div4 /deep/ .tabs_div1_item{position: relative;}
+.tabs_div4 /deep/ .tabs_div1_item_title{padding: 0px 20px; width: 100px;}
+.tabs_div4 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 0; height: 20px;line-height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
+.tabs_div4 /deep/ .tabs_div1_item_ul{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap;flex: 1;}
+.tabs_div4 /deep/ .tabs_div1_item_ul li{width: 20%; text-align: center; height: 40px; line-height: 40px;    transition: all .2s;cursor: pointer;}
+.tabs_div4 /deep/ .tabs_div1_item_ul li:hover {color: #2CAEFF;}
 </style>

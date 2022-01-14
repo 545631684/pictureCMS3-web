@@ -33,14 +33,14 @@
         <el-table-column prop="labelList" label="标签数" width="100" align="center"></el-table-column>
   			<el-table-column prop="state" label="标签组状态" width="100" align="center">
   				<template slot-scope="scope">
-            <el-tag v-if="scope.row.state === '1'" type="success">正常使用</el-tag>
-            <el-tag v-if="scope.row.state === '2'" type="danger">已禁用</el-tag>
+            <el-tag v-if="scope.row.state === 1" type="success">正常使用</el-tag>
+            <el-tag v-if="scope.row.state === 2" type="danger">已禁用</el-tag>
   				</template>
   			</el-table-column>
   			<el-table-column prop="webShow" label="前台显示" width="100" align="center">
   				<template slot-scope="scope">
-  					<svg v-if="scope.row.webShow === '1'" class="icon" aria-hidden="true"><use xlink:href="#icon-dui"></use></svg>
-  					<svg v-if="scope.row.webShow === '0'" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
+  					<svg v-if="scope.row.webShow === 1" class="icon" aria-hidden="true"><use xlink:href="#icon-dui"></use></svg>
+  					<svg v-if="scope.row.webShow === 0" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
   				</template>
   			</el-table-column>
   			<el-table-column label="操作" align="center" width="200">
@@ -72,7 +72,7 @@
   		            <el-button type="primary" @click="handleUpdate()" :loading="handleUpdateLoading">确 定</el-button>
   		          </span>
   					</el-dialog>
-            <el-button size="mini" type="danger" icon="el-icon-delete" circle title="删除" @click="dataDel(scope.$index, scope.row.gid)" :disabled="scope.row.labelList === '0'  ? false : true"></el-button>
+            <el-button size="mini" type="danger" icon="el-icon-delete" circle title="删除" @click="dataDel(scope.$index, scope.row.gid)" :disabled="scope.row.labelList === 0  ? false : true"></el-button>
   				</template>
   			</el-table-column>
   		</el-table>
@@ -253,9 +253,10 @@
       // 各种功能弹出 文字的不同
       firing(row, id) {
       	// 深拷贝处理
-      	this.row = JSON.stringify(row)
-      	this.row = JSON.parse(this.row)
       	if(id === '1') {
+					this.row = JSON.parse(JSON.stringify(row))
+					this.row.state = this.row.state.toString()
+					this.row.webShow = this.row.webShow.toString()
       		this.centerDialogVisibleP = true
       		this.title = '编辑标签组名称（' + row.name + '）为：'
       	} else if(id === '3') {

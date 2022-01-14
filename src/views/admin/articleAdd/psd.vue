@@ -22,7 +22,7 @@
     data() {
       return {
         psd: [],
-        action: this.$store.state.common.publicInfo.srcUrl + '/u/upfile',
+        action: this.$store.state.common.publicInfo.srcUrl + 'u/upfile',
         // action: '/a' + '/u/upfile',
         uploadFiles: [],
         dynamicTags: [],
@@ -55,7 +55,7 @@
       },
       // 获取上传图片的服务器端实际路径地址并保存到数组中
       obtainImgSrc(file, fileList) {
-      	let srcBoolean = false
+      	let srcBoolean = false, _this = this
       	if(file.response !== undefined) {
       		if(file.response.data.type === '4') {
       			this.psd.push({

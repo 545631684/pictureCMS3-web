@@ -8,7 +8,7 @@
           		<img :src="this.$store.state.common.publicInfo.srcUrl + adminInfo.headPortraitSrc" alt=""/>
           	</li>
           	<li>
-          		<span>{{adminInfo.nickname}}<svg v-if="adminInfo.sex === '1'" class="icon2" aria-hidden="true"><use xlink:href="#icon-xingbienan"></use></svg><svg v-if="adminInfo.sex === '0'" class="icon2" aria-hidden="true"><use xlink:href="#icon-xingbienv"></use></svg></span>
+          		<span>{{adminInfo.nickname}}<svg v-if="adminInfo.sex === 1" class="icon2" aria-hidden="true"><use xlink:href="#icon-xingbienan"></use></svg><svg v-if="adminInfo.sex === 0" class="icon2" aria-hidden="true"><use xlink:href="#icon-xingbienv"></use></svg></span>
           	<samp>{{adminInfo.userName}}</samp>
           	</li>
            </ul>
@@ -31,7 +31,7 @@
       <el-col :span="12">
         <el-card class="box-card">
           <div slot="header" style="font-weight: bold;">最新发布</div>
-          <div class="articleList" >
+          <div class="articleList" v-loading="loadingPublish">
             <dl v-if="article.length !== 0">
               <dd v-for="(itme, index) in article" :key="index">
                 <span class="article-title" @click="seeArticle(itme.mId, itme.typeFile)">{{ itme.title }}</span>
@@ -45,7 +45,7 @@
       <el-col :span="12">
         <el-card class="box-card">
           <div slot="header" style="font-weight: bold;">操作日志</div>
-          <div class="articleList" >
+          <div class="articleList" v-loading="loadingOperation">
             <el-timeline :reverse="false" v-if="operationInfo.length !== 0" style="padding-left: 10px;">
               <el-timeline-item
                 v-for="(activity, index) in operationInfo"
@@ -81,6 +81,8 @@
     components: {},
     data() {
       return {
+				loadingPublish:false,
+				loadingOperation:false,
         adminInfo: this.$store.state.admin.adminInfo,
         userList: [],
         article:[],
@@ -132,7 +134,7 @@
       this.userState({uId:this.$store.state.admin.adminInfo.uId})
         .then((response) => {
           if(response.code === 200) {
-            if(response.data.state === '1'){
+            if(response.data.state === 1){
               _this.$alert("账号过期，请重新登录", {confirmButtonText: '确定'})
               _this.exitlogin({uId: _this.$store.state.admin.adminInfo.uId})
                 .then(function (response) {
@@ -188,13 +190,16 @@
                 .then((response) => {
                   if(response.code === 200) {
                     _this.operationInfo = response.data === null ? [] : response.data
-                    console.log(response.data)
+                    // console.log(response.data)
                   }
                 })
                 .catch(function (error) {
                   // _this.$alert(error.msg, {confirmButtonText: '确定'})
                 })
             }
+						
+						_this.loadingPublish = false
+						_this.loadingOperation = false
           }
         })
         .catch(function (error) {

@@ -61,8 +61,8 @@
     },
     watch: {
       'userInfo.sex':function (newQuestion, oldQuestion) {
-        if (this.userInfo.sex === 1 || this.userInfo.sex === '1') this.userInfo.sex = '男'
-        if (this.userInfo.sex === 0 || this.userInfo.sex === '0') this.userInfo.sex = '女'
+        if (this.userInfo.sex === 1 || this.userInfo.sex === 1) this.userInfo.sex = '男'
+        if (this.userInfo.sex === 0 || this.userInfo.sex === 0) this.userInfo.sex = '女'
       }
     },
     methods: {
@@ -116,17 +116,17 @@
         }
         
       },
-      uploadAvatar(url) {
-        this.userInfo.headPortraitSrc = url
-        this.uploadFile.push(url)
+      uploadAvatar(data) {
+        this.userInfo.headPortraitSrc = data.dataImg
+        this.uploadFile.push(data.dataImg)
       },
     },
     created() {
       this.userInfo = this.$store.state.admin.adminInfo
       this.userInfo.registerTime = this.formatDates(this.userInfo.registerTime)
       this.userInfo.endTime = this.formatDates(this.userInfo.endTime)
-      if (this.userInfo.sex === 1 || this.userInfo.sex === '1') this.userInfo.sex = '男'
-      if (this.userInfo.sex === 0 || this.userInfo.sex === '0') this.userInfo.sex = '女'
+      if (this.userInfo.sex === 1 || this.userInfo.sex === 1) this.userInfo.sex = '男'
+      if (this.userInfo.sex === 0 || this.userInfo.sex === 0) this.userInfo.sex = '女'
       this.userInfo2 = JSON.stringify(this.$store.state.admin.adminInfo)
       this.userInfo2 = JSON.parse(this.userInfo2)
       // 刷新页面时删除上传的文件

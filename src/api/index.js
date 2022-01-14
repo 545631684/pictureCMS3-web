@@ -21,7 +21,7 @@ import {
 } from 'STORE/mutation-types'
 
 /* eslint-disable */
-const API_ROOT = 'http://192.168.0.130/'
+const API_ROOT = 'http://192.168.0.130:82/'
 const API_ROOT_DEV = '/a'
 
 /* eslint-enable */
@@ -70,6 +70,12 @@ export default {
   webLogin (params) {
     return axios.post('u/login', Qs.stringify(params))
   },
+	/**
+	 * 获取用户数据
+	 */
+	getUserInfo2 (params) {
+	  return axios.post('a/getUserInfo2', Qs.stringify(params))
+	},
   /**
    * 用户注册
    */

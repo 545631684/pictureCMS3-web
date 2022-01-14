@@ -18,7 +18,7 @@
               </el-checkbox-group>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm')" style="width: 100%;">登录</el-button>
+              <el-button type="primary" @click="submitForm('ruleForm')" style="width: 100%;" :loading="loading">登录</el-button>
             </el-form-item>
           </el-form>
           <!-- <router-link class="mk1_a1" tag="a" :to="{path:'/enrollUser'}">没有账号？<b>注册</b></router-link> -->
@@ -39,6 +39,7 @@
     name: 'login',
     data() {
       return {
+				loading:false,
         ruleForm: {
           email: '',
           pw: '',
@@ -88,16 +89,19 @@
       // 登录提交
       submitForm (formName) { 
         let _this = this
+				this.loading = true
       	if (this.ruleForm.email === 'admin' && this.ruleForm.pw.length !== 0) {
         	this.webLogin({userName: this.ruleForm.email, password: this.ruleForm.pw, 'setPasswordStyle': this.ruleForm.type })
             .then(function (response) {
               if (response.code === 200 && response.data.adminInfo.userName === _this.ruleForm.email) {
-                _this.setOperationInfo({_this:_this, type:27})
+                _this.loading = false
+								_this.setOperationInfo({_this:_this, type:27})
                 _this.$message({message: response.msg, type: 'success'})
                 _this.$router.push('/backstage')
               }
             })
             .catch(function (error) {
+							_this.loading = false
               _this.$alert(error.msg, {confirmButtonText: '确定'})
             })
       	} else {
@@ -106,15 +110,18 @@
       		    this.webLogin({userName: this.ruleForm.email, password: this.ruleForm.pw, 'setPasswordStyle': this.ruleForm.type })
       		      .then(function (response) {
       		        if (response.code === 200 && response.data.adminInfo.userName === _this.ruleForm.email) {
+										_this.loading = false
                     _this.setOperationInfo({_this:_this, type:27})
       		          _this.$message({message: response.msg, type: 'success'})
       		          _this.$router.push('/backstage')
       		        }
       		      })
       		      .catch(function (error) {
+									_this.loading = false
       		        _this.$alert(error, {confirmButtonText: '确定'})
       		      })
       		  } else {
+							_this.loading = false
       		    this.$alert('请输入邮箱和密码', '警告', {confirmButtonText: '确定'})
       		    return false;
       		  }

@@ -19,9 +19,14 @@ const KEYS = {
   adminInfo: 'adminInfo',
   webInfo: 'webInfo',
   publicInfo: 'publicInfo',
+  otherinfo: 'otherinfo',
 }
 const KEYS_DATA = {
   token: '',
+	otherinfo:{
+		// 导航高亮显示位置
+		adminNavigation: '1',
+	},
   adminInfo: {
     uId: '',
     permissions: '',
@@ -37,8 +42,6 @@ const KEYS_DATA = {
     setPasswordStyle: false,
     // 用户密码修改的验证码按钮读秒
     adminTime: 0,
-    // 导航高亮显示位置
-    adminNavigation: '1',
     // 权限
     auth: {},
     // 后台导航缩进
@@ -79,7 +82,7 @@ const KEYS_DATA = {
 }
 
 // 这里改为自己的nameSpace，比如项目名称
-const nameSpace = 'SAIQI'
+const nameSpace = 'SAIQI-SCK'
 
 // 给存储变量添加项目名称前缀
 for (let i in KEYS) {
@@ -100,6 +103,17 @@ class CommonStorage {
     const options = this.exp ? { exp: this.exp } : null
     this.storage.set(this.key, value, options)
   }
+	
+	save2 (key,value) {
+		let boolen = JSON.stringify(this.storage.get(nameSpace + ':' + key.toUpperCase())) == JSON.stringify(value) ? true : false
+		console.log(this.storage.get(nameSpace + ':' + key.toUpperCase()),value,'本地存储')
+		if(!boolen){
+			this.storage.deleteAllExpires()
+			this.storage.delete(nameSpace + ':' + key.toUpperCase())
+			this.storage.set(nameSpace + ':' + key.toUpperCase(), value, 3000)
+		}
+		return boolen
+	}
 
   load () {
     return this.storage.get(this.key)
@@ -146,5 +160,7 @@ export const cachedAdminInfo = new CommonStorage(KEYS.adminInfo, 0)
 export const cachedWebInfo = new CommonStorage(KEYS.webInfo, 0)
 // 公共key
 export const cachedPublicInfo = new CommonStorage(KEYS.publicInfo, 0)
+// 其他key
+export const cachedOtherinfo = new CommonStorage(KEYS.otherinfo, 0)
 // 初始化参数
 export const cachedKeysData = KEYS_DATA

@@ -67,14 +67,14 @@
   			<el-table-column prop="articlelist" label="文章" width="100" align="center"></el-table-column>
   			<el-table-column prop="state" label="状态" width="100" align="center">
   				<template slot-scope="scope">
-            <el-tag v-if="scope.row.state === '1'" type="success">正常使用</el-tag>
-            <el-tag v-if="scope.row.state === '2'" type="danger">已禁用</el-tag>
+            <el-tag v-if="scope.row.state === 1" type="success">正常使用</el-tag>
+            <el-tag v-if="scope.row.state === 2" type="danger">已禁用</el-tag>
   				</template>
   			</el-table-column>
   			<el-table-column prop="webShow" label="前台显示" width="100" align="center">
   				<template slot-scope="scope">
-  					<svg v-if="scope.row.webShow === '1'" class="icon" aria-hidden="true"><use xlink:href="#icon-dui"></use></svg>
-  					<svg v-if="scope.row.webShow === '0'" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
+  					<svg v-if="scope.row.webShow === 1" class="icon" aria-hidden="true"><use xlink:href="#icon-dui"></use></svg>
+  					<svg v-if="scope.row.webShow === 0" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
   				</template>
   			</el-table-column>
   			<el-table-column label="操作" align="center" width="200">
@@ -106,7 +106,7 @@
   				            <el-button type="primary" @click="handleUpdate(scope.$index, scope.row)" :loading="handleUpdateLoading">确 定</el-button>
   			          	</span>
   					</el-dialog>
-            <el-button size="mini" type="danger" icon="el-icon-delete" circle title="删除" @click="projectDel(scope.$index, scope.row.pid)" :disabled="scope.row.articlelist === '0' ? false : true"></el-button>
+            <el-button size="mini" type="danger" icon="el-icon-delete" circle title="删除" @click="projectDel(scope.$index, scope.row.pid)" :disabled="scope.row.articlelist === 0 ? false : true"></el-button>
   				</template>
   			</el-table-column>
   		</el-table>
@@ -252,8 +252,9 @@
       // 功能弹出框的标题重构
       firing(row, id) {
       	// 深拷贝处理
-      	this.row = JSON.stringify(row)
-      	this.row = JSON.parse(this.row)
+      	this.row = this.row = JSON.parse(JSON.stringify(row))
+				this.row.state = this.row.state.toString()
+				this.row.webShow = this.row.webShow.toString()
       	if(id === '1') {
       		this.centerDialogVisibleP = true
       		this.title = '修改项目名称（' + row.xname + '）'

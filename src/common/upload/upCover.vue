@@ -81,7 +81,8 @@ export default {
       token: {token:this.$store.state.admin.token},
       uploadProgress: 0,
       calcHeight: 0,
-      action: this.$store.state.common.publicInfo.srcUrl + 'u/upfile?id=2',
+      // action: this.$store.state.common.publicInfo.srcUrl + 'u/upfile?id=2',
+      action: '/a/' + 'u/upfile?id=2',
     }
   },
   created() {

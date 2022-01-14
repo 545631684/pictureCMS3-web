@@ -64,7 +64,7 @@
       <el-table-column prop="userName" label="用户名" min-width="200" align="center"></el-table-column>
       <el-table-column prop="sex" label="性别" align="center" min-width="200">
       	<template slot-scope="scope">
-          {{scope.row.sex === null ? '暂无' : scope.row.sex === '1' ? '男' : '女'}}
+          {{scope.row.sex === null ? '暂无' : scope.row.sex === 1 ? '男' : '女'}}
         </template>
       </el-table-column>
       <el-table-column prop="articleNum" label="发布文章" align="center" width="100"></el-table-column>
@@ -77,8 +77,8 @@
       </el-table-column>
       <el-table-column prop="webShow" label="前台显示" align="center" width="100">
         <template slot-scope="scope">
-        	<svg v-if="scope.row.webShow === '1'" class="icon" aria-hidden="true"><use xlink:href="#icon-dui"></use></svg>
-  				<svg v-if="scope.row.webShow === '0'" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
+        	<svg v-if="scope.row.webShow === 1" class="icon" aria-hidden="true"><use xlink:href="#icon-dui"></use></svg>
+  				<svg v-if="scope.row.webShow === 0" class="icon" aria-hidden="true"><use xlink:href="#icon-cuo"></use></svg>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="100">
@@ -142,7 +142,7 @@
                     :key="tag.tid"
                     closable
                     @close="removeState(tag.tid)"
-                    v-if="tag.state == '1'"
+                    v-if="tag.state == 1"
                     type=""
                     style="margin-right: 10px;">
                     {{tag.lname}}
@@ -214,7 +214,7 @@
         })
         this.row.shieldInfo == "" ? this.row.shieldInfo = null : this.row.shieldInfo = this.row.shieldInfo
         // this.row.shieldInfo.find((o,index)=>{
-        //   o.pid == name ? o.state = '0': o = o
+        //   o.pid == name ? o.state = 0: o = o
         // })
       },
       removeState(tid){
@@ -222,8 +222,8 @@
         this.row.shieldInfo.find((o,index)=>{
           if(o.pid == _this.editableTabsValue){
             o.type.find((t,indext)=>{
-              t.tid == tid ? t.state = '0' : t = t,
-              t.state == '0' ? num++ : t = t
+              t.tid == tid ? t.state = 0 : t = t,
+              t.state == 0 ? num++ : t = t
             })
             o.type.length == num ? _this.row.shieldInfo.splice(index,1) : o = o
           }
@@ -242,6 +242,9 @@
       	this.row = JSON.parse(this.row)
         this.row.password = ""
         this.row.shieldInfo !== null ? this.editableTabsValue = this.row.shieldInfo[0].pid : this.editableTabsValue = this.editableTabsValue
+				this.row.sex =  this.row.sex.toString()
+				this.row.state =  this.row.state.toString()
+				this.row.webShow =  this.row.webShow.toString()
       	// 权限id转名称，清空密码,账号状态修改
       	this.usergroups.find((o, index) => {
       		if (o.id === _this.row.permissions) {

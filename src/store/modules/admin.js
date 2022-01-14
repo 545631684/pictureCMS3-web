@@ -2,20 +2,26 @@ import api from 'API/index'
 
 import {
   SET_ADMIN_INFO,
+  SET_OTHER_INFO,
   SET_TOKEN_INFO
 } from '../mutation-types'
 
 import {
   saveAccessToken,
   getAccessToken,
+  cachedOtherinfo,
   cachedAdminInfo,
+  cachedWebInfo,
+  cachedPublicInfo,
   removeAccessToken,
   cachedKeysData
 } from 'API/cacheService'
 
+
 const state = {
   token: getAccessToken() || {},
-  adminInfo: cachedAdminInfo.load() || cachedKeysData.adminInfo
+  adminInfo: cachedAdminInfo.load() || cachedKeysData.adminInfo,
+  otherinfo: cachedOtherinfo.load() || cachedKeysData.otherinfo
 }
 
 const getters = {
@@ -24,6 +30,9 @@ const getters = {
   },
   adminInfo (state) {
     return state.adminInfo
+  },
+  otherinfo (state) {
+    return state.otherinfo
   }
 }
 
@@ -33,6 +42,9 @@ const mutations = {
   },
   [SET_ADMIN_INFO] (state, data) {
     state.adminInfo = data
+  },
+  [SET_OTHER_INFO] (state, data) {
+    state.otherinfo = data
   }
 }
 
@@ -49,6 +61,27 @@ const actions = {
         return Promise.reject(error)
       })
   },
+	/**
+	 * 获取用户数据
+	 */
+	getUserInfo2 (store, params) {
+	  return api.getUserInfo2(params)
+	    .then((data) => {
+				console.log(data)
+				cachedAdminInfo.save2('ADMININFO',data.data.adminInfo)
+				cachedPublicInfo.save2('PUBLICINFO',data.data.publicInfo)
+				cachedWebInfo.save2('WEBINFO',cachedKeysData.webInfo)
+				saveAccessToken(data.data.token.access_token, parseInt(data.data.token.token_expires_in))
+				store.commit(SET_WEB_INFO, cachedKeysData.webInfo)
+				store.commit(SET_ADMIN_INFO, data.data.adminInfo)
+				store.commit(SET_PUBLIC_INFO, data.data.publicInfo)
+				store.commit(SET_TOKEN_INFO, data.data.token)
+	      return Promise.resolve(data)
+	    })
+	    .catch((error) => {
+	      return Promise.reject(error)
+	    })
+	},
   /**
    * 用户列表(权限管理用户列表页)
    */
@@ -1062,12 +1095,12 @@ const actions = {
         console.log("发布文章")
         break;
       case 32:
-        paramsData.content_user = params.uId
+        paramsData.content_user.uId = params.uId
         paramsData.content_project = params.shieldInfo
         console.log("添加项目屏蔽人")
         break;
       case 33:
-        paramsData.content_user = params.uId
+        paramsData.content_user.uId = params.uId
         paramsData.content_type = params.shieldInfo
         console.log("添加类型屏蔽人")
         break;

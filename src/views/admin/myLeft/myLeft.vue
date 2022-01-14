@@ -38,7 +38,7 @@
 <script>
   import {
     SET_WEB_INFO,
-    SET_ADMIN_INFO,
+    SET_OTHER_INFO,
     SET_TOKEN_INFO,
     SET_PUBLIC_INFO
   } from 'STORE/mutation-types'
@@ -46,6 +46,7 @@
   import {
     saveAccessToken,
     getAccessToken,
+    cachedOtherinfo,
     cachedAdminInfo,
     cachedWebInfo,
     cachedPublicInfo,
@@ -59,7 +60,7 @@
 		data() {
 			return {
 				isCollapse: this.$store.state.admin.adminInfo.isCollapse,
-				isdefaultActive: this.$store.state.admin.adminInfo.adminNavigation,
+				isdefaultActive: this.$store.state.admin.otherinfo.adminNavigation,
 				userGroups: this.$store.state.admin.adminInfo.auth,
         toggleLineData: [],
         lineStyle: {
@@ -149,7 +150,6 @@
 					case "home":
 						this.$router.push("/backstage/home");
 						this.localStorageSet(event.index)
-        debugger
 						break;
           case "uploadFile":
 						this.$router.push("/backstage/articleAdd");
@@ -190,30 +190,30 @@
 				}
 			},
       ...mapMutations([
-        SET_ADMIN_INFO
+        SET_OTHER_INFO
       ]),
 			// 把导航值赋值给isdefaultActive并本地储存
 			localStorageSet(index) {
 				this.isdefaultActive = index.toString()
-        let adminInfo = cachedAdminInfo.load()
-        adminInfo.adminNavigation = index.toString()
-        cachedAdminInfo.save(adminInfo)
-        this.$store.commit(SET_ADMIN_INFO, adminInfo)
+        let otherinfo = cachedOtherinfo.load()
+        otherinfo.adminNavigation = index.toString()
+        cachedOtherinfo.save2('otherinfo',otherinfo)
+        this.$store.commit(SET_OTHER_INFO, otherinfo)
 			},
 			// 本地获取导航值，赋值给isdefaultActive
 			localStorageGet() {
-        let adminInfo = cachedAdminInfo.load()
-				this.isdefaultActive = adminInfo.adminNavigation.toString() || ''
+        let otherinfo = cachedOtherinfo.load()
+				this.isdefaultActive = otherinfo.adminNavigation.toString() || ''
 			},
       // 导航缩放展开/缩进按钮
       toggleCollapse () {
         this.isCollapse = !this.isCollapse
         this.toggleLineData = this.isCollapse ? this.lineStyle.arrowRightLineData : this.lineStyle.arrowLeftLineData
         // 更新本地和vuex
-        let adminInfo = this.$store.state.admin.adminInfo
-        adminInfo.isCollapse = this.isCollapse
-        cachedAdminInfo.save(adminInfo)
-        this.$store.commit(SET_ADMIN_INFO, adminInfo)
+        let otherinfo = this.$store.state.otherinfo
+        otherinfo.isCollapse = this.isCollapse
+        cachedOtherinfo.save(otherinfo)
+        this.$store.commit(SET_OTHER_INFO, otherinfo)
       },
       // 导航缩放展开/缩进按钮的样式赋值
       setLineData (e) {
@@ -229,6 +229,8 @@
 			this.localStorageGet()
       // 展开按钮赋值
       this.toggleLineData = this.lineStyle.normalLineData
+			// 权限功能赋值
+			// this.userGroups = this.$store.state.admin.adminInfo.auth
 		}
 	}
 </script>

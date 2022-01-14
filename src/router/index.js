@@ -3,8 +3,18 @@ import VueRouter from 'vue-router'
 
 // 本地存储
 import {
-  getAccessToken
+  saveAccessToken,
+  getAccessToken,
+  cachedAdminInfo,
+  cachedWebInfo,
+  cachedPublicInfo,
+  removeAccessToken,
+  cachedKeysData
 } from 'API/cacheService'
+
+// 调用接口
+import store from '../store/index';
+import api from 'API/index'
 
 // 路由跳转页面顶部进度条
 import NProgress from 'nprogress'
@@ -15,6 +25,7 @@ import web from './modules/web'
 import admin from './modules/admin'
 
 Vue.use(VueRouter)
+const _vue = Vue
 
 // 用es6展开语法赋值
 const routes = [
@@ -59,6 +70,25 @@ router.beforeEach((to, from, next) => {
 
 // 全局后置钩子
 router.afterEach((to, from) => {
+	// 实时获取用户信息进行修改
+	if (to.path.indexOf('/login') === -1){
+		console.log(store.state.admin)
+		api.getUserInfo2({uId:store.state.admin.adminInfo.uId})
+			.then((data) => {
+				if(!cachedAdminInfo.save2('ADMININFO',data.data.adminInfo) || !cachedPublicInfo.save2('PUBLICINFO',data.data.publicInfo)){
+					this.a.app.$alert('检测到有数据更新，请刷新页面获取最新数据', '提示', {
+						confirmButtonText: '确定',
+						callback: action => {
+							// 刷新页面
+							location.reload()
+						}
+					})
+				}
+			})
+			.catch((error) => {
+			})
+	}
+	
   // console.log(to,'后置钩子')
   // 页面跳转置顶进度条结束
   NProgress.done()

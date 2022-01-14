@@ -14,13 +14,13 @@
             <div class="tabs_div1_item">
               <p class="tabs_div1_item_title">在职</p>
               <ul class="tabs_div1_item_ul">
-                <li class="omit" v-for="(item, index) in userList" :key="index" v-if="item.articleNum !== 0 && item.state === '0'" @click="handleInputConfirm('user',item.nickname)">{{item.nickname}}</li>
+                <li class="omit" v-for="(item, index) in userList" :key="index" v-if="item.articleNum !== 0 && item.state === 0" @click="handleInputConfirm('user',item.nickname)">{{item.nickname}}</li>
               </ul>
             </div>
             <div class="tabs_div1_item2">
               <p class="tabs_div1_item_title2">离职</p>
               <ul class="tabs_div1_item_ul2">
-                <li class="omit" v-for="(item, index) in userList" :key="index" v-if="item.articleNum !== 0 && item.state === '1'" @click="handleInputConfirm('user',item.nickname)">{{item.nickname}}</li>
+                <li class="omit" v-for="(item, index) in userList" :key="index" v-if="item.articleNum !== 0 && item.state === 1" @click="handleInputConfirm('user',item.nickname)">{{item.nickname}}</li>
               </ul>
             </div>
           </div>
@@ -37,13 +37,13 @@
             <div class="tabs_div1_item">
               <p class="tabs_div1_item_title">运维中</p>
               <ul class="tabs_div1_item_ul">
-                <li class="omit" v-for="(item, index) in projects" :key="index" v-if="item.state === '1' && item.webShow === '1'" @click="handleInputConfirm('projects',item.xname)">{{item.xname}}</li>
+                <li class="omit" v-for="(item, index) in projects" :key="index" v-if="item.state === 1 && item.webShow === 1" @click="handleInputConfirm('projects',item.xname)">{{item.xname}}</li>
               </ul>
             </div>
             <div class="tabs_div1_item2">
               <p class="tabs_div1_item_title2">已结束</p>
               <ul class="tabs_div1_item_ul2">
-                <li class="omit" v-for="(item, index) in projects" :key="index" v-if="item.state === '1' && item.webShow === '0'" @click="handleInputConfirm('projects',item.xname)">{{item.xname}}</li>
+                <li class="omit" v-for="(item, index) in projects" :key="index" v-if="item.state === 1 && item.webShow === 0" @click="handleInputConfirm('projects',item.xname)">{{item.xname}}</li>
               </ul>
             </div>
           </div>
@@ -59,7 +59,7 @@
           <div class="tabs_div3">
             <div class="tabs_div1_item">
               <ul class="tabs_div1_item_ul">
-                <li class="omit" v-for="(item, index) in types" :key="index" v-if="item.state === '1'" @click="handleInputConfirm('types',item.lname)">{{item.lname}}</li>
+                <li class="omit" v-for="(item, index) in types" :key="index" v-if="item.state === 1" @click="handleInputConfirm('types',item.lname)">{{item.lname}}</li>
               </ul>
             </div>
           </div>
@@ -182,8 +182,8 @@
             <el-button size="mini" circle icon="el-icon-view" title="查看" disabled v-on:click.stop="seeArticle(scope.row.mId, scope.row.typeFile)" v-else="!scope.row.see"></el-button>
             <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" v-on:click.stop="modifyArticle(scope.row.mId, scope.row.typeFile, scope.row.uId)" v-if="scope.row.see"></el-button>
             <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" disabled v-on:click.stop="modifyArticle(scope.row.mId, scope.row.typeFile, scope.row.uId)" v-else="!scope.row.see"></el-button>
-            <el-button size="mini" type="danger" circle icon="el-icon-delete" title="删除" v-on:click.stop="deleteArticle(scope.row.mId, scope.row.uId)" v-if="userInfo.permissions === '2' || scope.row.uId === userInfo.uId"></el-button>
-            <el-button size="mini" type="danger" circle icon="el-icon-delete" title="删除" disabled v-on:click.stop="deleteArticle(scope.row.mId, scope.row.uId)" v-if="userInfo.permissions !== '2' && scope.row.uId !== userInfo.uId"></el-button>
+            <el-button size="mini" type="danger" circle icon="el-icon-delete" title="删除" v-on:click.stop="deleteArticle(scope.row.mId, scope.row.uId)" v-if="userInfo.permissions === 2 || scope.row.uId === userInfo.uId"></el-button>
+            <el-button size="mini" type="danger" circle icon="el-icon-delete" title="删除" disabled v-on:click.stop="deleteArticle(scope.row.mId, scope.row.uId)" v-if="userInfo.permissions !== 2 && scope.row.uId !== userInfo.uId"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -275,13 +275,13 @@
       },
       'xname.name':function (newQuestion, oldQuestion) {
         let _this = this, num = []
-      	if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+      	if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== 2){
           this.userInfo.shieldInfo.find((o,index)=>{
-            if(o.xname == _this.xname.name && o.state == '0'){
+            if(o.xname == _this.xname.name && o.state == 0){
               o.type.find((e,indexe)=>{
-                if(e.state == '1'){
+                if(e.state == 1){
                   _this.types.find((x,indexx)=>{
-                    e.tid == x.tid ? x.state = '0' : x = x
+                    e.tid == x.tid ? x.state = 0 : x = x
                     _this.$set(_this.types,indexx,x)
                   })
                 }
@@ -432,7 +432,7 @@
           this.minTypes2 = this.minTypes
         } else if (this.xname.id === '' && this.lname.id !== '' && this.dnames.did === '') {
           this.minTypes.find((obj, index) => {
-            if (_this.lname.id === obj.tbid && obj.state === '1' && obj.webShow === '1') {
+            if (_this.lname.id === obj.tbid && obj.state === 1 && obj.webShow === 1) {
               _this.minTypes2.push(obj)
             }
           })
@@ -441,13 +441,13 @@
           this.minTypes2 = this.minTypes
         } else if (this.xname.id !== '' && this.lname.id !== '' && this.dnames.did === '') {
           this.minTypes.find((obj, index) => {
-            if (_this.lname.id === obj.tbid  && obj.state === '1' && obj.webShow === '1') {
+            if (_this.lname.id === obj.tbid  && obj.state === 1 && obj.webShow === 1) {
               _this.minTypes2.push(obj)
             }
           })
         } else if (this.xname.id === '' && this.lname.id !== '' && this.dnames.did !== '') {
           this.minTypes.find((obj, index) => {
-            if (_this.lname.id === obj.tbid  && obj.state === '1' && obj.webShow === '1') {
+            if (_this.lname.id === obj.tbid  && obj.state === 1 && obj.webShow === 1) {
               _this.minTypes2.push(obj)
             }
           })
@@ -455,7 +455,7 @@
           this.minTypes2 = this.minTypes
         } else if (this.xname.id !== '' && this.lname.id !== '' && this.dnames.did !== '') {
           this.minTypes.find((obj, index) => {
-            if (_this.lname.id === obj.tbid  && obj.state === '1' && obj.webShow === '1') {
+            if (_this.lname.id === obj.tbid  && obj.state === 1 && obj.webShow === 1) {
               _this.minTypes2.push(obj)
             }
           })
@@ -672,7 +672,7 @@
           panduan = true
         } else {
           this.$store.state.common.publicInfo.privacyTypes.find(obj=>{
-            if(obj.state === "1"){
+            if(obj.state === 1){
               privacyTypes.push({
                 "id":obj.id,
                 "tid":obj.tid,
@@ -683,13 +683,13 @@
               })
             }
           })
-          if(privacyTypes.length === 0 || article.uId === _this.userInfo.uId || _this.userInfo.permissions === "2"){
+          if(privacyTypes.length === 0 || article.uId === _this.userInfo.uId || _this.userInfo.permissions === 2){
             panduan = true
           } else {
             privacyTypes.find(p=>{
               if(p.tid === article.detailsid){
-                if(p.state === "2" || (p.state === "1" && p.users.length === 0 && p.authGroup.length === 0 ) || (p.state === "1" && p.users.includes(_this.userInfo.uId) || p.authGroup.includes(_this.userInfo.permissions))){
-                  panduan = false
+                if(p.state === 2 || (p.state === 1 && p.users.length === 0 && p.authGroup.length === 0 ) || (p.state === 1 && p.users.includes(_this.userInfo.uId) || p.authGroup.includes(_this.userInfo.permissions))){
+                  panduan = true
                 } else {
                   panduan = false
                 }
@@ -734,10 +734,10 @@
         })
 
       // 屏蔽项目设置
-      if(this.userInfo.shieldInfo !== "{}" && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+      if(this.userInfo.shieldInfo !== "{}" && this.projects.length !== 0 && this.userInfo.permissions !== 2){
         this.userInfo.shieldInfo.find((o,index)=>{
           _this.projects.find((e,indexe)=>{
-            e.pid == o.pid && o.state !== '0' ? e.state = '0' : e = e
+            e.pid == o.pid && o.state !== 0 ? e.state = 0 : e = e
             _this.$set(_this.projects,indexe,e)
           })
         })

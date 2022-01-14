@@ -8,7 +8,7 @@
     				<router-link tag="a" class="" to="#/login">登陆</router-link> <!-- | <router-link tag="a" class="" to="#/enrollUser">注册</router-link> -->
     			</dd>
   				<dd v-if="show">
-  					<el-dropdown @command="urlpage($event)">
+  					<el-dropdown @command="urlpage($event)" style="width: 150px;">
   						<span class="el-dropdown-link omit" style="color: #FFFFFF;">
   		    			<img :src="headPortraitSrc" alt="" /><span>{{name}}</span>
   		      	</span>
@@ -74,7 +74,7 @@ export default {
       }
     },
     created() {
-      if (this.$store.state.admin.adminInfo.state === '0' && this.$store.state.admin.adminInfo.judgeLogin === '1') {
+      if (this.$store.state.admin.adminInfo.state === 0 && this.$store.state.admin.adminInfo.judgeLogin === '1') {
         this.name = this.$store.state.admin.adminInfo.nickname || this.$store.state.admin.adminInfo.name
         this.headPortraitSrc = this.$store.state.common.publicInfo.srcUrl + this.$store.state.admin.adminInfo.headPortraitSrc
         this.show = true

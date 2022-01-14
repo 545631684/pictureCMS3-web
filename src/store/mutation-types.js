@@ -7,6 +7,8 @@ export const SET_WEB_INFO = 'SET_WEB_INFO'
 export const SET_PUBLIC_INFO = 'SET_PUBLIC_INFO'
 // 保存token
 export const SET_TOKEN_INFO = 'SET_TOKEN_INFO'
+// 保存后台页面辅助参数信息
+export const SET_OTHER_INFO = 'SET_OTHER_INFO'
 /********************************* 正在使用的end ***************************************/
 
 // 屏幕大小改变

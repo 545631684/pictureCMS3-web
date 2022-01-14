@@ -28,15 +28,15 @@ export default [
     path: '/web/*',
     name: '404',
     component: index
-  }
+  },
   // {
   //   path: '/enrollUser',
   //   name: 'enrollUser',
   //   component: enrollUser
   // },
-  // {
-  //   path: '/retrieveUser',
-  //   name: 'retrieveUser',
-  //   component: retrieveUser
-  // },
+  {
+    path: '/retrieveUser',
+    name: 'retrieveUser',
+    component: retrieveUser
+  },
 ]

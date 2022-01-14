@@ -12,15 +12,15 @@
   		<div class="title">
   			<samp>分类：</samp>
   			<el-select v-model="projectImg" placeholder="请选择项目" filterable clearable style="width:200px; color: #409eff;">
-  				<el-option v-for="item in projects" :key="item.pid" :label="item.xname" :value="item.xname" v-if="item.state === '1'">
+  				<el-option v-for="item in projects" :key="item.pid" :label="item.xname" :value="item.xname" v-if="item.state === 1">
   				</el-option>
   			</el-select>
   			<el-select v-model="typeImg" placeholder="请选择类型" filterable clearable style="width:200px;margin-left: 50px; color: #409eff;">
-  				<el-option v-for="item in types" :key="item.tid" :label="item.lname" :value="item.lname" v-if="item.state === '1'">
+  				<el-option v-for="item in types" :key="item.tid" :label="item.lname" :value="item.lname" v-if="item.state === 1">
   				</el-option>
   			</el-select>
   			<el-select v-model="minTypeImg" placeholder="请选择分类" filterable clearable style="width:200px;margin-left: 50px; color: #409eff;">
-  				<el-option v-for="item in minTypes2" :key="item.did" :label="item.dname" :value="item.dname" v-if="item.state === '1'">
+  				<el-option v-for="item in minTypes2" :key="item.did" :label="item.dname" :value="item.dname" v-if="item.state === 1">
   				</el-option>
   			</el-select>
   		</div>
@@ -220,17 +220,17 @@
       // 屏蔽设置
       projectImg:function (newQuestion, oldQuestion) {
         let _this = this, num = []
-      	if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+      	if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== 2){
           this.userInfo.shieldInfo.find((o,index)=>{
-            if(o.xname == _this.projectImg && o.state == '0'){
+            if(o.xname == _this.projectImg && o.state == 0){
               o.type.find((e,indexe)=>{
-                if(e.state == '1'){
+                if(e.state == 1){
                   _this.types.find((x,indexx)=>{
                     if(e.tid == x.tid){
-                      x.state = '0'
+                      x.state = 0
                       _this.$set(_this.types,indexx,x)
                       _this.minTypes.find((s,indexs)=>{
-                        s.tbid == x.tid ? s.state = '0' : s = s,
+                        s.tbid == x.tid ? s.state = 0 : s = s,
                         _this.$set(_this.minTypes,indexs,s)
                       })
                     }
@@ -239,10 +239,10 @@
               })
             } else {
               _this.types.find((x,indexx)=>{
-                x.state = '1'
+                x.state = 1
                 _this.$set(_this.types,indexx,x)
                 _this.minTypes.find((s,indexs)=>{
-                  s.tbid == x.tid ? s.state = '1' : s = s,
+                  s.tbid == x.tid ? s.state = 1 : s = s,
                   _this.$set(_this.minTypes,indexs,s)
                 })
               })
@@ -617,10 +617,10 @@
       	}
       });
       // 屏蔽项目设置
-      if(this.userInfo.shieldInfo !== null && this.projects.length !== 0 && this.userInfo.permissions !== "2"){
+      if((typeof this.userInfo.shieldInfo == 'Array' && this.userInfo.shieldInfo.length !== 0) && this.projects.length !== 0 && this.userInfo.permissions !== 2){
         this.userInfo.shieldInfo.find((o,index)=>{
           _this.projects.find((e,indexe)=>{
-            e.pid == o.pid && o.state !== '0' ? e.state = '0' : e = e
+            e.pid == o.pid && o.state !== 0 ? e.state = 0 : e = e
             _this.$set(_this.projects,indexe,e)
           })
         })

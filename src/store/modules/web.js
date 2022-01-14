@@ -4,12 +4,14 @@ import {
   SET_WEB_INFO, 
   SET_ADMIN_INFO, 
   SET_TOKEN_INFO, 
+  SET_OTHER_INFO, 
   SET_PUBLIC_INFO 
 } from '../mutation-types'
 
 import {
   saveAccessToken,
   getAccessToken,
+  cachedOtherinfo,
   cachedAdminInfo,
   cachedWebInfo,
   cachedPublicInfo,
@@ -40,11 +42,13 @@ const actions = {
   webLogin (store, params) {
     return api.webLogin(params)
       .then((data) => {
+        cachedOtherinfo.save(data.data.otherinfo)
         cachedAdminInfo.save(data.data.adminInfo)
         cachedPublicInfo.save(data.data.publicInfo)
         cachedWebInfo.save(cachedKeysData.webInfo)
         saveAccessToken(data.data.token.access_token, parseInt(data.data.token.token_expires_in))
         store.commit(SET_WEB_INFO, cachedKeysData.webInfo)
+        store.commit(SET_OTHER_INFO, data.data.otherinfo)
         store.commit(SET_ADMIN_INFO, data.data.adminInfo)
         store.commit(SET_PUBLIC_INFO, data.data.publicInfo)
         store.commit(SET_TOKEN_INFO, data.data.token)

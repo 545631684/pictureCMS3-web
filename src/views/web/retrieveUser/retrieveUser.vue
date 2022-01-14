@@ -1,6 +1,6 @@
 <template>
   <el-container class="login">
-    <el-main flex="main:center cross:center">
+    <el-main style="display: flex; justify-content: center; align-items: center;">
       <div class="body">
         <h1>赛奇<br /><span>因你而精彩</span></h1>
         <div class="mk1">
@@ -135,6 +135,8 @@
             _this.retrievePassword({userName: _this.ruleForm.email, password: _this.ruleForm.pw, verification: _this.ruleForm.yzm})
               .then(function (response) {
                 _this.$message({message: response.msg, type: 'success'})
+								_this.ruleForm = { email: '', pw: '', pw2: '', yzm: '' }
+								_this.$router.push('/login')
               })
               .catch(function (error) {
                 _this.$message({message: error.msg, type: 'success'})
