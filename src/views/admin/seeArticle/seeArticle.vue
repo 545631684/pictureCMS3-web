@@ -18,7 +18,7 @@
               </ul>
             </div>
             <div class="tabs_div1_item2">
-              <p class="tabs_div1_item_title2">离职</p>
+              <p class="tabs_div1_item_title2">离任</p>
               <ul class="tabs_div1_item_ul2">
                 <li class="omit" v-for="(item, index) in userList" :key="index" v-if="item.articleNum !== 0 && item.state === 1" @click="handleInputConfirm('user',item.nickname)">{{item.nickname}}</li>
               </ul>
@@ -41,7 +41,7 @@
               </ul>
             </div>
             <div class="tabs_div1_item2">
-              <p class="tabs_div1_item_title2">已结束</p>
+              <p class="tabs_div1_item_title2">暂停中</p>
               <ul class="tabs_div1_item_ul2">
                 <li class="omit" v-for="(item, index) in projects" :key="index" v-if="item.state === 1 && item.webShow === 0" @click="handleInputConfirm('projects',item.xname)">{{item.xname}}</li>
               </ul>
@@ -74,12 +74,37 @@
           trigger="hover">
           <div class="tabs_div3">
             <div class="tabs_div1_item">
+          		<p class="tabs_div1_item_title">文章类</p>
               <ul class="tabs_div1_item_ul">
-                <li class="omit" v-for="(item, index) in minTypes2" :key="index" v-html="item.dname" :title="item.dname" @click="handleInputConfirm('minTypes',item.dname)"></li>
+                <li class="omit" v-for="(item, index) in minTypes2" :key="index" v-html="item.dname" :title="item.dname" v-if="item.state === 1 && item.webShow === 1 && item.tbid !== 54 && item.tbid !== 56 " @click="handleInputConfirm('minTypes',item.dname)"></li>
               </ul>
             </div>
+          	<div class="tabs_div1_item" style="margin-top: 10px;">
+          		<p class="tabs_div1_item_title2">视频类</p>
+          	  <ul class="tabs_div1_item_ul">
+          	    <li class="omit" v-for="(item, index) in minTypes2" :key="index" v-html="item.dname" :title="item.dname" v-if="item.state === 1 && item.webShow === 1 && item.tbid === 54 || item.tbid === 56" @click="handleInputConfirm('minTypes',item.dname)"></li>
+          	  </ul>
+          	</div>
           </div>
         </el-popover>
+				<el-button v-popover:popover7 style="border: 2px dashed #DCDFE6; background: none;margin-right: 20px;">文章质量</el-button>
+				<el-popover
+				  ref="popover7"
+				  :open-delay="0"
+				  :visible-arrow="true"
+				  placement="bottom"
+				  width="400"
+				  trigger="hover">
+				  <div class="tabs_div3">
+				    <div class="tabs_div1_item">
+				      <ul class="tabs_div1_item_ul">
+				        <li class="omit" title="高" @click="handleInputConfirm('quality','3')">高</li>
+				        <li class="omit" title="中" @click="handleInputConfirm('quality','2')">中</li>
+				        <li class="omit" title="低" @click="handleInputConfirm('quality','1')">低</li>
+				      </ul>
+				    </div>
+				  </div>
+				</el-popover>
         <el-button v-popover:popover5 style="border: 2px dashed #DCDFE6; background: none;margin-right: 20px;">文件类型</el-button>
         <el-popover
           ref="popover5"
@@ -114,8 +139,12 @@
         <span v-for="tag in dynamicTags" :key="tag.name" class="el-tag el-tag--plain" v-if="tag.name !== ''">  {{tag.name}}  <i class="el-tag__close el-icon-close" @click="handleClose(tag.name)"></i></span>
       </div>
       <el-alert title="带💗️标志为当前用户发布的文章" type="info" show-icon style="width: 100% !important;"></el-alert>
-      <el-table v-loading="loading" :data="article" style="width: 100% !important;">
-        <el-table-column prop="mId" label="id" width="100" align="center">
+      <el-table ref="multipleTable" v-loading="loading" :data="article" stripe @select="setTableData" @select-all="setTableData" :header-cell-style="{background:'#f0f7ff',color:'#333333','text-align':'center'}" style="width: 100% !important;">
+        <el-table-column
+					type="selection"
+					width="55">
+				</el-table-column>
+				<el-table-column prop="mId" label="id" width="100" align="center">
         	<template slot-scope="scope">
         		{{myarticle(scope.row.uId, scope.row.mId)}}
         	</template>
@@ -159,6 +188,13 @@
             </svg>
           </template>
         </el-table-column>
+				<el-table-column prop="quality" label="质量" width="80" align="center">
+					<template slot-scope="scope">
+						<b v-if="scope.row.quality == '3'" style="font-size: 16px;display: block;width: 30px;height: 30px;line-height: 30px;text-align: center;margin: 0 auto; color: #fff;background-color: #eb3535;">高</b>
+						<b v-if="scope.row.quality == '2'" style="font-size: 16px;display: block;width: 30px;height: 30px;line-height: 30px;text-align: center;margin: 0 auto; color: #fff;background-color: #d09a31;">中</b>
+						<b v-if="scope.row.quality == '1'" style="font-size: 16px;display: block;width: 30px;height: 30px;line-height: 30px;text-align: center;margin: 0 auto; color: #fff;background-color: #cdcdcd;">低</b>
+					</template>
+				</el-table-column>
         <el-table-column prop="title" label="标题" min-width="250" align="center"></el-table-column>
         <el-table-column prop="projectid" label="项目" width="100" align="center">
           <template slot-scope="scope">
@@ -178,6 +214,8 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="220">
           <template slot-scope="scope">
+            <el-button class="collect-off" :class="{ userCollectSee: scope.row.isUserCollect, 'disabled': scope.row.disabled }" size="mini" circle icon="el-icon-star-off" title="收藏" @click="onCollectArticle(scope.row.mId)" v-if="!scope.row.isUserCollect"></el-button>
+            <el-button class="collect-on" :class="{ userCollectSee: scope.row.isUserCollect, 'disabled': scope.row.disabled }" size="mini" circle icon="el-icon-star-on" title="已收藏" @click="onCollectArticle(scope.row.mId)" v-if="scope.row.isUserCollect"></el-button>
             <el-button size="mini" circle icon="el-icon-view" title="查看" v-on:click.stop="seeArticle(scope.row.mId, scope.row.typeFile)" v-if="scope.row.see"></el-button>
             <el-button size="mini" circle icon="el-icon-view" title="查看" disabled v-on:click.stop="seeArticle(scope.row.mId, scope.row.typeFile)" v-else="!scope.row.see"></el-button>
             <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" v-on:click.stop="modifyArticle(scope.row.mId, scope.row.typeFile, scope.row.uId)" v-if="scope.row.see"></el-button>
@@ -187,13 +225,26 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="block" style="width: 470px;margin:10px auto;">
+      <div class="block" style="margin: 20px 14px;display: flex;justify-content: space-between;align-items: center;">
+				<div style="width: 410px;display: flex;justify-content: space-between;align-items: center;">
+					<el-checkbox v-model="checkedAll" :indeterminate="isIndeterminate" size="small" @change="handleCheckAllChange()">全选</el-checkbox>
+					<el-select v-model="operationValue" placeholder="请选择" size="small">
+					  <el-option
+					    v-for="item in options"
+					    :key="item.value"
+					    :label="item.label"
+					    :value="item.value">
+					  </el-option>
+					</el-select>
+					<el-button @click="executeOperate()" size="small" :loading="operateLoading">{{ operateLoading ? '执行中 ...' : '执行操作' }}</el-button>
+				</div>
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage1"
-          :page-sizes="[6, 12, 24, 48]"
+          :page-sizes="[6, 12, 18, 24]"
           :page-size="dataList"
+					:pager-count='7'
           layout="total, sizes, prev, pager, next"
           :total="articleAll">
         </el-pagination>
@@ -205,8 +256,8 @@
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'
   import { formatDate, getProjectID, getProjectName, getTypesID, getTypesName } from 'UTIL/publicAPI'
-  import { SET_ADMIN_INFO } from 'STORE/mutation-types'
-  import { cachedAdminInfo } from 'API/cacheService'
+  import { SET_OTHER_INFO } from 'STORE/mutation-types'
+  import { cachedOtherinfo } from 'API/cacheService'
   export default {
     inject: ['reload'],
     name: 'backstage',
@@ -215,6 +266,7 @@
       return {
         userInfo: this.$store.state.admin.adminInfo,
         loading: true,
+				operateLoading: false,
         projects: this.$store.state.common.publicInfo.projects,
         types: this.$store.state.common.publicInfo.types,
         minTypes: this.$store.state.common.publicInfo.details,
@@ -228,6 +280,11 @@
         num2: '',
         num3: '',
         num4: '',
+				quality: {
+				  id: '',
+				  name: '',
+				  index: '-1'
+				},
         user: {
           id: '',
           name: '',
@@ -256,11 +313,21 @@
           index: ''
         },
         currentPage1: 1,
-        dataList: this.$store.state.admin.adminInfo.articlePageNum,
-        pageNum: this.$store.state.admin.adminInfo.pageNum,
-        articleAll: parseInt(this.$store.state.admin.adminInfo.articleAll),
+        dataList: this.$store.state.admin.otherinfo.articlePageNum,
+        pageNum: this.$store.state.admin.otherinfo.pageNum,
+        articleAll: parseInt(this.$store.state.admin.otherinfo.articleAll),
         dynamicTags: [],
         searchKeyword:'',
+        selectData:[],
+				options:[
+				  {value:'修改文章质量为高'},
+				  {value:'修改文章质量为中'},
+				  {value:'修改文章质量为低'},
+				  {value:'删除所选文章到回收站'},
+				],
+				checkedAll:false,
+				operationValue:'',
+				isIndeterminate: false,
       }
     },
     watch: {
@@ -302,8 +369,28 @@
         'getUserList',
         'getArticleAll2',
         'exhibitionDel',
-        'setOperationInfo'
+        'setOperationInfo',
+        'updateArticleQuality',
+        'exhibitionDels',
+				'collectArticle'
       ]),
+			// 收藏文章/取消收藏
+			onCollectArticle(mid){
+				let _this = this
+				this.collectArticle({uId:this.$store.state.admin.adminInfo.uId, mId:mid})
+				  .then((response) => {
+				    if(response.code === 200) {
+							_this.article.find((obj,index)=>{
+								if(obj.mId == mid) obj.isUserCollect = response.data
+								_this.$set(_this.article,index,obj)
+							})
+							_this.$message({ message: response.msg, type: 'success' });
+				    }
+				  })
+				  .catch(function (error) {
+				    _this.$message({ message: error.msg, type: 'warning' });
+				  })
+			},
       // 搜素按钮
       search(){
         this.setdata()
@@ -332,6 +419,10 @@
             this.dnames.did = minTypes.did
             this.dnames.name = minTypes.dname
           }
+					if(type === 'quality'){
+					  this.quality.id = inputValue
+					  this.quality.name = inputValue == 1 ? '低' : inputValue == 2 ? '中' : inputValue == 3 ? '高' : console.log()
+					}
           if(type === 'fileType'){
             this.fileType.id = inputValue
             this.fileType.name = inputValue
@@ -343,6 +434,7 @@
           this.lname.name !== '' ? this.dynamicTags.push(this.lname) : console.log()
           this.dnames.name !== '' ? this.dynamicTags.push(this.dnames) : console.log()
           this.fileType.name !== '' ? this.dynamicTags.push(this.fileType) : console.log()
+					this.quality.name !== '' ? this.dynamicTags.push(this.quality) : console.log()
 
           this.setdata()
         }
@@ -367,6 +459,10 @@
           this.dnames.did = ''
           this.dnames.name = ''
         }
+				if(tagName === this.quality.name){
+				  this.quality.id = ''
+				  this.quality.name = ''
+				}
         if(tagName === this.fileType.name){
           this.fileType.id = ''
           this.fileType.name = ''
@@ -376,6 +472,7 @@
         this.xname.name !== '' ? this.dynamicTags.push(this.xname) : console.log()
         this.lname.name !== '' ? this.dynamicTags.push(this.lname) : console.log()
         this.dnames.name !== '' ? this.dynamicTags.push(this.dnames) : console.log()
+				this.quality.name !== '' ? this.dynamicTags.push(this.quality) : console.log()
         this.fileType.name !== '' ? this.dynamicTags.push(this.fileType) : console.log()
 
         this.setdata()
@@ -386,20 +483,23 @@
         return urls
       },
       handleSizeChange(val) {
-        let adminInfo =  this.$store.state.admin.adminInfo
-        adminInfo.articlePageNum = val
+        let otherinfo =  this.$store.state.admin.otherinfo
+        otherinfo.articlePageNum = val
+        otherinfo.pageNum = (this.articleAll/val).toFixed(0)
+        otherinfo.articleAll = this.articleAll
         this.dataList = val
-        this.$store.commit(SET_ADMIN_INFO, adminInfo)
-        cachedAdminInfo.save(adminInfo)
+        this.$store.commit(SET_OTHER_INFO, otherinfo)
+        cachedOtherinfo.save(otherinfo)
         this.adminGetArticleAll({
           page: 1,
-          articlePageNum: this.dataList || 6,
+          articlePageNum: this.dataList || 5,
           keyword: this.searchKeyword,
           type: this.fileType.name !== '' ? this.fileType.name : null,
           pid: this.xname.id !== '' ? this.xname.id : null,
           tid: this.lname.id !== '' ? this.lname.id : null,
           did: this.dnames.did !== '' ? this.dnames.did : null,
           uid: this.user.id !== '' ? this.user.id : null,
+					quality: this.quality.id,
           userId: this.userInfo.uId
           })
         // console.log('每页 ' + val + '条');
@@ -407,13 +507,14 @@
       handleCurrentChange(val) {
         this.adminGetArticleAll({
           page: val,
-          articlePageNum: this.dataList || 6,
+          articlePageNum: this.dataList || 5,
           keyword: this.searchKeyword,
           type: this.fileType.name !== '' ? this.fileType.name : null,
           pid: this.xname.id !== '' ? this.xname.id : null,
           tid: this.lname.id !== '' ? this.lname.id : null,
           did: this.dnames.did !== '' ? this.dnames.did : null,
           uid: this.user.id !== '' ? this.user.id : null,
+					quality: this.quality.id,
           userId: this.userInfo.uId
           })
       },
@@ -462,13 +563,14 @@
         }
         this.adminGetArticleAll({
           page: 1,
-          articlePageNum: this.dataList || 6,
+          articlePageNum: this.dataList || 5,
           keyword: this.searchKeyword,
           type: this.fileType.name !== '' ? this.fileType.name : null,
           pid: this.xname.id !== '' ? this.xname.id : null,
           tid: this.lname.id !== '' ? this.lname.id : null,
           did: this.dnames.did !== '' ? this.dnames.did : null,
           uid: this.user.id !== '' ? this.user.id : null,
+					quality: _this.quality.id,
           userId: this.userInfo.uId
           })
       },
@@ -655,10 +757,12 @@
             }
             // 更新每页条数
             if (_this.dataList !== response.data.article.length) {
-              let adminInfo =  _this.$store.state.admin.adminInfo
-              adminInfo.articlePageNum = response.data.article.length
-              _this.$store.commit(SET_ADMIN_INFO, adminInfo)
-              cachedAdminInfo.save(adminInfo)
+              let otherinfo =  _this.$store.state.admin.otherinfo
+              otherinfo.articlePageNum = response.data.article.length
+							otherinfo.pageNum = (_this.articleAll/otherinfo.articlePageNum).toFixed(0)
+							otherinfo.articleAll = _this.articleAll
+              _this.$store.commit(SET_OTHER_INFO, otherinfo)
+              cachedOtherinfo.save(otherinfo)
             }
           })
           .catch(function (error) {
@@ -667,17 +771,31 @@
       },
       // 检查文章权限
       authorityDetection(mId){
-        let privacyTypes = [], panduan = true, _this = this, article = this.article.find(o=>{return o.mId === mId})
+        let privacyTypes = [], panduan = true, _this = this, article = this.article.find(o=>{return o.mId === mId}), authGroup = [], users = []
         if(this.$store.state.common.publicInfo.privacyTypes.length === 0){
           panduan = true
         } else {
           this.$store.state.common.publicInfo.privacyTypes.find(obj=>{
             if(obj.state === 1){
+							authGroup = []
+							users = []
+							// 检查数据格式
+							if(typeof obj.authGroup == 'string' && obj.authGroup.length > 1 &&  obj.authGroup.indexOf(',') > -1){
+								authGroup = obj.authGroup.split(',')
+							} else if(typeof obj.authGroup == 'string' && obj.authGroup.length > 1 &&  obj.authGroup.indexOf(',') == -1) {
+								authGroup.push(obj.authGroup)
+							}
+							if(typeof obj.users == 'string' && obj.users.length > 1 &&  obj.users.indexOf(',') > -1){
+								users = obj.users.split(',')
+							} else if(typeof obj.users == 'string' && obj.users.length > 1 &&  obj.users.indexOf(',') == -1) {
+								users.push(obj.users)
+							}
+							
               privacyTypes.push({
                 "id":obj.id,
                 "tid":obj.tid,
-                "users":obj.users !== null ? obj.users.split(',') : [],
-                "authGroup":obj.authGroup !== null ? obj.authGroup.split(',') : [],
+                "users":users,
+                "authGroup":authGroup,
                 "state":obj.state,
                 "articlelist":obj.articlelist
               })
@@ -688,7 +806,7 @@
           } else {
             privacyTypes.find(p=>{
               if(p.tid === article.detailsid){
-                if(p.state === 2 || (p.state === 1 && p.users.length === 0 && p.authGroup.length === 0 ) || (p.state === 1 && p.users.includes(_this.userInfo.uId) || p.authGroup.includes(_this.userInfo.permissions))){
+                if(p.state === 2 || (p.state === 1 && p.users.includes(_this.userInfo.uId.toString()) || p.authGroup.includes(_this.userInfo.permissions.toString()))){
                   panduan = true
                 } else {
                   panduan = false
@@ -698,19 +816,168 @@
           }
         }
         return panduan
-      }
+      },
+			// 获取已选中的值
+			setTableData() {
+				const _selectData = this.$refs.multipleTable.selection, _this = this
+				this.selectData.splice(0)
+			  _selectData.find(obj=>{
+			    _this.selectData.push(obj)
+			  })
+			  if(_selectData.length == 0){
+			    this.isIndeterminate = this.checkedAll = false
+			  } else if(_selectData.length === this.doctorPageNum || _selectData.length === this.doctorsAll){
+			    this.isIndeterminate = false
+			    this.checkedAll = true
+			  } else if(_selectData.length < this.doctorPageNum){
+			    this.isIndeterminate = true
+			    this.checkedAll = false
+			  }
+			},
+			// 复选框执行操作
+			executeOperate() {
+			  let idAll = [], _this = this
+			  if(this.selectData.length === 0){
+			    this.$alert('请选择需要操作的数据', {confirmButtonText: '确定'})
+			    return
+			  }
+			  this.selectData.find(o=>{
+			    idAll.push(o.mId)
+			  })
+			  if(this.operationValue === '修改文章质量为高'){
+			    this.operateLoading = true
+					this.updateArticleQuality({id:idAll, quality:3})
+					  .then((response) => {
+					    if(response.code === 200) {
+								_this.$alert(response.msg, {confirmButtonText: '确定'})
+					      _this.selectData = []
+					      _this.checkedAll = _this.isIndeterminate = false
+					    }
+					    _this.operateLoading = false
+					    _this.loading = true
+							_this.adminGetArticleAll({
+							  page: _this.currentPage1,
+							  articlePageNum: _this.dataList || 5,
+							  keyword: _this.searchKeyword,
+							  type: _this.fileType.name !== '' ? _this.fileType.name : null,
+							  pid: _this.xname.id !== '' ? _this.xname.id : null,
+							  tid: _this.lname.id !== '' ? _this.lname.id : null,
+							  did: _this.dnames.did !== '' ? _this.dnames.did : null,
+							  uid: _this.user.id !== '' ? _this.user.id : null,
+								quality: _this.quality.id,
+							  userId: _this.userInfo.uId
+							  })
+					  })
+					  .catch(function (error) {
+					    _this.$alert(error.msg, {confirmButtonText: '确定'})
+					  })
+			  } else if(this.operationValue === '修改文章质量为中'){
+			    this.operateLoading = true
+			    this.updateArticleQuality({id:idAll, quality:2})
+			      .then((response) => {
+			        if(response.code === 200) {
+			    			_this.$alert(response.msg, {confirmButtonText: '确定'})
+			          _this.selectData = []
+			          _this.checkedAll = _this.isIndeterminate = false
+			        }
+			        _this.operateLoading = false
+			        _this.loading = true
+			    		_this.adminGetArticleAll({
+			    		  page: _this.currentPage1,
+			    		  articlePageNum: _this.dataList || 5,
+			    		  keyword: _this.searchKeyword,
+			    		  type: _this.fileType.name !== '' ? _this.fileType.name : null,
+			    		  pid: _this.xname.id !== '' ? _this.xname.id : null,
+			    		  tid: _this.lname.id !== '' ? _this.lname.id : null,
+			    		  did: _this.dnames.did !== '' ? _this.dnames.did : null,
+			    		  uid: _this.user.id !== '' ? _this.user.id : null,
+								quality: _this.quality.id,
+			    		  userId: _this.userInfo.uId
+			    		  })
+			      })
+			      .catch(function (error) {
+			        _this.$alert(error.msg, {confirmButtonText: '确定'})
+			      })
+			  } else if(this.operationValue === '修改文章质量为低'){
+			    this.operateLoading = true
+			    this.updateArticleQuality({id:idAll, quality:1})
+			      .then((response) => {
+			        if(response.code === 200) {
+			    			_this.$alert(response.msg, {confirmButtonText: '确定'})
+			          _this.selectData = []
+			          _this.checkedAll = _this.isIndeterminate = false
+			        }
+			        _this.operateLoading = false
+			        _this.loading = true
+			    		_this.adminGetArticleAll({
+			    		  page: _this.currentPage1,
+			    		  articlePageNum: _this.dataList || 5,
+			    		  keyword: _this.searchKeyword,
+			    		  type: _this.fileType.name !== '' ? _this.fileType.name : null,
+			    		  pid: _this.xname.id !== '' ? _this.xname.id : null,
+			    		  tid: _this.lname.id !== '' ? _this.lname.id : null,
+			    		  did: _this.dnames.did !== '' ? _this.dnames.did : null,
+			    		  uid: _this.user.id !== '' ? _this.user.id : null,
+								quality: _this.quality.id,
+			    		  userId: _this.userInfo.uId
+			    		  })
+			      })
+			      .catch(function (error) {
+			        _this.$alert(error.msg, {confirmButtonText: '确定'})
+			      })
+			  } else if(this.operationValue === '删除所选文章到回收站'){
+			    let cuode = _this.selectData.find(a => a.uId !== _this.$store.state.admin.adminInfo.uId) || []
+					if(cuode.length !== 0 && _this.$store.state.admin.adminInfo.permissions !== 2) {
+						_this.$alert('请去除非本人上传文章后在操作', {confirmButtonText: '确定'})
+					} else {
+						this.operateLoading = true
+						this.exhibitionDels({id:idAll})
+						  .then((response) => {
+						    if(response.code === 200) {
+									_this.$alert(response.msg, {confirmButtonText: '确定'})
+						      _this.selectData = []
+						      _this.checkedAll = _this.isIndeterminate = false
+						    }
+						    _this.operateLoading = false
+						    _this.loading = true
+								_this.adminGetArticleAll({
+								  page: _this.currentPage1,
+								  articlePageNum: _this.dataList || 5,
+								  keyword: _this.searchKeyword,
+								  type: _this.fileType.name !== '' ? _this.fileType.name : null,
+								  pid: _this.xname.id !== '' ? _this.xname.id : null,
+								  tid: _this.lname.id !== '' ? _this.lname.id : null,
+								  did: _this.dnames.did !== '' ? _this.dnames.did : null,
+								  uid: _this.user.id !== '' ? _this.user.id : null,
+									quality: _this.quality.id,
+								  userId: _this.userInfo.uId
+								  })
+						  })
+						  .catch(function (error) {
+						    _this.$alert(error.msg, {confirmButtonText: '确定'})
+						  })
+					}
+					
+			  } else {
+			    this.$alert('请选择操作功能', {confirmButtonText: '确定'})
+			  }
+			},
+			handleCheckAllChange() {
+			  this.$refs.multipleTable.toggleAllSelection()
+			},
     },
     created() {
       let _this = this
       this.adminGetArticleAll({
         page: 1,
-        articlePageNum: this.$store.state.admin.adminInfo.articlePageNum,
+        articlePageNum: this.$store.state.admin.otherinfo.articlePageNum,
         keyword: this.searchKeyword,
         type: this.fileType.name !== '' ? this.fileType.name : null,
         pid: this.xname.id !== '' ? this.xname.id : null,
         tid: this.lname.id !== '' ? this.lname.id : null,
         did: this.dnames.did !== '' ? this.dnames.did : null,
         uid: this.user.id !== '' ? this.user.id : null,
+				quality: this.quality.id,
         userId: this.userInfo.uId
         })
       this.getUserList()
@@ -794,11 +1061,13 @@ table{ width: 100% !important;}
 .tabs_div2 /deep/ .tabs_div1_item_ul2 li:hover, .tabs_div2 /deep/ .tabs_div1_item_ul li:hover {color: #2CAEFF;}
 
 .tabs_div3{padding-top: 20px;}
-.tabs_div3 /deep/ .tabs_div1_item{position: relative;}
+.tabs_div3 /deep/ .tabs_div1_item{display: flex; justify-content: flex-start; align-items: flex-start;position: relative;}
 .tabs_div3 /deep/ .tabs_div1_item_title{padding: 0px 20px; width: 100px;}
-.tabs_div3 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 0; height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
+.tabs_div3 /deep/ .tabs_div1_item_title::after{position: absolute;left: 0; top: 0; height: 20px;line-height: 20px;content: " ";display: block;width: 4px; background: #5fd0cd;border-radius: 2px;}
+.tabs_div3 /deep/ .tabs_div1_item_title2{padding: 0px 20px; width: 100px;margin-top: 10px;}
+.tabs_div3 /deep/ .tabs_div1_item_title2::after{position: absolute;left: 0; top: 10px; height: 20px;line-height: 20px;content: " ";display: block;width: 4px; background: #FF4C29;border-radius: 2px;}
 .tabs_div3 /deep/ .tabs_div1_item_ul{display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap;flex: 1;}
-.tabs_div3 /deep/ .tabs_div1_item_ul li{width: 15%; text-align: left; height: 40px;    transition: all .2s;cursor: pointer;}
+.tabs_div3 /deep/ .tabs_div1_item_ul li{width: 20%; text-align: left; height: 40px;  line-height: 40px;  transition: all .2s;cursor: pointer;}
 .tabs_div3 /deep/ .tabs_div1_item_ul li:hover {color: #2CAEFF;}
 .el-tag + .el-tag {
     margin-left: 10px;
@@ -815,4 +1084,9 @@ table{ width: 100% !important;}
     margin-left: 10px;
     vertical-align: bottom;
   }
+.userCollectSee i{color: #ffff00; font-weight: bold;}
+.disabled{color: #c0c4cc;cursor: not-allowed;background-image: none;background-color: #ebeef5;border-color: #ebeef5;}
+.disabled i{color: #c0c4cc;}
+.disabled:hover i{color: #c0c4cc;}
+.collect-off:hover, .collect-on{color: #ffff00; font-weight: bold;border-color: #2CAEFF;background-color: #2CAEFF; }
 </style>

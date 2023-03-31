@@ -17,7 +17,7 @@
 
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'
-  import { cachedAdminInfo, cachedKeysData, removeAccessToken } from 'API/cacheService'
+  import { cachedAdminInfo, cachedKeysData, removeAccessToken, cachedWebInfo, cachedPublicInfo, cachedOtherinfo } from 'API/cacheService'
   export default {
   	inject: ['reload'],
     name: 'myHeader',
@@ -47,13 +47,16 @@
                   if(_this.$store.state.admin.adminInfo.setPasswordStyle === 'true'){
                     adminInfoData.userName = _this.$store.state.admin.adminInfo.userName
                     adminInfoData.password = _this.$store.state.admin.adminInfo.password
-                    adminInfoData.setPasswordStyle = _this.$store.state.admin.adminInfo.setPasswordStyle
+                    adminInfoData.setPasswordStyle = _this.$store.state.admin.adminInfo.setPasswordStyle.toString()
                   } else {
                     adminInfoData.userName = ''
                     adminInfoData.password = ''
-                    adminInfoData.setPasswordStyle = false
+                    adminInfoData.setPasswordStyle = 'false'
                   }
                   removeAccessToken()
+									cachedWebInfo.delete()
+									cachedPublicInfo.delete()
+									cachedOtherinfo.delete()
                   cachedAdminInfo.save(adminInfoData)
                   _this.$router.push("/login")
                 }

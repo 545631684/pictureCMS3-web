@@ -4,7 +4,7 @@
   		<p>
   			<el-button type="primary" size="medium" @click="groupAdd = true">添加用户组</el-button>
   			<el-alert title="重要提示" description="默认设计师、管理员权限组为不可删除，不可修改。指定删除的权限组（删除的权限组下有用户绑定），默认修改为设计师权限组" type="warning" show-icon style="width: 600px; margin: 20px 0;"></el-alert>
-  			<el-dialog title="添加用户组" :visible.sync="groupAdd" width="30%" center>
+  			<el-dialog :modal-append-to-body="false" title="添加用户组" :visible.sync="groupAdd" width="30%" center>
   				<el-input size="small" v-model="groupNameAdd" placeholder="组名称"></el-input>
   				<div v-for="(time, index) in groups" style="margin-top: 25px;">
   					<el-checkbox :indeterminate="time.isIndeterminate" v-model="time.checkAll" @change="handleCheckAllChange(time.checkAll, index)">{{time.name}}</el-checkbox>
@@ -39,8 +39,9 @@
         </el-table-column>
   			<el-table-column label="操作" align="center" width="200">
   				<template slot-scope="slotProps">
-  					<el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="updateGroupsShow(slotProps.row.id)" :disabled="slotProps.row.disabled === '2' ? true : false"></el-button>
-  					<el-dialog title="修改用户组" :visible.sync="groupUpdate" width="30%" center v-if="groupUpdate && groupUpdateSingle !== {}">
+  					<!-- <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="updateGroupsShow(slotProps.row.id)" :disabled="slotProps.row.disabled === '2' ? true : false"></el-button> -->
+  					<el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="updateGroupsShow(slotProps.row.id)" ></el-button>
+  					<el-dialog :modal-append-to-body="false" title="修改用户组" :visible.sync="groupUpdate" width="30%" center v-if="groupUpdate && groupUpdateSingle !== {}">
   						<el-input size="small" v-model="groupUpdateSingle[0].title" placeholder="组名称"></el-input>
   						<div v-for="(time, index) in groupUpdateSingle[0].rules" style="margin-top: 25px;">
   							<el-checkbox :indeterminate="time.isIndeterminate" v-model="time.checkAll" @change="handleCheckAllChangeUp(time.checkAll, index, groupUpdateSingle[0].id)">{{time.name}}</el-checkbox>

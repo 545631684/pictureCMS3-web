@@ -856,6 +856,42 @@ const actions = {
         return Promise.reject(error)
       })
   },
+	/**
+	 * 批量修改文章质量
+	 */
+	updateArticleQuality (store, params) {
+	  return api.updateArticleQuality(params)
+	    .then((data) => {
+	      return Promise.resolve(data)
+	    })
+	    .catch((error) => {
+	      return Promise.reject(error)
+	    })
+	},
+	/**
+	 * 批量删除文章（回收站）
+	 */
+	exhibitionDels (store, params) {
+	  return api.exhibitionDels(params)
+	    .then((data) => {
+	      return Promise.resolve(data)
+	    })
+	    .catch((error) => {
+	      return Promise.reject(error)
+	    })
+	},
+	/**
+	 * 获取用户个人收藏文章
+	 */
+	getUserCollectArticle (store, params) {
+	  return api.getUserCollectArticle(params)
+	    .then((data) => {
+	      return Promise.resolve(data)
+	    })
+	    .catch((error) => {
+	      return Promise.reject(error)
+	    })
+	},
   /**
    * 用户操作记录
    */

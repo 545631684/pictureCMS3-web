@@ -10,6 +10,7 @@ const userRecovery = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/ad
 const userGroup = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/userGroup/userGroup.vue')
 const category = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/category/category.vue')
 const userInfo = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/userInfo/userInfo.vue')
+const userCollect = () => import( /* webpackChunkName: "group-foo" */ 'VIEWS/admin/userCollect/userCollect.vue')
 
 export default [
   {
@@ -83,6 +84,12 @@ export default [
         path: 'category',
         name: 'backstageCategory',
         component: category
+      },
+      {
+        // 个人收藏
+        path: 'userCollect',
+        name: 'backstageUserCollect',
+        component: userCollect
       }
     ]
   },

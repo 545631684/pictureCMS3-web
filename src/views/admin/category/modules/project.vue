@@ -9,7 +9,7 @@
   		<el-button type="primary" style="float: left;" @click="search()">搜索</el-button>
   		<el-button style="float: left;" @click="firing('', '3')">添加项目</el-button>
   		<el-button style="float: left;" @click="firing('', '4')">添加屏蔽人</el-button>
-  		<el-dialog :title="title" :visible.sync="centerDialogVisibleAdd" width="20%" center>
+  		<el-dialog :modal-append-to-body="false" :title="title" :visible.sync="centerDialogVisibleAdd" width="20%" center>
   			<p class="upPwd">
   				<input class="el-input__inner" type="text" name="" id="" value="" v-model="name" @keyup.enter="addName()" />
   			</p>
@@ -18,7 +18,7 @@
               <el-button type="primary" @click="addName()">确 定</el-button>
             </span>
   		</el-dialog>
-      <el-dialog :title="title" :visible.sync="centerDialogShield" width="20%" center>
+      <el-dialog :modal-append-to-body="false" :title="title" :visible.sync="centerDialogShield" width="20%" center>
   			<el-alert
   			  title="选择项目屏蔽,项目下的类型也会屏蔽!"
   			  type="warning"
@@ -80,7 +80,7 @@
   			<el-table-column label="操作" align="center" width="200">
   				<template slot-scope="scope">
             <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="firing(scope.row, '1')" style="margin-left: 20px;"></el-button>
-  					<el-dialog :title="title" :visible.sync="centerDialogVisibleP" width="21%" center style="margin-left: -15vw;">
+  					<el-dialog :modal-append-to-body="false" :title="title" :visible.sync="centerDialogVisibleP" width="21%" center style="margin-left: -15vw;">
   						<div class="demo-input-suffix">
   							项目名称:
   							<el-input style="width: auto;" class="el-input--suffix" placeholder="请输入内容"  name="" id="" v-model="row.xname"></el-input>
@@ -251,11 +251,12 @@
       },
       // 功能弹出框的标题重构
       firing(row, id) {
-      	// 深拷贝处理
-      	this.row = this.row = JSON.parse(JSON.stringify(row))
-				this.row.state = this.row.state.toString()
-				this.row.webShow = this.row.webShow.toString()
       	if(id === '1') {
+					// 深拷贝处理
+					this.row = JSON.parse(JSON.stringify(row))
+					this.row.state = this.row.state.toString()
+					this.row.webShow = this.row.webShow.toString()
+					
       		this.centerDialogVisibleP = true
       		this.title = '修改项目名称（' + row.xname + '）'
       	} else if(id === '3') {

@@ -9,7 +9,7 @@
   			<el-button type="primary" style="float: left;" @click="search()">搜索</el-button>
   			<el-button style="float: left;" @click="firing('', '4')">添加类型</el-button>
         <el-button style="float: left;" @click="firing('', '5')">添加屏蔽人</el-button>
-  			<el-dialog :title="title" :visible.sync="centerDialogVisibleAdd" width="20%" center>
+  			<el-dialog :modal-append-to-body="false" :title="title" :visible.sync="centerDialogVisibleAdd" width="20%" center>
   				<p class="upPwd">
   					<input class="el-input__inner" type="text" name="" id="" value="" v-model="name" @keyup.enter="addName()" />
   				</p>
@@ -18,7 +18,7 @@
   	            <el-button type="primary" @click="addName()">确 定</el-button>
   	          </span>
   			</el-dialog>
-        <el-dialog :title="title" :visible.sync="centerDialogShield" width="20%" center>
+        <el-dialog :modal-append-to-body="false" :title="title" :visible.sync="centerDialogShield" width="20%" center>
         	<el-alert
         	  title="查看已屏蔽类型,请到<用户列表>查看用户屏蔽信息"
         	  type="warning"
@@ -95,7 +95,7 @@
   				<el-table-column label="操作" align="center" width="200">
   					<template slot-scope="scope">
               <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="firing(scope.row, '2')" style="margin-left: 20px;"></el-button>
-  						<el-dialog :title="title" :visible.sync="centerDialogVisibleT" width="24%" center>
+  						<el-dialog :modal-append-to-body="false" :title="title" :visible.sync="centerDialogVisibleT" width="24%" center>
   							<div class="demo-input-suffix">
   								项目名称:
   								<el-input style="width: auto;" class="el-input--suffix" placeholder="请输入内容"  name="" id="" v-model="row.lname"></el-input>

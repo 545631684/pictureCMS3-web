@@ -28,6 +28,16 @@
   	<el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
   		<labelComponent :dynamicTags2="dynamicTags" @setDynamicTags="setDynamicTags"></labelComponent>
   	</el-footer>
+		<el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
+			<div class="title">
+				<samp>质量：</samp>
+				<el-radio-group v-model="quality"  size="medium">
+					<el-radio-button label="3" >高</el-radio-button>
+					<el-radio-button label="2" >中</el-radio-button>
+					<el-radio-button label="1" >低</el-radio-button>
+				</el-radio-group>
+			</div>
+		</el-footer>
   	<el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
   		<div class="title">
         <samp>描述：</samp>
@@ -117,6 +127,7 @@
       return {
         loading: false,
         title: '',
+        quality: '1',
         titleCf: false,
         titleDiv: false,
         describe: '',
@@ -452,7 +463,7 @@
         } else {
           let _this = this
           this.loading = true
-          this.articleAdd({uId:this.$store.state.admin.adminInfo.uId, typeFile:this.checkedCities.toString(), typeid:this.$store.getters.getUserTypesId(this.typeImg).tid, projectid:this.$store.getters.getUserProjectsId(this.projectImg).pid, detailsid:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.title, keyword:this.dynamicTags.toString(), describe:this.describe, img:this.imgCrss, psd:this.psd, video:this.video, ai:this.ai, pdf:this.pdf, word:this.word, excel:this.excel, engineering:this.engineering})
+          this.articleAdd({uId:this.$store.state.admin.adminInfo.uId, typeFile:this.checkedCities.toString(), typeid:this.$store.getters.getUserTypesId(this.typeImg).tid, projectid:this.$store.getters.getUserProjectsId(this.projectImg).pid, detailsid:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.title, keyword:this.dynamicTags.toString(), describe:this.describe, img:this.imgCrss, psd:this.psd, video:this.video, ai:this.ai, pdf:this.pdf, word:this.word, excel:this.excel, engineering:this.engineering, quality:this.quality})
             .then((response) => {
               if(response.code === 200) {
                 _this.setOperationInfo({_this:_this, type:31, article:{uId:_this.$store.state.admin.adminInfo.uId, typeFile:_this.checkedCities.toString(), typeid:_this.$store.getters.getUserTypesId(_this.typeImg).tid, projectid:_this.$store.getters.getUserProjectsId(_this.projectImg).pid, detailsid:_this.$store.getters.getUserMinTypeId(_this.minTypeImg).did, title:_this.title, keyword:_this.dynamicTags.toString(), describe:_this.describe, img:_this.imgCrss, psd:_this.psd, video:_this.video, ai:_this.ai, pdf:_this.pdf, word:_this.word, excel:_this.excel, engineering:_this.engineering}})

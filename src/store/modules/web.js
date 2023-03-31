@@ -42,13 +42,13 @@ const actions = {
   webLogin (store, params) {
     return api.webLogin(params)
       .then((data) => {
-        cachedOtherinfo.save(data.data.otherinfo)
+        cachedOtherinfo.save(cachedKeysData.otherinfo)
         cachedAdminInfo.save(data.data.adminInfo)
         cachedPublicInfo.save(data.data.publicInfo)
         cachedWebInfo.save(cachedKeysData.webInfo)
         saveAccessToken(data.data.token.access_token, parseInt(data.data.token.token_expires_in))
         store.commit(SET_WEB_INFO, cachedKeysData.webInfo)
-        store.commit(SET_OTHER_INFO, data.data.otherinfo)
+        store.commit(SET_OTHER_INFO, cachedKeysData.otherinfo)
         store.commit(SET_ADMIN_INFO, data.data.adminInfo)
         store.commit(SET_PUBLIC_INFO, data.data.publicInfo)
         store.commit(SET_TOKEN_INFO, data.data.token)
@@ -147,6 +147,30 @@ const actions = {
    */
   webUserList (store, params) {
     return api.webUserList(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 下载记录
+   */
+  downloadInfo (store, params) {
+    return api.downloadInfo(params)
+      .then((data) => {
+        return Promise.resolve(data)
+      })
+      .catch((error) => {
+        return Promise.reject(error)
+      })
+  },
+  /**
+   * 用户收藏文章操作：收藏/取消收藏
+   */
+  collectArticle (store, params) {
+    return api.collectArticle(params)
       .then((data) => {
         return Promise.resolve(data)
       })

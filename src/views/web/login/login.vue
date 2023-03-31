@@ -34,6 +34,7 @@
 
 <script>
   import { mapActions, mapGetters, mapMutations } from 'vuex'
+	import { cachedKeysData, cachedAdminInfo, cachedWebInfo, cachedPublicInfo} from 'API/cacheService'
   export default {
     inject: ['reload'],
     name: 'login',
@@ -81,6 +82,13 @@
         }
       }
     },
+		watch: {
+			'ruleForm.type': function (val, oldVal) {
+				let adminInfo = cachedAdminInfo.load()
+				adminInfo.setPasswordStyle = val.toString()
+				cachedAdminInfo.save(adminInfo)
+			},
+		},
     methods: {
       ...mapActions([
         'webLogin',

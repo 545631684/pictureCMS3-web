@@ -18,7 +18,7 @@
             <i class="el-icon-question" style="color: rgb(0, 0, 0);"></i>
           </el-tooltip>
         </div>
-  			<el-dialog :title="title" :visible.sync="privacyTypeAdd" width="20%" center>
+  			<el-dialog :modal-append-to-body="false" :title="title" :visible.sync="privacyTypeAdd" width="20%" center>
   				<div class="upPwd2">
   				  <p>分类：</p>
   					<el-select
@@ -108,7 +108,7 @@
   				<el-table-column label="操作" align="center" width="200">
   					<template slot-scope="scope">
               <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="firing(scope.row, '2')" style="margin-left: 20px;"></el-button>
-  						<el-dialog :title="title" :visible.sync="privacyTypeUp" width="24%" center>
+  						<el-dialog :modal-append-to-body="false" :title="title" :visible.sync="privacyTypeUp" width="24%" center>
   							<div class="upPwd2">
   							  <p>分类：</p>
                   <el-select

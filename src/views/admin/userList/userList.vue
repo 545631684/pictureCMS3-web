@@ -2,7 +2,7 @@
   <el-container>
     <el-header>
       <el-button icon="el-icon-plus" type="primary" @click="addUserShow()">添加用户</el-button>
-      <el-dialog title="添加用户" :visible.sync="addUserdiv" width="32%" center>
+      <el-dialog :modal-append-to-body="false" title="添加用户" :visible.sync="addUserdiv" width="32%" center>
         <div class="demo-input-suffix">
           邮箱:
           <el-input style="width: auto;" class="el-input--suffix" placeholder="请输入用户名"  name="" id="" v-model="adduser.userName" clearable></el-input>
@@ -84,7 +84,7 @@
       <el-table-column label="操作" align="center" width="100">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="handleEdit(scope.$index, scope.row)"></el-button>
-          <el-dialog title="编辑用户信息" :visible.sync="centerDialogVisible" width="32%" center>
+          <el-dialog :modal-append-to-body="false" title="编辑用户信息" :visible.sync="centerDialogVisible" width="32%" center>
             <div class="demo-input-suffix">
   						用户名:
   						<el-input style="width: auto;margin-left: 28px;" class="el-input--suffix" placeholder="请输入用户名"  name="" id="" v-model="row.userName" clearable disabled></el-input>

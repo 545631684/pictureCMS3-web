@@ -1,10 +1,12 @@
 import axios from 'axios'
 import Qs from 'qs'
 import store from 'STORE/index'
-import { pushLogins } from 'ROUTER/index'
+import { MessageBox } from "element-ui"
+import Cache from 'web-storage-cache'
 
 
 import {
+	cachedKeysData,
   saveAccessToken,
   getAccessToken,
   removeAccessToken,
@@ -21,8 +23,11 @@ import {
 } from 'STORE/mutation-types'
 
 /* eslint-disable */
-const API_ROOT = 'http://192.168.0.130:82/'
+const API_ROOT = 'http://192.168.0.130/'
 const API_ROOT_DEV = '/a'
+
+// 本地存储初始化
+const lsCache = new Cache()
 
 /* eslint-enable */
 axios.defaults.baseURL = (process.env.NODE_ENV === 'production' ? API_ROOT : API_ROOT_DEV)
@@ -43,17 +48,31 @@ axios.interceptors.request.use(function (config) {
 
 // axios拦截器 验证token信息如果没有或者过期返回登录页面
 axios.interceptors.response.use(function (response) {
-  if (response.data.code < 0) {
-    if (response.data.code === -4001) {
-      // 清空登录信息、token、跳转登录页
-      removeAdminInfo()
-      removeAccessToken()
-      pushLogins()
-    }
-    let error = {
-      msg: response.data.msg
-    }
-    return Promise.reject(error)
+  if (response.data == 'TOKEN过期,请重新登录') {
+		// 清空登录信息、token、跳转登录页
+		MessageBox.alert(response.data, "登录失效", {
+			confirmButtonText: "跳转登录页面",
+			callback: action => {
+				let adminInfo = cachedAdminInfo.load(), adminInfo_keysData = cachedKeysData.adminInfo
+				if (adminInfo.setPasswordStyle) {
+				  adminInfo_keysData.userName = adminInfo.userName
+				  adminInfo_keysData.Password = adminInfo.Password
+				  adminInfo_keysData.setPasswordStyle = adminInfo.setPasswordStyle.toString()
+				} else {
+				  adminInfo_keysData.userName = ''
+				  adminInfo_keysData.Password = ''
+				  adminInfo_keysData.setPasswordStyle = 'false'
+				}
+				lsCache.set('SAIQI-SCK:ADMININFO', adminInfo_keysData)
+				// lsCache.delete('SAIQI-SCK:ADMININFO')
+				lsCache.delete('SAIQI-SCK:PUBLICINFO')
+				lsCache.delete('SAIQI-SCK:OTHERINFO')
+				lsCache.delete('SAIQI-SCK:WEBINFO')
+				lsCache.delete('SAIQI-SCK:TOKEN')
+				// 跳转登录页
+				window.location.href = "#/login";
+			}
+		});
   }
   return response.data
 }, function (error) {
@@ -314,7 +333,7 @@ export default {
    * 管理员添加用户
    */
   guanliUserAdd (params) {
-    return axios.post('a/user_add', Qs.stringify(params))
+    return axios.post('a/userAdd', Qs.stringify(params))
   },
   /**
    * 添加文章
@@ -508,5 +527,34 @@ export default {
   privacyTypeDel (params) {
     return axios.post('a/privacyTypeDel', Qs.stringify(params))
   },
-
+  /**
+   * 下载记录
+   */
+  downloadInfo (params) {
+    return axios.post('w/downloadInfo', Qs.stringify(params))
+  },
+	/**
+	 * 批量修改文章质量
+	 */
+	updateArticleQuality (params) {
+	  return axios.post('a/updateArticleQuality', Qs.stringify(params))
+	},
+	/**
+	 * 批量删除文章（回收站）
+	 */
+	exhibitionDels (params) {
+	  return axios.post('a/exhibitionDels', Qs.stringify(params))
+	},
+	/**
+	 * 用户收藏文章操作：收藏/取消收藏
+	 */
+	collectArticle (params) {
+	  return axios.post('w/collectArticle', Qs.stringify(params))
+	},
+	/**
+	 * 获取用户个人收藏文章
+	 */
+	getUserCollectArticle (params) {
+	  return axios.post('a/getUserCollectArticle', Qs.stringify(params))
+	},
 }

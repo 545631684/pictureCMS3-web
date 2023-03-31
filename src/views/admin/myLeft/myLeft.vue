@@ -187,6 +187,10 @@
 						this.$router.push("/backstage/userGroup");
 						this.localStorageSet(event.index)
 						break;
+					case "userCollect":
+						this.$router.push("/backstage/userCollect");
+						this.localStorageSet(event.index)
+						break;
 				}
 			},
       ...mapMutations([

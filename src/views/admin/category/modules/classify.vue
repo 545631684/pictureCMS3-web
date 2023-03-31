@@ -16,7 +16,7 @@
   		</el-row>
   		<el-button type="primary" style="float: left;" @click="search()">搜索</el-button>
   		<el-button style="float: left;" @click="firing('', '1')">添加分类</el-button>
-  		<el-dialog :title="title" :visible.sync="mixTypeAdd" width="35%" center>
+  		<el-dialog :modal-append-to-body="false" :title="title" :visible.sync="mixTypeAdd" width="35%" center>
   			<p class="clearfix" style="width: 65%;margin: 0 auto;">
   				<el-select class="ma10" v-model="typeName" placeholder="分类" filterable clearable style="width:200px;margin-left: 20px; color: #409eff;">
   					<el-option v-for="item in tList" :key="item.tid" :label="item.lname" :value="item.lname">
@@ -57,7 +57,7 @@
   			<el-table-column label="操作" align="center" width="200">
   				<template slot-scope="scope">
             <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="firing(scope.row, '2')" style="margin-left: 20px;"></el-button>
-  					<el-dialog :title="title" :visible.sync="mixTypeModify" width="24%" center>
+  					<el-dialog :modal-append-to-body="false" :title="title" :visible.sync="mixTypeModify" width="24%" center>
   						<div class="demo-input-suffix">
   							分类名称:
   							<el-input style="width: auto;" class="el-input--suffix" placeholder="请输入内容"  name="" id="" v-model="row.dname" clearable></el-input>

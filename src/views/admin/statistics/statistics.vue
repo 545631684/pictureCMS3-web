@@ -126,75 +126,97 @@
     <el-header style="margin: 10px 0;">
     	<el-row :gutter="20" >
     		<el-col :span="12">
-          <el-card>
-            <div slot="header" class="clearfix titleIcon">
-              <svg class="icon svg-icon" aria-hidden="true">
-                <use xlink:href="#icon-zuixin"></use>
-              </svg>
-              <span>最新发布</span>
-            </div>
-            <div id="articleLately" class="articleLately" style="height: 506px;">
-            	<ul>
-            		<li v-for="(item, index) in activeLatelyData" :key="index" v-if="index < 10">
-            			<router-link target="_blank" :title="item.title" tag="a" :to="seeArticle(item.mId, item.typeFile)">
-            				<p class="omit">{{item.title}}</p>
-            				<p>
-            					<samp><svg class="icon" aria-hidden="true"><use xlink:href="#icon-shijian"></use></svg>{{formatDate(item.registerTimeImg)}}</samp>
-            					<samp><svg v-if="item.sex === '0'" class="icon" aria-hidden="true"><use xlink:href="#icon-icon-test"></use></svg><svg v-if="item.sex === '1'" class="icon" aria-hidden="true"><use xlink:href="#icon-icon-test1"></use></svg>{{item.nickname}}</samp>
-            					<samp><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chakan"></use></svg>{{item.click}}</samp>
-            					<samp>
-            						<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('img', item.mId)">
-                          <use xlink:href="#icon-picture"></use>
-                        </svg>
-                        <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('psd', item.mId)">
-                          <use xlink:href="#icon-web-psd"></use>
-                        </svg>
-                        <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('video', item.mId)">
-                          <use xlink:href="#icon-shipinbofangyingpian"></use>
-                        </svg>
-                        <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('ai', item.mId)">
-                          <use xlink:href="#icon-Ai"></use>
-                        </svg>
-                        <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('pdf', item.mId)">
-                          <use xlink:href="#icon-Pdf"></use>
-                        </svg>
-                        <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('word', item.mId)">
-                          <use xlink:href="#icon-word1"></use>
-                        </svg>
-                        <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('excel', item.mId)">
-                          <use xlink:href="#icon-excel1"></use>
-                        </svg>
-                        <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('engineering', item.mId)">
-                          <use xlink:href="#icon-gongcheng-"></use>
-                        </svg>
-            					</samp>
-            				</p>
-            			</router-link>
-            		</li>
-            	</ul>
-            </div>
-          </el-card>
+					<el-tabs type="border-card">
+						<el-tab-pane>
+							<span slot="label" style="display: flex;justify-content: center;align-items: center;"> <svg class="icon svg-icon" aria-hidden="true" style="font-size: 24px;"> <use xlink:href="#icon-zuixin"></use> </svg> <samp>最新发布</samp></span>
+							<div id="articleLately" class="articleLately" style="height: 506px;">
+								<ul>
+									<li v-for="(item, index) in activeLatelyData" :key="index" v-if="index < 10">
+										<router-link target="_blank" :title="item.title" tag="a" :to="seeArticle(item.mId, item.typeFile)">
+											<p class="omit">{{item.title}}</p>
+											<p>
+												<samp><svg class="icon" aria-hidden="true"><use xlink:href="#icon-shijian"></use></svg>{{formatDate(item.registerTimeImg)}}</samp>
+												<samp><svg v-if="item.sex === '0'" class="icon" aria-hidden="true"><use xlink:href="#icon-icon-test"></use></svg><svg v-if="item.sex === '1'" class="icon" aria-hidden="true"><use xlink:href="#icon-icon-test1"></use></svg>{{item.nickname}}</samp>
+												<samp><svg class="icon" aria-hidden="true"><use xlink:href="#icon-chakan"></use></svg>{{item.click}}</samp>
+												<samp>
+													<svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('img', item.mId)">
+							              <use xlink:href="#icon-picture"></use>
+							            </svg>
+							            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('psd', item.mId)">
+							              <use xlink:href="#icon-web-psd"></use>
+							            </svg>
+							            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('video', item.mId)">
+							              <use xlink:href="#icon-shipinbofangyingpian"></use>
+							            </svg>
+							            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('ai', item.mId)">
+							              <use xlink:href="#icon-Ai"></use>
+							            </svg>
+							            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('pdf', item.mId)">
+							              <use xlink:href="#icon-Pdf"></use>
+							            </svg>
+							            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('word', item.mId)">
+							              <use xlink:href="#icon-word1"></use>
+							            </svg>
+							            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('excel', item.mId)">
+							              <use xlink:href="#icon-excel1"></use>
+							            </svg>
+							            <svg class="icon svg-icon" aria-hidden="true" v-if="returnArticleType('engineering', item.mId)">
+							              <use xlink:href="#icon-gongcheng-"></use>
+							            </svg>
+												</samp>
+											</p>
+										</router-link>
+									</li>
+								</ul>
+							</div>
+						</el-tab-pane>
+					</el-tabs>
     		</el-col>
         <el-col :span="12">
-          <el-card>
-            <div slot="header" class="clearfix titleIcon">
-              <svg class="icon svg-icon" aria-hidden="true">
-                <use xlink:href="#icon-paihangbang-"></use>
-              </svg>
-              <span>用户发布TOP10</span>
-            </div>
-             <div id="articleRanking" class="articleRanking" style="height: 506px;">
-             	<ul>
-             		<li v-for="(item, index) in articleRankingData" :key="index" v-if="index < 10">
-             			<p>{{index+1}}</p>
-             			<p>
-             				<span :style="returnProportion(articleRankingData[0].count, item.count)"></span>
-             				<samp>{{item.nickname}}    发布文章：{{item.count}}</samp>
-             			</p>
-             		</li>
-             	</ul>
-             </div>
-          </el-card>
+					<el-tabs type="border-card">
+						<el-tab-pane>
+							<span slot="label" style="display: flex;justify-content: center;align-items: center;"> <svg class="icon svg-icon" aria-hidden="true" style="font-size: 24px;"> <use xlink:href="#icon-paihangbang-"></use> </svg> <samp>用户发布TOP10</samp></span>
+							<div id="articleRanking" class="articleRanking" style="height: 506px;">
+								<ul>
+									<li v-for="(item, index) in articleRankingData" :key="index" v-if="index < 10">
+										<p>{{index+1}}</p>
+										<p>
+											<span :style="returnProportion(articleRankingData[0].count, item.count)"></span>
+											<samp>{{item.nickname}}    发布文章：{{item.count}}</samp>
+										</p>
+									</li>
+								</ul>
+							</div>
+						</el-tab-pane>
+						<el-tab-pane label="用户收藏TOP10">
+							<span slot="label" style="display: flex;justify-content: center;align-items: center;"> <svg class="icon svg-icon" aria-hidden="true" style="font-size: 24px;"> <use xlink:href="#icon-paihangbang-"></use> </svg> <samp>用户收藏TOP10</samp></span>
+							<div id="articleRanking" class="articleRanking" style="height: 506px;">
+								<ul>
+									<li v-for="(item, index) in userCollectData" :key="index" v-if="index < 10">
+										<p>{{index+1}}</p>
+										<p>
+											<span :style="returnProportion(userCollectData[0].count, item.count)"></span>
+											<samp>{{item.nickname}}    收藏文章：{{item.count}}</samp>
+										</p>
+									</li>
+								</ul>
+							</div>
+						</el-tab-pane>
+						<el-tab-pane label="文章收藏TOP10">
+							<span slot="label" style="display: flex;justify-content: center;align-items: center;"> <svg class="icon svg-icon" aria-hidden="true" style="font-size: 24px;"> <use xlink:href="#icon-paihangbang-"></use> </svg> <samp>文章收藏TOP10</samp></span>
+							<div id="articleRanking" class="articleRanking" style="height: 506px;">
+								<ul>
+									<li v-for="(item, index) in activeCollectData" :key="index" v-if="index < 10">
+										<p>{{index+1}}</p>
+										<p style="width: 770px;">
+											<span :style="returnProportion(activeCollectData[0].count, item.count)"></span>
+											<samp>{{item.title}}    收藏用户：{{item.count}}</samp>
+										</p>
+									</li>
+								</ul>
+							</div>
+						</el-tab-pane>
+					</el-tabs>
     		</el-col>
     	</el-row>
     </el-header>
@@ -319,6 +341,8 @@
         ],
         articleRankingData: [],
         activeLatelyData: [],
+				userCollectData: [],
+				activeCollectData: []
     	}
     },
     mounted() {
@@ -439,6 +463,12 @@
 
             // 文件类型的统计
             _this.fileType = response.data.fileType
+						
+						// 用户收藏统计
+            _this.userCollectData = response.data.userCollect
+						
+						// 文章收藏统计
+            _this.activeCollectData = response.data.activeCollect
 
             _this.userAll = response.data.userAll
             _this.activeAll = response.data.activeAll
@@ -504,7 +534,7 @@
 .articleRanking ul li:nth-child(3) p:nth-child(2) samp{color: #67C23A;}
 .articleRanking ul li:after {content: ".";display: block;height: 0;clear: both;visibility: hidden;}
 .articleRanking ul li p:nth-child(1){float:left; width: 38px; height: 38px; border: 1px solid #909399; margin-right: 10px; font-size: 30px; font-weight: bold; text-align: center; line-height: 38px; color: #909399;}
-.articleRanking ul li p:nth-child(2){float:left;width: 440px; height: 40px;}
+.articleRanking ul li p:nth-child(2){float:left;width: 760px; height: 40px;}
 .articleRanking ul li p:nth-child(2) span{display: block; width: 90%; background: #0077AA; height: 20px;
 background: linear-gradient(left , rgb(107, 197, 62) , rgb(230, 162, 60) 48% , rgb(245, 108, 108) 85%);
 background: -o-linear-gradient(left , rgb(107, 197, 62) , rgb(230, 162, 60) 48% , rgb(245, 108, 108) 85%);

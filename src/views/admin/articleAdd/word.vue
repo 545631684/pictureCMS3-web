@@ -22,8 +22,8 @@
     data() {
       return {
         word: [],
-        action: this.$store.state.common.publicInfo.srcUrl + 'u/upfile',
-        // action: '/a' + '/u/upfile',
+        // action: this.$store.state.common.publicInfo.srcUrl + 'u/upfile',
+        action: '/a' + '/u/upfile',
         uploadFiles: [],
       }
     },

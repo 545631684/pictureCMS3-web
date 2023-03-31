@@ -26,6 +26,12 @@ const KEYS_DATA = {
 	otherinfo:{
 		// 导航高亮显示位置
 		adminNavigation: '1',
+		// 文章总数
+		articleAll: 0,
+		// 总页数
+		pageNum: 0,
+		// 每页条数
+		articlePageNum: 6
 	},
   adminInfo: {
     uId: '',
@@ -48,18 +54,18 @@ const KEYS_DATA = {
     isCollapse: false,
     // 用户是否登录
     judgeLogin: '',
-    // 文章总数
-    articleAll: 0,
-    // 总页数
-    pageNum: 0,
-    // 每页条数
-    articlePageNum: 6,
   },
   webInfo: {
     // 注册/找回密码的获取验证码按钮成功后的读秒
     webTime: 0,
     // 文章id
-    mId: ''
+    mId: '',
+		// 文章总数
+		articleAll: 0,
+		// 总页数
+		pageNum: 0,
+		// 每页条数
+		articlePageNum: 8
   },
   publicInfo: {
     // 类型数组
@@ -103,14 +109,30 @@ class CommonStorage {
     const options = this.exp ? { exp: this.exp } : null
     this.storage.set(this.key, value, options)
   }
-	
+	/*
+	* 	判断用户的权限数据是否有变动，并更新本地缓存和VUEX数据
+	*/
 	save2 (key,value) {
-		let boolen = JSON.stringify(this.storage.get(nameSpace + ':' + key.toUpperCase())) == JSON.stringify(value) ? true : false
-		console.log(this.storage.get(nameSpace + ':' + key.toUpperCase()),value,'本地存储')
+		let boolen = false, saveValue = {}
+		if(key == 'ADMININFO'){
+			let obj = this.storage.get(this.key), objNew = value
+			boolen = JSON.stringify(obj.auth) == JSON.stringify(value.auth) && obj.permissions == value.permissions
+			// console.log(boolen,'ADMININFO')
+			// console.log(JSON.stringify(obj.auth) == JSON.stringify(value.auth),obj.permissions == value.permissions,JSON.stringify(obj.auth) == JSON.stringify(value.auth) || obj.permissions == value.permissions,'ADMININFO')
+			// console.log(JSON.stringify(obj.auth),JSON.stringify(value.auth),obj.permissions,value.permissions,'ADMININFO')
+			if(!boolen){
+				saveValue = obj
+				saveValue.auth = value.auth
+				saveValue.permissions = value.permissions
+			}
+		} else if(key == 'PUBLICINFO'){
+			boolen = JSON.stringify(this.storage.get(this.key)) == JSON.stringify(value)
+			if(!boolen) saveValue = value
+		}
 		if(!boolen){
 			this.storage.deleteAllExpires()
-			this.storage.delete(nameSpace + ':' + key.toUpperCase())
-			this.storage.set(nameSpace + ':' + key.toUpperCase(), value, 3000)
+			this.storage.delete(this.key)
+			this.storage.set(this.key, value, null)
 		}
 		return boolen
 	}
@@ -145,7 +167,7 @@ export function removeAdminInfo (adminInfo, keys_data) {
   if (adminInfo.setPasswordStyle) {
     keys_data.adminInfo.userName = adminInfo.userName
     keys_data.adminInfo.Password = adminInfo.Password
-    KEYS_DATA.adminInfo.setPasswordStyle = adminInfo.setPasswordStyle
+    keys_data.adminInfo.setPasswordStyle = adminInfo.setPasswordStyle
   } else {
     keys_data.adminInfo.userName = ''
     keys_data.adminInfo.Password = ''

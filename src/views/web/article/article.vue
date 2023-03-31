@@ -2,10 +2,19 @@
   <div>
   	<!-- 头部组件 -->
   	<webHead></webHead>
-  	<div style="background: #f4f4f4; padding: 20px 0;">
+		<el-empty description="空空如也" :image-size="550" v-if="!articleSee"></el-empty>
+  	<div style="background: #f4f4f4; padding: 20px 0;" v-loading="loading" v-if="articleSee">
   		<div class="article clearfix">
   			<div class="l">
-  				<div style="padding: 30px 30px 16px;">
+  				<div style="padding: 30px 30px 16px; position: relative;">
+						<p class="gn-p1">
+							<span class="gn-p2"  title="收藏" v-if="!article.isUserCollect" @click="onCollectArticle(article.mId)">
+								<i class="el-icon-star-on" style=""></i><samp>收藏</samp>
+							</span>
+							<span class="gn-p3"  title="已收藏" v-if="article.isUserCollect" @click="onCollectArticle(article.mId)">
+								<i class="el-icon-star-on" style=""></i><samp>已收藏</samp>
+							</span>
+						</p>
   					<h1 class="title">{{article.title}}</h1>
   					<p class="time">{{webFormatDate(parseInt(article.registerTimeImg))}}</p>
   					<p class="nav" v-if="nav.num.length === 1"><a :href="nav.num[0].href">{{nav.num[0].name}}</a><i>/</i><a>详情页</a></p>
@@ -40,6 +49,7 @@
               		<li v-for="(item, index) in psdFile" :key="index">
               			<img :src="URLS2 + item.Psdview" alt="" />
               			<el-button class="download" type="primary" icon="el-icon-download" size="mini" @click="singleDownload(item.dataPsd.url,item.dataPsd.name)">下载</el-button>
+										<a class="download" @click="directDownload(article.mId,article.uId)" style="left: 100px;background-color: #fff;padding: 0 5px;height: 28px;border-radius: 5px;line-height: 28px;font-weight: bold;" :href="item.dataPsd.url">直链下载</a>
               		</li>
               	</ul>
               </viewer>
@@ -137,6 +147,12 @@
               <template slot="title">
                 <p style="padding: 0 10px;">文章信息</p>
               </template>
+							<div class="attribute3">
+							  <samp style="width: 75px;">文章质量：</samp>
+								<span v-if="article.quality == '3'" style="font-size: 14px;display: block;width: 25px;height: 25px;line-height: 25px;text-align: center; color: #fff;background-color: #eb3535;border-radius: 3px;">高</span>
+								<span v-if="article.quality == '2'" style="font-size: 14px;display: block;width: 25px;height: 25px;line-height: 25px;text-align: center;color: #fff;background-color: #d09a31;border-radius: 3px;">中</span>
+								<span v-if="article.quality == '1'" style="font-size: 14px;display: block;width: 25px;height: 25px;line-height: 25px;text-align: center;color: #fff;background-color: #cdcdcd;border-radius: 3px;">低</span>
+							</div>
   				  	<div class="attribute2">
                 <samp style="width: 75px;">文章类型：</samp>
                 <span>
@@ -267,8 +283,11 @@ export default {
         engineerings:[],
         typeFile: '',
         loading: false,
+        articleSee: true,
         xiangguan: [],
-        article: {},
+        article: {
+					typeFile:''
+				},
         nav: {
         	id: '',
         	name: '',
@@ -400,8 +419,25 @@ export default {
     },
     methods: {
       ...mapActions([
-        'getWebArticle'
+        'getWebArticle',
+        'downloadInfo',
+				'collectArticle'
       ]),
+			// 收藏文章/取消收藏
+			onCollectArticle(mid){
+				let _this = this
+				this.collectArticle({uId:this.$store.state.admin.adminInfo.uId, mId:mid})
+				  .then((response) => {
+				    if(response.code === 200) {
+							_this.article.isUserCollect = response.data
+							// _this.$set(_this.article,obj)
+							_this.$message({ message: response.msg, type: 'success' });
+				    }
+				  })
+				  .catch(function (error) {
+				    _this.$message({ message: error.msg, type: 'warning' });
+				  })
+			},
       // 文档文件预览
       fileShow(src){
         // window.open('http://192.168.0.130:8012/' + 'onlinePreview?url='+encodeURIComponent(this.URLS2 + src));
@@ -532,25 +568,32 @@ export default {
       seeArticle(mid, typeFile) {
         this.$router.push('/web/article/' + mid + '/Index/0/0/')
         this.reload()
-        // switch (typeFile) {
-        //     case 'img':
-        //       this.$router.push('/web/article/' + mid + '/Index/0/0/')
-        //       this.reload()
-        //       break;
-        //     case 'psd':
-        //       this.$router.push('/web/article/' + mid  + '/Index/0/0/')
-        //       this.reload()
-        //       break;
-        //     case 'video':
-        //       this.$router.push('/web/article/' + mid  + '/Index/0/0/')
-        //       this.reload()
-        //       break;
-        //   }
       },
       // 手风琴模块点击事件
       handleChange(val) {
 //		        console.log(val);
-        },
+			},
+				
+			// 直链文件下载按钮
+			directDownload(mid, uid) {
+				let _this = this
+				let obj = {
+					mId:mid,
+					froid:this.$store.state.admin.adminInfo.uId,
+					inid:uid
+				}
+				// 获取文章数据
+				this.downloadInfo(obj)
+				  .then((response) => {
+				    if (response.code === 200) {
+				      console.log(response)
+				    }
+				  })
+				  .catch(function (error) {
+				    _this.$alert(error.msg, {confirmButtonText: '确定'})
+				  })
+			},
+			
       // 时间戳转换
       webFormatDate (time) {
         if (time !== null) {
@@ -570,6 +613,7 @@ export default {
       // 获取数据
       getPost () {
         let _this = this
+				_this.loading = true
         // 获取文章数据
         this.getWebArticle({mId: this.$route.params.id, uId: this.$store.state.admin.adminInfo.uId})
           .then((response) => {
@@ -588,8 +632,18 @@ export default {
               _this.permissions = _this.userRecovery.find(o=>{
                 return o.id === response.data.user.permissions
               })
+							_this.loading = false
               console.log(typeof _this.article.describe,'：类型')
-            }
+            } else {
+							_this.articleSee = false
+							_this.loading = false
+							_this.$alert(response.msg, '提示', {
+								confirmButtonText: '返回首页',
+								callback: action => {
+									_this.$router.push("/web");
+								}
+							});
+						}
           })
           .catch(function (error) {
             _this.$alert(error.msg, {confirmButtonText: '确定'})
@@ -657,6 +711,7 @@ export default {
 .attribute2 a{cursor: pointer; display: block; padding: 5px; text-indent: 1em;}
 .attribute2 a:hover{color: #B10202;}
 .attribute2 span{flex-wrap: wrap;    flex: 1;}
+.attribute3{font-size: 14px;color: #666666;background-repeat: no-repeat;background-position: left;padding: 0 10px; display: flex; justify-content: flex-start; align-items: center;margin-bottom: 5px;}
 .keyword{ padding-top: 10px; flex-wrap: wrap;}
 .keyword samp{max-width: 60px;height: 24px;font-size: 12px;color: #999;line-height: 24px;padding: 0 14px;margin: 0 5px 10px 0;background: #eee;border-radius: 4px;-webkit-border-radius: 4px;-moz-border-radius: 4px;display: inline-block;vertical-align: middle;zoom: 1;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;cursor: pointer;}
 .el-checkbox{padding: 5px 10px;}
@@ -693,4 +748,16 @@ iframe::-webkit-scrollbar-track {/*滚动条里面轨道*/-webkit-box-shadow: in
 .fileList p:hover span{color: #B10202;}
 .fileList p img{margin: auto;}
 .fileList p span{text-align: center; width: 100px; display: block;}
+.gn-p1{position: absolute;top: -2px;right: 0;width: 90px; height: 30px;    line-height: 30px;}
+.gn-p2{  width: auto; height: 30px; border-radius: 5px;  display: flex;justify-content: center;align-items: center;    border: 1px solid;cursor: pointer; color: #bbb;}
+.gn-p2 i{font-size: 20px; color: #bbb;    margin-right: 10px;}
+.gn-p2 i:hover{color: #ffff00; font-weight: bold;}
+.gn-p2:hover{background-color: #409EFF; border: 1px solid #409EFF;}
+.gn-p2:hover samp{color: #fff;}
+.gn-p2:hover i{color: #ffff00; font-weight: bold;}
+.gn-p3{  width: auto; height: 30px; border-radius: 5px; background-color: #409EFF;  display: flex;justify-content: center;align-items: center;    border: 1px solid #409EFF;cursor: pointer;}
+.gn-p3 samp{color: #fff;}
+.gn-p3 i{font-size: 20px; color: #ffff00;    margin-right: 10px;}
+.gn-p3 i:hover{color: #ffff00; font-weight: bold;}
+.gnSee{display: none;}
 </style>

@@ -16,7 +16,7 @@
   		</el-row>
   		<el-button type="primary" style="float: left;" @click="search()">搜索</el-button>
   		<el-button style="float: left;" @click="firing('', '3')">添加标签</el-button>
-  		<el-dialog :title="title" :visible.sync="centerDialogVisibleAdd" width="22%" center>
+  		<el-dialog :modal-append-to-body="false" :title="title" :visible.sync="centerDialogVisibleAdd" width="22%" center>
   			<p class="upPwd">
   				<el-select class="ma10" v-model="groupLabelName" placeholder="请选择标签组" filterable clearable style="width:200px;margin-left: 20px; color: #409eff;">
   					<el-option v-for="item in groupLabel" :key="item.gid" :label="item.name" :value="item.name">
@@ -63,7 +63,7 @@
   			<el-table-column label="操作" align="center" width="200">
   				<template slot-scope="scope">
             <el-button size="mini" type="primary" circle icon="el-icon-edit" title="编辑" @click="firing(scope.row, '1')" style="margin-left: 20px;"></el-button>
-  					<el-dialog :title="title" :visible.sync="centerDialogVisibleP" width="21%" center style="margin-left: -15vw;">
+  					<el-dialog :modal-append-to-body="false" :title="title" :visible.sync="centerDialogVisibleP" width="21%" center style="margin-left: -15vw;">
   						<div class="demo-input-suffix">
   							标签名称:
   							<el-input style="width: auto;" class="el-input--suffix" placeholder="请输入内容"  name="" id="" v-model="row.name" clearable></el-input>

@@ -30,6 +30,16 @@
   	<el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
   		<labelComponent :dynamicTags2="dynamicTags" @setDynamicTags="setDynamicTags"></labelComponent>
   	</el-footer>
+		<el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
+			<div class="title">
+				<samp>质量：</samp>
+				<el-radio-group v-model="quality"  size="medium" >
+					<el-radio-button label="3" >高</el-radio-button>
+					<el-radio-button label="2" >中</el-radio-button>
+					<el-radio-button label="1" >差</el-radio-button>
+				</el-radio-group>
+			</div>
+		</el-footer>
   	<el-footer style="min-height: 50px;height: auto !important; padding-bottom: 15px;">
   		<div class="title"><samp>描述：</samp>
   			<wangeditor :describe="article.describe" :type="'up'" @catchData="catchData"></wangeditor>
@@ -119,6 +129,7 @@
         loading: false,
         loading2: true,
         title: '',
+        quality: '1',
         titleCf: false,
         titleDiv: false,
         describe: '',
@@ -325,7 +336,7 @@
           title: '提示',
           dangerouslyUseHTMLString: true,
           // message: h('p', { style: 'color: teal;text-align: justify'}, '1.在修改中关闭文件类型、删除文件、重新上传文件操作，<b>只要不点击《提交修改》都可以刷新还原，请放心修改！</b>2.修改中每个类型的文件<b>上传时不会显示进度条</b>，上传时请耐心等待，上传成功的文件会直接显示！'),
-          message: '<p style="color: teal;text-align: justify">1.在修改中关闭文件类型、删除文件、重新上传文件操作，<b style="color:#d81e06;">只要不点击《提交修改》都可以刷新还原，请放心修改！</b>2.修改中每个类型的文件<b style="color:#d81e06;">上传时不会显示进度条</b>，上传时请耐心等待，上传成功的文件会直接显示！</p>',
+          message: '<p style="color: teal;text-align: justify">1.在修改中关闭文件类型、删除文件、重新上传文件操作，<b style="color:#d81e06;">只要不点击《提交修改》都可以刷新还原，请放心修改！</b>2.修改中每个类型的文件<b style="color:#d81e06;">上传时不会显示进度条</b>，上传时请耐心等待，上传成功的文件会直接显示！3.<b style="color:#d81e06;">上传后长时间不显示，请先检查上传的文件是否可以正常打开或打开后部分内容损坏等问题</b></p>',
           duration: 0,
           customClass:'popupClass',
           showClose:false,
@@ -510,7 +521,7 @@
           this.article.word.length !== 0 ? typeName.push('word') : console.log()
           this.article.excel.length !== 0 ? typeName.push('excel') : console.log()
           this.article.engineering.length !== 0 ? typeName.push('压缩包') : console.log()
-          this.articleUpdate({mId:this.article.mId, uId:this.article.uId, pid:this.$store.getters.getUserProjectsId(this.projectImg).pid, tid:this.$store.getters.getUserTypesId(this.typeImg).tid, did:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(), describe:this.article.describe.replace(/\s+/g," "), img:this.article.img, psd:this.article.psd, video:this.article.video, ai:this.article.ai, pdf:this.article.pdf, word:this.article.word, excel:this.article.excel, engineering:this.article.engineering, typeFile:typeName.toString()})
+          this.articleUpdate({mId:this.article.mId, uId:this.article.uId, pid:this.$store.getters.getUserProjectsId(this.projectImg).pid, tid:this.$store.getters.getUserTypesId(this.typeImg).tid, did:this.$store.getters.getUserMinTypeId(this.minTypeImg).did, title:this.article.title.replace(/\s+/g," "), keyword:this.dynamicTags.toString(), describe:this.article.describe.replace(/\s+/g," "), img:this.article.img, psd:this.article.psd, video:this.article.video, ai:this.article.ai, pdf:this.article.pdf, word:this.article.word, excel:this.article.excel, engineering:this.article.engineering, typeFile:typeName.toString(), quality:this.quality})
             .then((response) => {
               if(response.code === 200) {
                 console.log(this.$store.state.admin.adminInfo,'修改后用户信息')
@@ -667,6 +678,7 @@
             _this.typeImg = _this.article.lname
             _this.did = _this.article.detailsid
             _this.minTypeImg = _this.article.dname
+            _this.quality = _this.article.quality
             _this.loading2 = false
           }
         })

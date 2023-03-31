@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
   
   // 判断是否登录
   if (to.path.indexOf('/backstage') === 0 || to.path.indexOf('/web') === 0) {
-    if (!getAccessToken()) {
+    if (!getAccessToken() && store.state.admin.adminInfo.uId != '') {
       // 页面跳转置顶进度条开始
       NProgress.start()
       if(to.fullPath !== '/login'){
@@ -73,20 +73,23 @@ router.afterEach((to, from) => {
 	// 实时获取用户信息进行修改
 	if (to.path.indexOf('/login') === -1){
 		console.log(store.state.admin)
-		api.getUserInfo2({uId:store.state.admin.adminInfo.uId})
-			.then((data) => {
-				if(!cachedAdminInfo.save2('ADMININFO',data.data.adminInfo) || !cachedPublicInfo.save2('PUBLICINFO',data.data.publicInfo)){
-					this.a.app.$alert('检测到有数据更新，请刷新页面获取最新数据', '提示', {
-						confirmButtonText: '确定',
-						callback: action => {
-							// 刷新页面
-							location.reload()
-						}
-					})
-				}
-			})
-			.catch((error) => {
-			})
+		if(store.state.admin.adminInfo.uId != ''){
+			api.getUserInfo2({uId:store.state.admin.adminInfo.uId})
+				.then((data) => {
+					if(!cachedAdminInfo.save2('ADMININFO',data.data.adminInfo) || !cachedPublicInfo.save2('PUBLICINFO',data.data.publicInfo)){
+						this.a.app.$alert('检测到有数据更新，请刷新页面获取最新数据', '提示', {
+							confirmButtonText: '确定',
+							callback: action => {
+								// 刷新页面
+								location.reload()
+							}
+						})
+					}
+				})
+				.catch((error) => {
+				})
+		}
+		
 	}
 	
   // console.log(to,'后置钩子')
@@ -96,6 +99,7 @@ router.afterEach((to, from) => {
 
 // 跳转登录页
 export function pushLogin () {
+	console.log('进入跳转登录页')
   router.push('/login')
 }
 
